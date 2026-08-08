@@ -38,11 +38,30 @@ powerful stat in the game.
 
 **Players:** read `rules.md`, open the app, and stop there. The mystery is the game.
 
+## 🚀 Play it as a real web app
+
+This repo auto-deploys the game to **GitHub Pages** on every push (via
+`.github/workflows/deploy.yml`). Your live URL:
+
+> **https://jhando95.github.io/They-were-here/**
+
+- First time only: if the URL 404s, go to repo **Settings → Pages** and set
+  **Source: GitHub Actions**, then re-run the "Deploy the Field Kit" workflow
+  from the Actions tab.
+- **Only the app is published.** The `campaign/` folder — every spoiler, the
+  GM guides, the census — stays in the repo, never on the public site. Your
+  player can open the URL freely.
+- **Install it as an app:** on the live site, Chrome/Edge shows an *Install*
+  icon in the address bar (or menu → "Install Pinebrook…"). That gives you a
+  standalone desktop app window, and the service worker keeps it working
+  even if the Wi-Fi dies mid-session.
+- Prefer another host? The app is plain static files — drag the folder into
+  Netlify/Vercel/Cloudflare Pages and it just works.
+
 ## The companion app
 
-No install, no build, no internet required — open `index.html` in any modern
-browser (double-click it, or serve it with `python3 -m http.server` if you
-prefer). It also works great hosted on GitHub Pages.
+No install, no build, no internet required even without the deploy — open
+`index.html` in any modern browser and everything works straight off the disk.
 
 - 🗺 **Interactive map of Pinebrook** — click locations for descriptions and a
   hand-drawn night vignette of each spot, drag the glowing player token around town.
@@ -66,6 +85,10 @@ prefer). It also works great hosted on GitHub Pages.
 - 🕵️ **GM Screen toggle** — flips the whole app: secret GM notes on every
   location/quest/clue, hidden locations (the crash site, the pod vault), quest
   state controls, and clue reveals. Leave it off when the player is looking.
+- 🎛 **GM control room** (GM-only tab) — combat round tracker with the
+  GLORP-PRIME buffer counter, the five-minute session-prep checklist, a
+  random-townsperson button, the quick-rules card, and persistent session
+  notes. Everything you need at the table without opening a single file.
 - 🧑‍🚀 **Character sheet** — four stats, HP / Weird Points / Luck / **Glow**
   trackers, one-click pregen loading, and full card-based gear & powers: a
   searchable 36-item compendium (garage weapons → Glorptech artifacts with

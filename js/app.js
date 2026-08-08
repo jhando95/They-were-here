@@ -30,7 +30,11 @@
     enemySeq: 1,
     npcStatus: {},    // id -> "human"|"clone"|"unknown" (GM's live truth)
     npcSus: {},       // id -> true (the player's own suspect list)
-    revelations: {}   // id -> true when the player has learned it
+    revelations: {},  // id -> true when the player has learned it
+    round: 1,         // combat round tracker (GM control room)
+    buffered: 0,      // GLORP PRIME actions lost this round
+    gmPrep: {},       // session-prep checklist
+    gmNotes: ""       // the GM's scratchpad
   });
 
   function load() {
@@ -1223,6 +1227,66 @@
 
   $("#folksSearch").addEventListener("input", renderFolks);
 
+  /* ---------------- GM control room ---------------- */
+
+  const PREP_ITEMS = [
+    "Where did we leave them — and is a cold open ready for the obvious next thing?",
+    "Two nearest unchecked revelations (THE TRAIL) + one path to each from where they are.",
+    "This session's ONE Opposition move (MARSH-2 rung or Crisp countermeasure).",
+    "Which clocks move if the player does nothing? (Usually Reputation +1.)",
+    "Which twist am I planting tonight? (Arm it in Scenes.)",
+    "Two townsfolk I want to say out loud, chosen for joy."
+  ];
+
+  function renderGm() {
+    $("#roundVal").textContent = state.round;
+    document.querySelectorAll(".buf").forEach((b) =>
+      b.classList.toggle("active-state", Number(b.dataset.buf) === state.buffered));
+    $("#gmNotes").value = state.gmNotes;
+
+    const list = $("#prepList");
+    list.innerHTML = "";
+    PREP_ITEMS.forEach((text, i) => {
+      const row = document.createElement("div");
+      const done = !!state.gmPrep[i];
+      row.className = "trail-row" + (done ? " got" : "");
+      row.innerHTML = `<button class="trail-check ${done ? "on" : ""}">${done ? "✔" : ""}</button>
+        <div class="trail-body"><span class="trail-title" style="text-decoration:none">${text}</span></div>`;
+      row.querySelector(".trail-check").addEventListener("click", () => {
+        if (state.gmPrep[i]) delete state.gmPrep[i];
+        else state.gmPrep[i] = true;
+        save(); renderGm();
+      });
+      list.appendChild(row);
+    });
+  }
+
+  $("#roundPlus").addEventListener("click", () => {
+    state.round++; state.buffered = 0; save(); renderGm();
+  });
+  $("#roundMinus").addEventListener("click", () => {
+    state.round = Math.max(1, state.round - 1); state.buffered = 0; save(); renderGm();
+  });
+  $("#roundReset").addEventListener("click", () => {
+    state.round = 1; state.buffered = 0; save(); renderGm();
+  });
+  document.querySelectorAll(".buf").forEach((b) =>
+    b.addEventListener("click", () => {
+      state.buffered = Number(b.dataset.buf); save(); renderGm();
+    }));
+  $("#prepReset").addEventListener("click", () => {
+    state.gmPrep = {}; save(); renderGm();
+  });
+  $("#gmNotes").addEventListener("input", (e) => {
+    state.gmNotes = e.target.value; save();
+  });
+  $("#gmRandomNpc").addEventListener("click", () => {
+    const n = Dice.pick(DATA.npcs || []);
+    $("#gmNpcResult").hidden = false;
+    $("#gmNpcText").textContent =
+      `${n.name} — ${n.role} (${npcStatus(n)}). ${n.bit}`;
+  });
+
   /* ---------------- player view window ---------------- */
 
   $("#playerViewBtn").addEventListener("click", () => {
@@ -1312,7 +1376,14 @@
     renderClues();
     renderScenes();
     renderFolks();
+    renderGm();
   }
 
   renderAll();
+
+  /* Installable app: register the service worker when served over http(s).
+     (Skipped on file:// — the app still runs fine straight off the disk.) */
+  if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  }
 })();

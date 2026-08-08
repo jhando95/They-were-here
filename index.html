@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>THEY WERE HERE — Pinebrook Field Kit</title>
+<meta name="theme-color" content="#0a0f14">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -197,6 +201,7 @@
         <button class="tab" data-tab="sounds">Sound</button>
         <button class="tab" data-tab="scenes">Scenes</button>
         <button class="tab" data-tab="folks">Folks</button>
+        <button class="tab dm-only-tab" data-tab="gm">GM</button>
       </nav>
 
       <!-- CHARACTER SHEET -->
@@ -383,6 +388,70 @@
         <input type="text" id="folksSearch" placeholder="Search the census…">
         <div class="picker-chips" id="folksChips"></div>
         <div id="folksList"></div>
+      </div>
+
+      <!-- GM CONTROL ROOM -->
+      <div class="tab-page" id="page-gm">
+        <p class="empty-note gm-locked-note">A locked drawer. It smells faintly of index cards.</p>
+        <div class="dm-only">
+
+          <div class="gm-block">
+            <div class="section-head">
+              <h3 class="section-title dm-text">COMBAT ROUND</h3>
+              <span class="gm-round-controls">
+                <button id="roundMinus" class="btn tiny">−</button>
+                <b id="roundVal" class="glow-val">1</b>
+                <button id="roundPlus" class="btn tiny">+</button>
+                <button id="roundReset" class="btn tiny">reset</button>
+              </span>
+            </div>
+            <div class="gm-buffer-row">
+              <span class="tracker-name" title="GLORP PRIME loses one action per act of genuine human weirdness this round (max 2)">BUFFERED</span>
+              <div class="quest-controls">
+                <button class="btn tiny buf" data-buf="0">0</button>
+                <button class="btn tiny buf" data-buf="1">1 action lost</button>
+                <button class="btn tiny buf" data-buf="2">FULL BUFFER</button>
+              </div>
+            </div>
+            <p class="empty-note">+ / advancing the round resets the buffer. Boss acts twice, minus buffered.</p>
+          </div>
+
+          <div class="gm-block">
+            <div class="section-head">
+              <h3 class="section-title dm-text">WHO'S NEARBY?</h3>
+              <button id="gmRandomNpc" class="btn tiny">🎲 townsperson</button>
+            </div>
+            <div id="gmNpcResult" class="gen-result" hidden><p id="gmNpcText"></p></div>
+          </div>
+
+          <div class="gm-block">
+            <div class="section-head">
+              <h3 class="section-title dm-text">SESSION PREP (5 MINUTES)</h3>
+              <button id="prepReset" class="btn tiny">new session</button>
+            </div>
+            <div id="prepList"></div>
+            <p class="empty-note">New session: reset this list, set the player's Luck to 3, play the recap card.</p>
+          </div>
+
+          <div class="gm-block">
+            <h3 class="section-title dm-text">QUICK RULES</h3>
+            <div class="gm-rules">
+              <p><b>DCs</b> Easy 8 · Tricky 12 · Hard 16 · Out-of-this-world 20 · adv/dis = 2d20</p>
+              <p><b>Fail</b> = progress + complication (🌀 button). Nat 1 = +1 WP. Nat 20 = delight.</p>
+              <p><b>Combat</b> player first · move + one thing · dmg d4 improvised / d6 solid / d8 absurd · PC Dodge 10+Brawn</p>
+              <p><b>SALT</b> double vs gelatinous · <b>Weirdness</b> = clones buffer</p>
+              <p><b>Ally</b> +1d6 once/scene; ally eats the failure · <b>Luck</b> reroll anything, 3/session</p>
+              <p><b>Clone voice</b> pick two: weather · lawns · FELLOW HUMAN · aggressive agreement · 2s-late laugh</p>
+              <p><b>Stuck?</b> 🧭 Now What (Dice tab) · unprepped place = person + wrongness + thread</p>
+            </div>
+          </div>
+
+          <div class="gm-block">
+            <h3 class="section-title dm-text">SESSION NOTES</h3>
+            <textarea id="gmNotes" rows="6" placeholder="What they did, what they suspect, what I owe them next time…"></textarea>
+          </div>
+
+        </div>
       </div>
     </div>
   </section>

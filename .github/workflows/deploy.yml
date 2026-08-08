@@ -1,0 +1,44 @@
+name: Deploy the Field Kit to GitHub Pages
+
+on:
+  push:
+    branches: [claude/they-were-here-dnd-wmaawr, main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Publish ONLY the app. The campaign/ folder (GM secrets, spoilers)
+      # deliberately stays out of the public site.
+      - name: Assemble site
+        run: |
+          mkdir dist
+          cp index.html styles.css sw.js manifest.webmanifest icon-192.png icon-512.png dist/
+          cp -r js dist/js
+          if [ -d art ]; then cp -r art dist/art; fi
+
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
