@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THEY WERE HERE — Pinebrook Field Kit</title>
+<meta name="theme-color" content="#0a0f14">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="title-block">
+    <h1>THEY WERE HERE</h1>
+    <p class="tagline">PINEBROOK FIELD KIT · POP. 8,213 · ALL NORMAL HERE</p>
+  </div>
+  <button id="radioBadge" class="btn small radio-badge" hidden
+    title="Incoming transmission — received 2:47 AM">📻 <b id="radioCount">1</b></button>
+  <div class="controls">
+    <button id="playerViewBtn" class="btn small" title="Open a spoiler-free second window to share in Discord — it mirrors this one live">🖥 Player view</button>
+    <label class="switch" title="Reveals GM notes, hidden locations, and quest controls">
+      <input type="checkbox" id="dmToggle">
+      <span class="slider"></span>
+      <span class="switch-label">GM SCREEN</span>
+    </label>
+    <button id="exportBtn" class="btn small" title="Download save file">Export</button>
+    <button id="importBtn" class="btn small" title="Load a save file">Import</button>
+    <input type="file" id="importFile" accept=".json" hidden>
+    <button id="resetBtn" class="btn small danger" title="Erase everything and start over">Reset</button>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ======================= LEFT: MAP ======================= -->
+  <section class="col-map">
+    <div class="card map-card">
+      <svg id="map" viewBox="0 0 1000 700" aria-label="Map of Pinebrook">
+        <defs>
+          <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="6" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <radialGradient id="vign" cx="50%" cy="45%" r="75%">
+            <stop offset="70%" stop-color="#000" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#000" stop-opacity="0.5"/>
+          </radialGradient>
+          <radialGradient id="lamp">
+            <stop offset="0" stop-color="#ffcf6b" stop-opacity="0.16"/>
+            <stop offset="1" stop-color="#ffcf6b" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="fogBlur" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="18"/>
+          </filter>
+        </defs>
+
+        <!-- ground -->
+        <rect x="0" y="0" width="1000" height="700" fill="#0e1a13"/>
+
+        <!-- optional AI-generated map: art/map.jpg is injected here at boot -->
+        <g id="customMap"></g>
+
+        <g id="terrain">
+        <!-- park -->
+        <ellipse cx="320" cy="222" rx="100" ry="62" fill="#152a1c"/>
+        <circle cx="270" cy="205" r="16" fill="#1c3a26"/>
+        <circle cx="355" cy="240" r="13" fill="#1c3a26"/>
+        <circle cx="330" cy="195" r="11" fill="#1c3a26"/>
+
+        <!-- reservoir -->
+        <ellipse cx="845" cy="602" rx="125" ry="70" fill="#0f2437" stroke="#1e4560" stroke-width="3"/>
+        <path d="M 770 590 q 20 -10 40 0 q 20 10 40 0 q 20 -10 40 0" fill="none" stroke="#1e4560" stroke-width="2" opacity="0.7"/>
+
+        <!-- whisper woods -->
+        <g fill="#18301f">
+          <circle cx="920" cy="180" r="24"/><circle cx="960" cy="230" r="20"/>
+          <circle cx="900" cy="255" r="18"/><circle cx="950" cy="300" r="24"/>
+          <circle cx="895" cy="350" r="20"/><circle cx="945" cy="385" r="17"/>
+          <circle cx="905" cy="420" r="15"/><circle cx="960" cy="120" r="18"/>
+          <circle cx="875" cy="205" r="14"/><circle cx="935" cy="345" r="14"/>
+        </g>
+
+        <!-- roads -->
+        <g stroke="#242c34" fill="none" stroke-linecap="round">
+          <path d="M 30 360 H 970" stroke-width="28"/>
+          <path d="M 520 30 V 670" stroke-width="28"/>
+          <path d="M 150 360 V 214" stroke-width="22"/>
+        </g>
+        <circle cx="150" cy="170" r="44" fill="none" stroke="#242c34" stroke-width="24"/>
+        <circle cx="150" cy="170" r="18" fill="#152a1c"/>
+        <path d="M 520 92 L 828 108" stroke="#33302a" stroke-width="9" stroke-dasharray="10 8" fill="none"/>
+
+        <!-- centerlines -->
+        <g stroke="#4d4c39" stroke-width="2" stroke-dasharray="14 12" fill="none" opacity="0.8">
+          <path d="M 30 360 H 970"/>
+          <path d="M 520 30 V 670"/>
+        </g>
+
+        <!-- freshmart parking -->
+        <rect x="455" y="515" width="155" height="82" rx="8" fill="#1a2128"/>
+        <g stroke="#3a4450" stroke-width="2">
+          <line x1="480" y1="525" x2="480" y2="545"/><line x1="505" y1="525" x2="505" y2="545"/>
+          <line x1="530" y1="525" x2="530" y2="545"/><line x1="555" y1="525" x2="555" y2="545"/>
+        </g>
+
+        <!-- decorative houses -->
+        <g class="deco-houses">
+          <g transform="translate(105,248)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(120,318)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(185,318)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#9dff70"/></g>
+          <g transform="translate(250,395)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(430,395)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#9dff70"/></g>
+          <g transform="translate(700,318)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(795,318)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(810,395)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#9dff70"/></g>
+          <g transform="translate(470,120)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(545,185)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(470,250)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#9dff70"/></g>
+          <g transform="translate(545,435)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+        </g>
+
+        <!-- street names -->
+        <g class="street-names" fill="#46545f" font-size="11" letter-spacing="3">
+          <text x="240" y="352">SYCAMORE AVE</text>
+          <text x="700" y="352">SYCAMORE AVE</text>
+          <text transform="rotate(-90 536 250)" x="536" y="250">MAIN ST</text>
+          <text transform="rotate(-90 136 322)" x="136" y="322" font-size="9">MARIGOLD LN</text>
+        </g>
+
+        <!-- streetlight pools -->
+        <g pointer-events="none">
+          <circle cx="150" cy="362" r="52" fill="url(#lamp)"/>
+          <circle cx="520" cy="362" r="60" fill="url(#lamp)"/>
+          <circle cx="330" cy="360" r="42" fill="url(#lamp)"/>
+          <circle cx="720" cy="360" r="42" fill="url(#lamp)"/>
+          <circle cx="520" cy="580" r="46" fill="url(#lamp)"/>
+        </g>
+        </g><!-- /terrain -->
+
+        <!-- drifting night fog -->
+        <g id="fog" filter="url(#fogBlur)" pointer-events="none" opacity="0.55">
+          <ellipse cx="220" cy="120" rx="240" ry="46" fill="#9fc3d9" opacity="0.10"/>
+          <ellipse cx="640" cy="480" rx="300" ry="60" fill="#9fc3d9" opacity="0.08"/>
+          <ellipse cx="820" cy="240" rx="200" ry="44" fill="#9fc3d9" opacity="0.09"/>
+          <ellipse cx="380" cy="640" rx="260" ry="40" fill="#9fc3d9" opacity="0.07"/>
+        </g>
+
+        <rect x="0" y="0" width="1000" height="700" fill="url(#vign)" pointer-events="none"/>
+
+        <g id="markers"></g>
+        <g id="enemyLayer"></g>
+        <g id="tokenLayer"></g>
+      </svg>
+      <p class="map-hint">Click a location for details · drag the glowing token to move your character</p>
+
+      <div class="dm-only token-tray">
+        <div class="tray-add">
+          <select id="enemyType"></select>
+          <button id="enemyAdd" class="btn small">+ Drop token</button>
+        </div>
+        <div id="enemyList"></div>
+      </div>
+    </div>
+
+    <div class="card suspicion-card">
+      <div class="suspicion-head">
+        <h2 title="How much the ALIENS have noticed you">NEIGHBORHOOD WATCH</h2>
+        <div class="suspicion-btns">
+          <button id="suspMinus" class="btn tiny">−</button>
+          <button id="suspPlus" class="btn tiny">+</button>
+        </div>
+      </div>
+      <div id="suspicionTrack" class="suspicion-track"></div>
+      <p id="suspicionLabel" class="suspicion-label"></p>
+
+      <div class="suspicion-head rep-head">
+        <h2 title="How crazy the HUMANS think you are — MARSH-2's gaslight campaign pushes it up, hard evidence pulls it down">REPUTATION</h2>
+        <div class="suspicion-btns">
+          <button id="repMinus" class="btn tiny">−</button>
+          <button id="repPlus" class="btn tiny">+</button>
+        </div>
+      </div>
+      <div id="repTrack" class="suspicion-track rep-track"></div>
+      <p id="repLabel" class="suspicion-label rep-label"></p>
+    </div>
+
+    <div class="card location-card" id="locationCard">
+      <p class="placeholder">— Click somewhere on the map. Pinebrook has nothing to hide. —</p>
+    </div>
+  </section>
+
+  <!-- ======================= RIGHT: PANEL ======================= -->
+  <section class="col-panel">
+    <div class="card panel-card">
+      <nav class="tabs">
+        <button class="tab active" data-tab="sheet">Sheet</button>
+        <button class="tab" data-tab="dice">Dice</button>
+        <button class="tab" data-tab="quests">Quests</button>
+        <button class="tab" data-tab="clues">Clues</button>
+        <button class="tab" data-tab="sounds">Sound</button>
+        <button class="tab" data-tab="scenes">Scenes</button>
+        <button class="tab" data-tab="folks">Folks</button>
+        <button class="tab dm-only-tab" data-tab="gm">GM</button>
+      </nav>
+
+      <!-- CHARACTER SHEET -->
+      <div class="tab-page active" id="page-sheet">
+        <div class="pregen-row">
+          <select id="pregenSelect">
+            <option value="">— Load a pregen… —</option>
+          </select>
+          <button id="pregenLoad" class="btn small">Load</button>
+          <button id="printSheet" class="btn small" title="Print a paper copy of this sheet">🖨</button>
+        </div>
+
+        <label class="field">Name
+          <input type="text" id="chName" placeholder="Who are you?">
+        </label>
+        <label class="field">Known around town for…
+          <input type="text" id="chConcept" placeholder="e.g. night-shift nurse, awake at 2:47 by profession">
+        </label>
+
+        <div class="stats-grid">
+          <label class="stat">BRAWN<input type="number" id="stBrawn" min="-1" max="5" value="0">
+            <button class="btn tiny stat-roll" data-stat="brawn" title="Roll d20 + Brawn (uses the DC and adv/dis set on the Dice tab)">🎲 check</button></label>
+          <label class="stat">BRAINS<input type="number" id="stBrains" min="-1" max="5" value="0">
+            <button class="btn tiny stat-roll" data-stat="brains" title="Roll d20 + Brains">🎲 check</button></label>
+          <label class="stat">CHARM<input type="number" id="stCharm" min="-1" max="5" value="0">
+            <button class="btn tiny stat-roll" data-stat="charm" title="Roll d20 + Charm">🎲 check</button></label>
+          <label class="stat">WEIRD<input type="number" id="stWeird" min="-1" max="5" value="0">
+            <button class="btn tiny stat-roll" data-stat="weird" title="Roll d20 + Weird">🎲 check</button></label>
+        </div>
+        <p class="derived">Dodge <b id="dvDodge">10</b> · suggested Max HP <b id="dvHp">8</b> (8 + Brawn)</p>
+
+        <div class="trackers">
+          <div class="tracker">
+            <span class="tracker-name">HP</span>
+            <button class="btn tiny" id="hpMinus">−</button>
+            <span class="hp-read"><b id="hpCur">8</b>/<input type="number" id="hpMax" min="1" max="20" value="8"></span>
+            <button class="btn tiny" id="hpPlus">+</button>
+            <button class="btn tiny" id="restBtn" title="Rest: heal 1d6 HP and regain 1 WP">😴 rest</button>
+          </div>
+          <div class="tracker">
+            <span class="tracker-name" title="Weird Points — fuel for your power">WP</span>
+            <div class="pips" id="wpPips" data-max="3"></div>
+          </div>
+          <div class="tracker">
+            <span class="tracker-name" title="Spend to reroll anything">LUCK</span>
+            <div class="pips" id="luckPips" data-max="3"></div>
+          </div>
+          <div class="tracker">
+            <span class="tracker-name" title="Advancement — gained at act ends. Spend on +1 stat, a new power, or a SUBLIME unlock.">GLOW</span>
+            <button class="btn tiny" id="glowMinus">−</button>
+            <b id="glowVal" class="glow-val">0</b>
+            <button class="btn tiny" id="glowPlus">+</button>
+            <span class="glow-hint">spend: +1 stat · new power · SUBLIME unlock</span>
+          </div>
+          <div class="tracker">
+            <span class="tracker-name" title="The anti-Weird meter (0–9): how much of you the broadcast has overwritten. Passing as perfect raises it; being known lowers it. Thresholds at 3, 6, and 9.">STATIC</span>
+            <button class="btn tiny" id="staticMinus">−</button>
+            <b id="staticVal" class="static-val">0</b>
+            <button class="btn tiny" id="staticPlus">+</button>
+            <span class="glow-hint" id="staticLabel"></span>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <h3 class="section-title">WACKY POWERS</h3>
+          <button class="btn tiny" id="addPowerBtn">+ add</button>
+        </div>
+        <div id="powerCards"></div>
+
+        <div class="section-head">
+          <h3 class="section-title">GEAR</h3>
+          <button class="btn tiny" id="addItemBtn">+ add</button>
+        </div>
+        <div id="itemCards"></div>
+
+        <div class="section-head">
+          <h3 class="section-title" title="Recruited allies: +1d6 help once per scene each; one Weirdness charge each for the finale">THE CREW</h3>
+          <button class="btn tiny" id="newSceneBtn" title="New scene: every ally's help die refreshes">🎬 new scene</button>
+        </div>
+        <div id="crewCards"></div>
+
+        <div class="section-head">
+          <h3 class="section-title" title="Temporary conditions, blessings, curses, and Marks">EFFECTS &amp; MARKS</h3>
+        </div>
+        <div id="effectChips" class="effect-chips"></div>
+        <div class="effect-add">
+          <input type="text" id="effectInput" placeholder="e.g. Rimmed bat: 3 salt hits left">
+          <button id="effectAdd" class="btn tiny">+ add</button>
+        </div>
+
+        <label class="field">Pocket lint &amp; misc
+          <textarea id="chGear" rows="3" placeholder="Fanny pack&#10;Keys to a car you no longer trust…"></textarea>
+        </label>
+        <label class="field">Notes
+          <textarea id="chNotes" rows="3" placeholder="Suspicions, promises, steak owed to Biscuit…"></textarea>
+        </label>
+      </div>
+
+      <!-- DICE -->
+      <div class="tab-page" id="page-dice">
+        <h3 class="section-title">CHECKS — d20 + your live stat</h3>
+        <div class="check-stats" id="checkStats"></div>
+        <div class="dice-options">
+          <label>vs DC
+            <select id="checkDC">
+              <option value="">—</option>
+              <option value="8">Easy 8</option>
+              <option value="12">Tricky 12</option>
+              <option value="16">Hard 16</option>
+              <option value="20">Cosmic 20</option>
+            </select>
+          </label>
+          <label>Formula <input type="text" id="formulaInput" placeholder="2d6+3" size="7"></label>
+          <button id="formulaRoll" class="btn small">Roll it</button>
+        </div>
+
+        <h3 class="section-title">RAW DICE</h3>
+        <div class="dice-buttons">
+          <button class="die" data-sides="4">d4</button>
+          <button class="die" data-sides="6">d6</button>
+          <button class="die" data-sides="8">d8</button>
+          <button class="die" data-sides="10">d10</button>
+          <button class="die" data-sides="12">d12</button>
+          <button class="die d20" data-sides="20">d20</button>
+          <button class="die" data-sides="100">d100</button>
+        </div>
+        <div class="dice-options">
+          <label>Qty <input type="number" id="diceQty" min="1" max="6" value="1"></label>
+          <label>Mod <input type="number" id="diceMod" min="-5" max="10" value="0"></label>
+          <select id="diceAdv" title="Advantage / disadvantage (single d20 only)">
+            <option value="normal">Normal</option>
+            <option value="adv">Advantage</option>
+            <option value="dis">Disadvantage</option>
+          </select>
+        </div>
+        <div id="diceResult" class="dice-result">
+          <span class="dice-total">—</span>
+          <span class="dice-detail">Pick a die. The universe is watching politely.</span>
+        </div>
+        <div id="assistRow" class="assist-row" hidden></div>
+
+        <div class="generators">
+          <button id="genPower" class="btn gen">🛸 Wacky Power</button>
+          <button id="genTell" class="btn gen">👁 Clone Tell</button>
+          <button id="genComp" class="btn gen">🌀 Complication</button>
+          <button id="genLoot" class="btn gen">🎁 Loot</button>
+          <button id="genMark" class="btn gen">🩹 Mark (0 HP)</button>
+          <button id="genConsp" class="btn gen">🛰 Conspiracy</button>
+          <button id="genNowWhat" class="btn gen">🧭 Now What?</button>
+        </div>
+        <div id="genResult" class="gen-result" hidden>
+          <p id="genText"></p>
+          <button id="genAdd" class="btn small" hidden>+ Add to sheet</button>
+        </div>
+
+        <h3 class="log-title">ROLL LOG</h3>
+        <ol id="diceLog" class="dice-log"></ol>
+      </div>
+
+      <!-- QUESTS -->
+      <div class="tab-page" id="page-quests">
+        <div class="dm-only trail-box">
+          <h3 class="section-title dm-text">THE TRAIL — WHAT THEY MUST LEARN (GM)</h3>
+          <p class="empty-note">Every revelation has 3+ paths — no missed scene breaks the story.
+            Check them off as they land; the paths tell you what's still reachable from anywhere.
+            (<b>running-it-loose.md</b>)</p>
+          <div id="trailList"></div>
+        </div>
+        <div id="questList"></div>
+      </div>
+
+      <!-- CLUES -->
+      <div class="tab-page" id="page-clues">
+        <h3 class="section-title">THE TRUTH BOARD</h3>
+        <div id="clueList"></div>
+        <div class="dm-only">
+          <h3 class="section-title dm-text">UNREVEALED (GM)</h3>
+          <div id="clueVault"></div>
+        </div>
+        <div class="custom-clue">
+          <h3 class="section-title">PIN YOUR OWN CLUE</h3>
+          <input type="text" id="customClueTitle" placeholder="Title — e.g. 'The humming yogurt'">
+          <textarea id="customClueText" rows="2" placeholder="What did you find?"></textarea>
+          <button id="customClueAdd" class="btn small">📌 Pin it</button>
+        </div>
+
+        <h3 class="section-title">PINEBROOK ALMANAC</h3>
+        <p class="empty-note">Documents, pamphlets, and papers gathered along the way.</p>
+        <div id="loreList"></div>
+        <div class="dm-only">
+          <h3 class="section-title dm-text">UNRELEASED DOCUMENTS (GM)</h3>
+          <div id="loreVault"></div>
+        </div>
+      </div>
+
+      <!-- SOUNDBOARD -->
+      <div class="tab-page" id="page-sounds">
+        <h3 class="section-title">AMBIENCE — CLICK TO LOOP</h3>
+        <div class="sound-grid">
+          <button class="btn sound" data-sound="hum">🛸 The 2:47 Hum</button>
+          <button class="btn sound" data-sound="crickets">🦗 Suburban Night</button>
+          <button class="btn sound" data-sound="mower">🚜 Gary's Mower</button>
+        </div>
+        <h3 class="section-title">STINGS — ONE SHOT</h3>
+        <div class="sound-grid">
+          <button class="btn sound" data-sound="beam">🔦 Abduction Beam</button>
+          <button class="btn sound" data-sound="doorbell">🚪 Doorbell</button>
+          <button class="btn sound" data-sound="buffering">😐 Clone Buffering</button>
+          <button class="btn sound" data-sound="sting">👁 Dread Sting</button>
+        </div>
+        <label class="field vol-field">Volume
+          <input type="range" id="volSlider" min="0" max="100" value="60">
+        </label>
+        <p class="empty-note">All audio is synthesized live in the browser — no files, works offline.
+          Cue the Hum whenever the pace sags. It is always almost 2:47.</p>
+      </div>
+
+      <!-- SCENES -->
+      <div class="tab-page" id="page-scenes">
+        <button id="recapBtn" class="btn recap-btn">📻 &nbsp;“Previously, on Pinebrook…”</button>
+        <p class="empty-note recap-note">Auto-narrated from your completed quests, pinned clues, and
+          the chronicle below — play it at the top of every session.</p>
+
+        <div class="section-head">
+          <h3 class="section-title">THE STORY SO FAR</h3>
+          <button id="storyDownload" class="btn tiny" title="Download the chronicle as a markdown file — the campaign's trophy">⬇ save story</button>
+        </div>
+        <div class="chron-add">
+          <input type="text" id="chronInput" placeholder="Record a moment or a table quote…">
+          <button id="chronAdd" class="btn tiny">💬 add</button>
+        </div>
+        <div id="chronList" class="chron-list"></div>
+        <div class="dm-only">
+          <h3 class="section-title dm-text">TRANSITION SCENES (GM) — CLICK TO ROLL FILM</h3>
+          <div id="sceneList"></div>
+          <h3 class="section-title dm-text">THE TWIST DECK (GM) — PLANT, THEN FIRE</h3>
+          <p class="empty-note">One fired twist per session, tops. Never fire one you didn't plant.
+            Full write-ups in <b>villains-and-twists.md</b>.</p>
+          <div id="twistList"></div>
+        </div>
+        <p class="empty-note player-scenes-note">The rest of the projection booth is GM-only.
+          Ask your GM nicely. Or don't — attendance will be taken either way.</p>
+      </div>
+
+      <!-- FOLKS (town census) -->
+      <div class="tab-page" id="page-folks">
+        <p id="folksCount" class="folks-count"></p>
+        <input type="text" id="folksSearch" placeholder="Search the census…">
+        <div class="picker-chips" id="folksChips"></div>
+        <div id="folksList"></div>
+      </div>
+
+      <!-- GM CONTROL ROOM -->
+      <div class="tab-page" id="page-gm">
+        <p class="empty-note gm-locked-note">A locked drawer. It smells faintly of index cards.</p>
+        <div class="dm-only">
+
+          <div class="gm-block">
+            <div class="section-head">
+              <h3 class="section-title dm-text">COMBAT ROUND</h3>
+              <span class="gm-round-controls">
+                <button id="roundMinus" class="btn tiny">−</button>
+                <b id="roundVal" class="glow-val">1</b>
+                <button id="roundPlus" class="btn tiny">+</button>
+                <button id="roundReset" class="btn tiny">reset</button>
+              </span>
+            </div>
+            <div class="gm-buffer-row">
+              <span class="tracker-name" title="GLORP PRIME loses one action per act of genuine human weirdness this round (max 2)">BUFFERED</span>
+              <div class="quest-controls">
+                <button class="btn tiny buf" data-buf="0">0</button>
+                <button class="btn tiny buf" data-buf="1">1 action lost</button>
+                <button class="btn tiny buf" data-buf="2">FULL BUFFER</button>
+              </div>
+            </div>
+            <p class="empty-note">+ / advancing the round resets the buffer. Boss acts twice, minus buffered.</p>
+          </div>
+
+          <div class="gm-block">
+            <div class="section-head">
+              <h3 class="section-title dm-text">THE 2:47 PROTOCOL</h3>
+              <button id="nightToggle" class="btn tiny">🌙 enter 2:47</button>
+            </div>
+            <div id="nightEventBox" class="gen-result" hidden>
+              <p id="nightEventText"></p>
+              <button id="nightRedraw" class="btn tiny">redraw event</button>
+            </div>
+            <p class="empty-note">Clones sync (sneaking auto-succeeds) · Weird at advantage · Charm vs clones
+              impossible · everything alien glows · habits get noticed (👁 +1/night after two nights running).
+              Rules: <b>whats-different.md</b></p>
+          </div>
+
+          <div class="gm-block">
+            <h3 class="section-title dm-text">TRANSMISSIONS — 📻 BETWEEN SESSIONS</h3>
+            <textarea id="txInput" rows="3" placeholder="Short, concrete, timestamped 2:47 AM. Ten ready-made in whats-different.md."></textarea>
+            <button id="txQueue" class="btn small">📻 queue transmission</button>
+            <div id="txList"></div>
+          </div>
+
+          <div class="gm-block">
+            <div class="section-head">
+              <h3 class="section-title dm-text">WHO'S NEARBY?</h3>
+              <button id="gmRandomNpc" class="btn tiny">🎲 townsperson</button>
+            </div>
+            <div id="gmNpcResult" class="gen-result" hidden><p id="gmNpcText"></p></div>
+          </div>
+
+          <div class="gm-block">
+            <div class="section-head">
+              <h3 class="section-title dm-text">SESSION PREP (5 MINUTES)</h3>
+              <button id="prepReset" class="btn tiny">new session</button>
+            </div>
+            <div id="prepList"></div>
+            <p class="empty-note">New session: reset this list, set the player's Luck to 3, play the recap card.</p>
+          </div>
+
+          <div class="gm-block">
+            <h3 class="section-title dm-text">QUICK RULES</h3>
+            <div class="gm-rules">
+              <p><b>DCs</b> Easy 8 · Tricky 12 · Hard 16 · Out-of-this-world 20 · adv/dis = 2d20</p>
+              <p><b>Fail</b> = progress + complication (🌀 button). Nat 1 = +1 WP. Nat 20 = delight.</p>
+              <p><b>Combat</b> player first · move + one thing · dmg d4 improvised / d6 solid / d8 absurd · PC Dodge 10+Brawn</p>
+              <p><b>SALT</b> double vs gelatinous · <b>Weirdness</b> = clones buffer</p>
+              <p><b>Ally</b> +1d6 once/scene; ally eats the failure · <b>Luck</b> reroll anything, 3/session</p>
+              <p><b>Clone voice</b> pick two: weather · lawns · FELLOW HUMAN · aggressive agreement · 2s-late laugh</p>
+              <p><b>Stuck?</b> 🧭 Now What (Dice tab) · unprepped place = person + wrongness + thread</p>
+            </div>
+          </div>
+
+          <div class="gm-block">
+            <h3 class="section-title dm-text">SESSION NOTES</h3>
+            <textarea id="gmNotes" rows="6" placeholder="What they did, what they suspect, what I owe them next time…"></textarea>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- COMPENDIUM PICKER -->
+<div id="pickerOverlay" class="picker-overlay" hidden>
+  <div class="picker-modal card">
+    <div class="picker-head">
+      <h3 class="section-title" id="pickerTitle">ADD FROM COMPENDIUM</h3>
+      <button class="btn tiny" id="pickerClose">✕</button>
+    </div>
+    <input type="text" id="pickerSearch" placeholder="Search…">
+    <div class="picker-chips" id="pickerChips"></div>
+    <div class="picker-list" id="pickerList"></div>
+  </div>
+</div>
+
+<!-- CINEMATIC SCENE OVERLAY -->
+<div id="sceneOverlay" class="scene-overlay" hidden>
+  <div class="scene-stage">
+    <div class="scene-art" id="sceneArt"></div>
+    <div class="scene-scrim"></div>
+    <div class="scene-scanlines"></div>
+    <div class="scene-text">
+      <p class="scene-kicker" id="sceneKicker"></p>
+      <h2 class="scene-title" id="sceneTitle"></h2>
+      <p class="scene-narration" id="sceneNarration"></p>
+    </div>
+    <p class="scene-hint">click anywhere to fade out</p>
+  </div>
+</div>
+
+<footer class="foot">
+  <span>PORCHLIGHT SYSTEM · one d20, four stats, zero homework</span>
+  <span class="foot-time">It is currently <b>2:47 AM</b> somewhere in Pinebrook.</span>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/census.js"></script>
+<script src="js/sync.js"></script>
+<script src="js/dice.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/art.js"></script>
+<script src="js/scenes.js"></script>
+<script src="js/scene-art.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

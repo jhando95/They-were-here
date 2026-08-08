@@ -1,0 +1,575 @@
+/* THEY WERE HERE — campaign data for the Pinebrook Field Kit.
+   Player-facing text lives in `player`; GM secrets live in `dm` and only render
+   when the GM Screen toggle is on. */
+
+const DATA = {
+
+  locations: [
+    {
+      id: "home", name: "Your House", emoji: "🏡", x: 95, y: 130, hidden: false,
+      player: "Marigold Lane, the cul-de-sac. Your kingdom of unwatered plants and a porch light that flickers at 2:47 AM. It started here.",
+      dm: "Safe zone (for now). At Suspicion 4+ a gnome appears on the lawn. At 10, the abduction attempt happens here."
+    },
+    {
+      id: "henderson", name: "The Hendersons'", emoji: "🏠", x: 235, y: 130, hidden: false,
+      player: "Gary and Diane's place. Gary's out front, mowing the same strip of lawn. He's been at it for three hours. He's wearing a suit.",
+      dm: "Break-in clues: HUMAN FOOD jars (mayo), soil in sock drawer, scorch ring on roof, brine receipts, Biscuit hiding in the tub. GARY-2 never attacks — he offers warm pickle-brine lemonade (Suspicion +2 if the PC is caught)."
+    },
+    {
+      id: "pemberton", name: "Mrs. Pemberton's Garden", emoji: "🌸", x: 200, y: 262, hidden: false,
+      player: "Begonias in weirdly perfect rows, a bird bath, and the lingering smell of a casserole that... just moved. Probably the wind.",
+      dm: "Side quest: The Casserole Is Moving. Gerald the larva is inside it. The begonias grew back overnight in antenna-segment rows — a free clue if the player thinks to look from above."
+    },
+    {
+      id: "school", name: "Pinebrook Middle School", emoji: "🏫", x: 280, y: 312, hidden: false,
+      player: "Home of the Fighting Beavers. Priya Chandrasekhar runs a drone empire out of the AV room at lunch.",
+      dm: "Recruit Priya here (payment: snacks + being taken seriously). Her aerial photos reveal the lawn antenna pattern. The marching band becomes finale weirdness ammo."
+    },
+    {
+      id: "diner", name: "Duke's Diner", emoji: "🥞", x: 450, y: 312, hidden: false,
+      player: "Bottomless coffee, sticky booths, and Marla, who's worked here since '99 and has opinions about the lights people see over the reservoir.",
+      dm: "Intel hub. Roll the d6 Rumor Mill freely. Marla has Magnet Touch (side quest: Magnet Fingers). Eating something questionable here restores 1 WP."
+    },
+    {
+      id: "wendell", name: "Wendell's Wires", emoji: "📻", x: 350, y: 408, hidden: false,
+      player: "Electronics repair. The sign has been 'BACK IN 5 MIN' since 2019, but Wendell's always there, listening to something on a big scanner.",
+      dm: "Wendell has tracked the Lawn Frequency for years — it spikes nightly at 2:47, bearing: water tower. Source of jammers, blacklights, and the TOTALLY FLORAL DELIVERY van."
+    },
+    {
+      id: "gazette", name: "The Pinebrook Gazette", emoji: "📰", x: 630, y: 312, hidden: false,
+      player: "Weekly paper. Headlines this month: 'LAWN OF THE MONTH: A RETROSPECTIVE.' The archives are in the basement, guarded by a very old filing system.",
+      dm: "1987 archive: 'LIGHTS OVER RESERVOIR; THREE MISSING, RETURNED POLITE.' One of the three was young Mr. Crisp. The microfiche machine counts as a gadget for Brains rolls."
+    },
+    {
+      id: "sheriff", name: "Sheriff's Office", emoji: "🚓", x: 620, y: 408, hidden: false,
+      player: "Two cells, one coffee maker, Deputy Hodge's crayon drawings on the fridge. Sheriff Marsh listens more than she talks.",
+      dm: "Marsh slowly starts believing the PC — then gets replaced mid-Act 2 ('THERE IS NO CRIME IN PINEBROOK'). Hodge is nearly un-clonable: 'template incoherent.'"
+    },
+    {
+      id: "community", name: "Community Center", emoji: "🏛️", x: 780, y: 428, hidden: false,
+      player: "Bulletin boards, folding chairs, and the office of HOA President Crisp. The BLOCK PARTY — MANDATORY FUN banner is already up.",
+      dm: "Block party set piece: humanity-test games, spore Jell-O, keycard lift. Founders' Day fireworks cache at the loading dock. Deborah Vance can requisition it with Form 77-B."
+    },
+    {
+      id: "freshmart", name: "FreshMart", emoji: "🛒", x: 565, y: 552, hidden: false,
+      player: "The new grocery store. Opened overnight, fully stocked. The yogurt aisle hums — hums a chord. Aisle 7 has a truly excessive amount of salt.",
+      dm: "Front for the Undermart. Freight elevator behind the yogurt, opened by Crisp's laminated keycard. Aisle 7's salt stock is the Collective's blind spot — they think the urns are decorative."
+    },
+    {
+      id: "watertower", name: "The Water Tower", emoji: "🗼", x: 850, y: 108, hidden: false,
+      player: "PINEBROOK painted proud on the tank. The ground around the legs is a little too green. At night, if you're very quiet, it hums back.",
+      dm: "The landing beacon. Ladder scuffs, spore-grass footing, dish on top fires the ALL IS READY signal on Founders' Day. Tunnel connects to the Undermart. Priya's salt drop or Wendell's jammer can kill it."
+    },
+    {
+      id: "woods", name: "Whisper Woods", emoji: "🌲", x: 900, y: 318, hidden: false,
+      player: "The trees out past the tower. Kids say the birds in there repeat what you say, a beat too late.",
+      dm: "Buffer zone hiding the crash clearing. The birds ARE repeating people — some are drone-pigeons (side quest: Birds Aren't Real). Blacklight reveals glorp trails."
+    },
+    {
+      id: "crash", name: "The Crash Site", emoji: "🛸", x: 915, y: 212, hidden: true,
+      player: "A perfect circle of flattened, glowing grass deep in Whisper Woods. Something landed here. Something tidied up afterward.",
+      dm: "REVEAL when the players follow the drone-pigeon or Biscuit's nose. The Vanguard's original 1987 landing spot. Buried: a hatch to the tunnel network and Gerald's original pod-crate."
+    },
+    {
+      id: "undermart", name: "The Undermart (Pod Vault)", emoji: "🕳️", x: 505, y: 612, hidden: true,
+      player: "Below FreshMart: rows of soft-lit pods, each with a sleeping neighbor inside. A sign reads GUESTS: 47 · COMFORT: MAXIMUM · RETURN DATE: N/A.",
+      dm: "Act 2 climax. Pods need the Overseer's handshake (Crisp's hand or gloves). Wall schematic reveals THE BLOOM / Founders' Day plan. Escape chase: Gnome Drones + THE MAILMAN."
+    },
+    {
+      id: "reservoir", name: "Pinebrook Reservoir", emoji: "💧", x: 830, y: 585, hidden: false,
+      player: "Where the lights were seen in '87 and '99. Decent fishing. The water is fine. The water is completely fine.",
+      dm: "Historic abduction site. In the Big Boom ending, GLORP PRIME dissolves in here — do not drink the water for a while. Nice quiet spot for 2:47 AM dread scenes."
+    }
+  ],
+
+  quests: [
+    // ----- ACT I -----
+    { id: "a1q1", group: "Act I — The Night It Happened", title: "2:47 AM", state: "active",
+      player: "You saw SOMETHING take Gary Henderson. Nobody believes you. Find proof.",
+      dm: "Open with the abduction scene. Phone glitch = 4,000 lawn photos clue. The hum recedes toward the water tower." },
+    { id: "a1q2", group: "Act I — The Night It Happened", title: "Something's Off About Gary", state: "hidden",
+      player: "Watch the 'new' Gary. Collect three things that prove he isn't Gary.",
+      dm: "Any 3 clone tells (d12 table) count. Break-in at the Henderson house pays out clues fast — and Biscuit." },
+    { id: "a1q3", group: "Act I — The Night It Happened", title: "Paper Trail", state: "hidden",
+      player: "This has happened before. Someone, somewhere in Pinebrook, wrote it down.",
+      dm: "Gazette 1987 archive: three taken, returned 'polite.' One was young Mr. Crisp. Marla's '99 sighting corroborates." },
+    { id: "a1q4", group: "Act I — The Night It Happened", title: "The Lawn Frequency", state: "hidden",
+      player: "Wendell says the static isn't static. Every night at 2:47 it... sings.",
+      dm: "Wendell's scanner triangulates to the water tower. FM Mouth can taste it. This is the thread that pulls the whole sweater." },
+    { id: "a1q5", group: "Act I — The Night It Happened", title: "MANDATORY FUN", state: "hidden",
+      player: "An invitation under every door: BLOCK PARTY — SATURDAY — ATTENDANCE WILL BE TAKEN.",
+      dm: "Act break. Everyone gets one. The phrase 'please verify you are having fun' should feel like a threat." },
+    // ----- ACT II -----
+    { id: "a2q1", group: "Act II — Welcome to the Neighborhood", title: "Block Party Infiltration", state: "hidden",
+      player: "Attend the party. Pass for normal. Do not eat the Jell-O.",
+      dm: "Humanity-test games, spore Jell-O, the three-legged race. Objective: Crisp's laminated keycard (Marla's Magnet Touch or a pickpocket roll)." },
+    { id: "a2q2", group: "Act II — Welcome to the Neighborhood", title: "Friends in Weird Places", state: "hidden",
+      player: "You can't do this alone. Recruit the town's weirdos — they were right all along.",
+      dm: "Wendell, Priya, Marla, Deborah, Biscuit. Each recruited ally = +1d6 help and a finale Weirdness charge." },
+    { id: "a2q3", group: "Act II — Welcome to the Neighborhood", title: "The FreshMart Basement", state: "hidden",
+      player: "The yogurt aisle hums. The freight elevator behind it wants a keycard.",
+      dm: "The Undermart: 47 pods, the manifest, the Founders' Day schematic. Let them ALMOST free Gary — pods need the Overseer's handshake. Escape chase on the way out." },
+    { id: "a2q4", group: "Act II — Welcome to the Neighborhood", title: "The Beacon", state: "hidden",
+      player: "Founders' Day. Fireworks. The water tower. Put it together before Saturday.",
+      dm: "Fireworks invoice (FRSHMRT LOGISTICS), sky-seeding chart, THE BLOOM. Establishes the finale's three sabotage targets." },
+    // ----- ACT III -----
+    { id: "a3q1", group: "Act III — Founders' Day", title: "The Plan", state: "hidden",
+      player: "Three targets: the fireworks, the beacon, the pods. Pick yours. Trust your weirdos with the rest.",
+      dm: "Let the player drive. Salt logistics scene (pool store / margarita stand / aisle 7). Deborah's Form 77-B secures the loading dock." },
+    { id: "a3q2", group: "Act III — Founders' Day", title: "Sabotage at Sundown", state: "hidden",
+      player: "Founders' Day is here. Smile. Wave. Ruin everything.",
+      dm: "Run the three targets as intercut scenes. Ally rolls for the targets the PC delegated. Failures = complications, not dead ends." },
+    { id: "a3q3", group: "Act III — Founders' Day", title: "GLORP PRIME", state: "hidden",
+      player: "Mr. Crisp would like a word. Mr. Crisp is unzipping.",
+      dm: "Boss fight. Two actions/round, Absorb comedy, salt = double damage, Weirdness Gambit removes actions. Callbacks to Scene 0 answers earn Luck." },
+    { id: "a3q4", group: "Act III — Founders' Day", title: "Wake the Neighbors", state: "hidden",
+      player: "47 pods. 47 neighbors. Bring them home.",
+      dm: "The handshake opens the vault. Roll d8 'What's in This Pod' for flavor. Then pick the ending: Treaty, Big Boom, or (if lost) Pinebrook Perfected. Epilogues for every ally." },
+    // ----- SIDE QUESTS -----
+    { id: "s1", group: "Side Quests", title: "Good Boy, Best Intel", state: "hidden",
+      player: "The Hendersons' dog can TALK now. He knows things. His rate is steak.",
+      dm: "Biscuit knows every backyard and smelled the tunnel under FreshMart. Says important things at the worst times. Non-negotiable: he survives the campaign." },
+    { id: "s2", group: "Side Quests", title: "The Casserole Is Moving", state: "hidden",
+      player: "Mrs. Pemberton's potluck casserole is moving. Return it to wherever it came from. Or name it.",
+      dm: "Gerald, a glorp larva. Raise him or return him to the crash-site crate. A befriended Gerald absorbs one Spore Burst in the finale, heroically." },
+    { id: "s3", group: "Side Quests", title: "Magnet Fingers", state: "hidden",
+      player: "Marla's health inspection is Friday and every fork in Duke's is stuck to her. Help.",
+      dm: "Grounding-wire gauntlet from Wendell's scrap bin. Completing it = Marla joins fully, and her handshake lifts Crisp's keycard clean." },
+    { id: "s4", group: "Side Quests", title: "Lawn Graffiti", state: "hidden",
+      player: "The lawns form a pattern. Patterns can be... edited. You'll need a riding mower and no shame.",
+      dm: "A rude enough word mowed into the antenna breaks the array: -5 GLORP PRIME HP before the fight. Suspicion +2, worth every point." },
+    { id: "s5", group: "Side Quests", title: "Birds Aren't Real (But This One Isn't)", state: "hidden",
+      player: "Wendell's rival Terrence says birds are fake. He's wrong. Except about one very specific pigeon.",
+      dm: "The drone-pigeon has filmed EVERYTHING since '87, including abductions. Its footage = undeniable proof, and it leads to the crash clearing. Terrence is insufferable about being right." },
+    { id: "s6", group: "Side Quests", title: "Release the Deborah", state: "hidden",
+      player: "HOA Vice-President Deborah Vance is the scariest thing in Pinebrook, and she is HUMAN. Point her at the truth.",
+      dm: "Convince her Crisp violated the bylaws (he has — Section 4: unapproved structures, i.e., a landing beacon). She can filibuster GLORP PRIME for one full round with a procedural objection." },
+    { id: "s7", group: "Side Quests", title: "The Marsh Files", state: "hidden",
+      player: "The Sheriff who believed you is gone — and the thing wearing her badge is telling everyone YOU'RE the problem. The real Marsh kept notes. Find them before it does.",
+      dm: "Activate after MARSH-2 appears. The Evidence Heist set-piece (villains-and-twists.md): the station lockup, box '2:47', Hodge's unlatched Tuesday window. Finding the notes fires Twist 10 (Hodge Knew) and can fire Twist 3 (The Template). The notes are Hard evidence: -2 Reputation when Arlene prints them." }
+  ],
+
+  clues: [
+    { id: "c1", title: "4,000 Lawn Photos", text: "Your phone tried to film the abduction. It saved 4,000 photos of a smiling lawn instead.",
+      dm: "The lawn in the photos is the Hendersons' — AFTER the spore re-sod that hadn't happened yet. Time-stamped 2:47 AM." },
+    { id: "c2", title: "The Scorch Ring", text: "A perfect circle burned around the Hendersons' chimney. Smells like a new shower curtain.",
+      dm: "Standard tractor-beam residue. Matches the 1987 Gazette photo if compared." },
+    { id: "c3", title: "HUMAN FOOD Jars", text: "The Henderson fridge: dozens of jars, all labeled HUMAN FOOD. All mayonnaise.",
+      dm: "Glorp needs emulsified lipids. This is also why Crisp drinks mayo. They think this is discreet." },
+    { id: "c4", title: "Brine Receipts", text: "Receipts for 14 gallons of pickle brine from FreshMart, purchased at exactly 2:47 PM.",
+      dm: "Clones run on brine like coffee. FreshMart logs all clone purchases under account 000-ALL-IS-WELL." },
+    { id: "c5", title: "The New Gnomes", text: "Every 'off' household has a brand-new garden gnome. Same gnome. Same smile. Facing the street.",
+      dm: "Gnome Drones: cameras + zappers. Destroying one is cathartic and raises Suspicion +1 (they file a report AS they explode)." },
+    { id: "c6", title: "The 2:47 Hum", text: "Wendell's scanner: a signal spike every night at 2:47 AM. Strongest bearing — the water tower.",
+      dm: "The Lawn Frequency. It's a lullaby broadcast keeping pod guests asleep and clones synced." },
+    { id: "c7", title: "Gazette, 1987", text: "'LIGHTS OVER RESERVOIR; THREE MISSING, RETURNED POLITE.' One of the three: a young Mr. Crisp.",
+      dm: "Crisp was the original template — the Vanguard's first and favorite suit. 'Returned' is generous." },
+    { id: "c8", title: "Spore-Grass Sample", text: "Too green, no smell, leans toward you. Under blacklight it glows. Salt makes it hiss.",
+      dm: "Confirms the salt weakness ahead of the finale. Lawn Whisperer PCs get advantage vs anything sod-based." },
+    { id: "c9", title: "The Antenna Pattern", text: "Priya's drone photos: seen from above, the replaced lawns form one enormous geometric array.",
+      dm: "The array amplifies the tower beacon. Side quest Lawn Graffiti can deface it for a boss debuff." },
+    { id: "c10", title: "The Mayo Thing", text: "Mr. Crisp does not sweat. Ever. And at the party he drank mayonnaise from the jar. Nobody else blinked.",
+      dm: "Nobody blinked because half the crowd was clones and the other half was being polite. Pinebrook's fatal flaw." },
+    { id: "c11", title: "The Pod Manifest", text: "GUESTS: 47 · COMFORT: MAXIMUM · RETURN DATE: N/A.",
+      dm: "47 = every replacement so far. The N/A is the horror beat. Play it straight for one beat, then let Biscuit break the tension." },
+    { id: "c12", title: "The Fireworks Invoice", text: "Founders' Day fireworks: 'extra sparkle compound' — supplier: FRSHMRT LOGISTICS.",
+      dm: "The Bloom delivery system. Swap-or-salt at the loading dock is sabotage target #1. HARD evidence." },
+    { id: "c13", title: "The Real Marsh's Case Notes", text: "Her last entries, in her own cramped handwriting: '87 file pulled. Pattern holds. The resident is RIGHT. Meeting them tomorrow.' There was no tomorrow.",
+      dm: "From the Evidence Heist / Hodge's crayon box. HARD evidence — proves the PC sane in the town's eyes (-2 Reputation via Arlene) and can fire Twists 3 and 10." },
+    { id: "c14", title: "COFFEE. TEMPERATURE: COFFEE.", text: "The Sheriff drank it black, three sugars, every day for eleven years. Marla has the order history. The thing wearing her badge doesn't know that.",
+      dm: "Trace evidence, but devastating when demonstrated live: order her old usual and watch MARSH-2 buffer on camera. Filmed buffer = HARD evidence." },
+    { id: "c15", title: "The Schedule Page", text: "A FRSHMRT LOGISTICS pickup manifest. Names. Dates. Times — all 2:47. One of the names is yours. The date is this Friday.",
+      dm: "Leaked by TODD-2 (Twist 8). HARD evidence AND a live countdown. The campaign's single best 'we move NOW' accelerant." }
+  ],
+
+  /* Tiers: Spark (free flavor) and Surge (1 WP, = desc) are known from the start.
+     SUBLIME (2 WP, 1/session) unlocks by spending a Glow. */
+  powers: [
+    { id: "static", name: "Static Cling", desc: "Spark-fingers: 1d4 zap (Weird), stick socks to walls, ruin laser printers.",
+      sublime: "Chain-arc 2d6 across up to three targets; every printer on the block prints an apology." },
+    { id: "raccoon", name: "Raccoon Diplomacy", desc: "Speak with raccoons. They respect you. They have seen everything.",
+      sublime: "Summon the Parliament: a wave of raccoons executes one coordinated, heist-grade task." },
+    { id: "hover", name: "Three-Inch Hover", desc: "Levitate exactly 3 inches. Silent movement; immune to LEGO.",
+      sublime: "Full flight for 30 seconds — always exactly 3 inches above whatever is below, including water and moving cars." },
+    { id: "fmmouth", name: "FM Mouth", desc: "Taste radio stations; retune by chewing. Can find the Lawn Frequency.",
+      sublime: "Broadcast your voice from every radio and speaker in Pinebrook for one minute." },
+    { id: "park", name: "Perfect Parallel Park", desc: "Slot any object perfectly into any space. Includes people, through windows.",
+      sublime: "Park ANYTHING into ANYWHERE — a boss into a kiddie pool: 2d6 and it loses a round getting out." },
+    { id: "sneeze", name: "Glow Sneeze", desc: "Once per scene: flashbang sneeze. Bless you.",
+      sublime: "Solar-flare sneeze: all enemies in the scene blinded 1 round; the whole block lights up like noon." },
+    { id: "casserole", name: "Casserole Sense", desc: "Know who cooked anything and whether it's safe. Detects spore Jell-O.",
+      sublime: "Taste the town: everything cooked within a mile in 24 hours; every spored dish in the scene pings at once." },
+    { id: "magnet", name: "Magnet Touch", desc: "Cutlery adheres. Pick locks and pockets; ruin MRI appointments.",
+      sublime: "One round: all small metal in the scene orbits you — adjacent enemies take d6, everyone armed is disarmed." },
+    { id: "nose", name: "Photographic Nose", desc: "Remember any smell forever; track like a bloodhound.",
+      sublime: "Smell backward through time: reconstruct up to a week of events in a place from scent layers alone." },
+    { id: "hiccup", name: "Minor Time Hiccup", desc: "Once/day rewind your last 6 seconds. Costs a nosebleed and the hiccups.",
+      sublime: "Rewind one full minute. Both nostrils. Hiccups for an hour. Worth it." },
+    { id: "lawn", name: "Lawn Whisperer", desc: "Grass leans toward you. Spore-grass HATES you: advantage vs anything sod-based.",
+      sublime: "The lawns revolt: all spore-grass in the scene turns on its makers — Sod Golems fight for you this scene." },
+    { id: "deadchannel", name: "Dead Channel Eyes", desc: "See invisible things: drones, static beings, who tracked mud in.",
+      sublime: "See through every disguise AND every wall (static outlines) for a scene; splitting headache after." },
+    { id: "pocket", name: "Pocket of Holding", desc: "Your fanny pack holds one absurd item too big for it. One.",
+      sublime: "The fanny pack accepts one ABSURD thing: a whole pod, a flamingo flock, one consenting ally." },
+    { id: "zapper", name: "Bug Zapper Aura", desc: "Mosquitos and Gnome Drones spark and pop near you.",
+      sublime: "Nova pop: every drone and small construct in the scene detonates into potpourri simultaneously." },
+    { id: "smalltalk", name: "Uncanny Small Talk", desc: "Clones MUST respond to small talk and buffer while doing so.",
+      sublime: "Mass freeze: EVERY clone in earshot locks into 'how about this weather' for 2 rounds." },
+    { id: "sprinkler", name: "Sprinkler Command", desc: "Activate/aim any sprinkler within a block. Load-bearing in the brine gambit.",
+      sublime: "Seize the town's entire sprinkler grid. With brine in the lines: 2d6 salt to all glorp outdoors." },
+    { id: "chalk", name: "Chalk Prophecy", desc: "Sidewalk chalk drawings come true-ish within 24h. Always literally.",
+      sublime: "Draw the next scene: declare one fact about the upcoming scene. It is true." },
+    { id: "yolk", name: "Double Yolk", desc: "Once/day split into two confused yous for one minute. Argue efficiently.",
+      sublime: "Three of you for ten minutes. The third one is, frankly, a bit much." },
+    { id: "nightowl", name: "Night Owl Clock", desc: "Always wake at 2:47 AM, and KNOW if something alien is happening tonight.",
+      sublime: "It becomes 2:47 AM everywhere for six seconds: every clone sync-freezes mid-step while you act freely." },
+    { id: "shrug", name: "The Shrug", desc: "Once per scene, ignore one hit entirely. 'I'm fine.'",
+      sublime: "Shrug off one entire ROUND of consequences — all damage, all effects. 'I said I'm fine.'" }
+  ],
+
+  /* Gear compendium. rarity: mundane | modified | glorptech | oddity.
+     Glorptech always carries a quirk. */
+  items: [
+    { id: "bat", name: "Baseball Bat 'The Equalizer'", cat: "weapon", rarity: "mundane",
+      effect: "d6 damage. +1 vs anything that just came through a window." },
+    { id: "skillet", name: "Cast-Iron Skillet", cat: "weapon", rarity: "mundane",
+      effect: "d6 damage. Advantage vs Jell-O-based lifeforms." },
+    { id: "whacker", name: "Weed Whacker", cat: "weapon", rarity: "mundane",
+      effect: "d6 damage, double vs Sod Golems. Extremely loud." },
+    { id: "leafblower", name: "Leaf Blower 900cc", cat: "weapon", rarity: "mundane",
+      effect: "d4 damage, pushes a person-sized target 10 ft. Suspicion +1 if used at night." },
+    { id: "skimmer", name: "Pool Skimmer", cat: "weapon", rarity: "mundane",
+      effect: "d4 damage, reach. On a natural 15+, you've CAUGHT a drone, live." },
+    { id: "gnomeweapon", name: "Garden Gnome (confiscated)", cat: "weapon", rarity: "mundane",
+      effect: "d4 thrown. Clones will not damage it — they revere it. It always survives the throw." },
+    { id: "pitcher", name: "T-Ball Pitching Machine", cat: "weapon", rarity: "mundane",
+      effect: "d8 damage. One turn to set up; keeps firing at its last target if left alone." },
+    { id: "racket", name: "Bug-Zapper Racket, Modified", cat: "weapon", rarity: "modified",
+      effect: "d4 damage. Instantly pops a Gnome Drone on any hit." },
+    { id: "crossbow", name: "Nerf Crossbow (salt darts)", cat: "weapon", rarity: "modified",
+      effect: "d4 ranged. Counts as salt: double damage vs glorp." },
+    { id: "flail", name: "Sprinkler-Head Flail", cat: "weapon", rarity: "modified",
+      effect: "d6 damage. Nat 20: douses the target — salt damage if the line runs brine." },
+
+    { id: "saltpacket", name: "Salt Packet", cat: "consumable", rarity: "mundane",
+      effect: "+2d6 salt damage on one hit, or dissolve one patch of spore-grass." },
+    { id: "poolsalt", name: "Pool Salt, 25 lb Bag", cat: "consumable", rarity: "mundane",
+      effect: "Two hands. Burst: 2d6 salt damage to every gelatinous thing adjacent." },
+    { id: "rimmer", name: "Margarita Rimmer", cat: "consumable", rarity: "mundane",
+      effect: "Coat a weapon: its next 3 hits count as salt." },
+    { id: "casseroleitem", name: "Duke's Mystery Casserole", cat: "consumable", rarity: "mundane",
+      effect: "Heal 1d6 HP. Weird DC 8 or hiccup audibly for a scene." },
+    { id: "coffee", name: "Thermos of Diner Coffee", cat: "consumable", rarity: "mundane",
+      effect: "Shake off fear or sleep; +1 on your next Brains roll." },
+    { id: "brine", name: "Pickle Brine Jar", cat: "consumable", rarity: "mundane",
+      effect: "Offer to a clone: advantage on one social roll vs clones. Do not drink." },
+    { id: "snacks", name: "Emergency Snacks", cat: "consumable", rarity: "mundane",
+      effect: "Re-roll one ally help die. Priya accepts no other currency." },
+    { id: "steak", name: "Steak (Biscuit Grade)", cat: "consumable", rarity: "mundane",
+      effect: "Biscuit answers three questions truthfully(-ish)." },
+
+    { id: "blacklight", name: "Blacklight Flashlight", cat: "gadget", rarity: "modified",
+      effect: "Reveals glorp residue, spore-grass, and trails invisible to the naked eye." },
+    { id: "camcorder", name: "1987 Camcorder 'The Witness'", cat: "gadget", rarity: "modified",
+      effect: "Films what phones can't. Its footage counts as PROOF." },
+    { id: "walkie", name: "Walkie-Talkie Set (one battery)", cat: "gadget", rarity: "modified",
+      effect: "Once per session, an ally arrives exactly when needed. The battery is always almost dead." },
+    { id: "bigear", name: "Scanner 'Big Ear'", cat: "gadget", rarity: "modified",
+      effect: "You can't be ambushed by clones while carrying it. Hums loudly at 2:47 AM." },
+    { id: "jammer", name: "Jammer Brick", cat: "gadget", rarity: "modified",
+      effect: "1/session: every Gnome Drone in the scene reboots for 1 round." },
+    { id: "petunia", name: "Priya's Drone 'Petunia'", cat: "gadget", rarity: "modified",
+      effect: "Aerial recon (Brains to pilot). HP 2. Scratch it and Priya's rates double." },
+    { id: "ghillie", name: "Ghillie Suit (Astroturf)", cat: "gadget", rarity: "modified",
+      effect: "Advantage on lawn stealth. Disadvantage on Charm while worn — look at you." },
+    { id: "empbell", name: "EMP Doorbell", cat: "gadget", rarity: "modified",
+      effect: "Plant on a door: the first clone through buffers for 2 rounds." },
+    { id: "gauntlet", name: "Grounding Gauntlet", cat: "gadget", rarity: "modified",
+      effect: "Immune to zap damage; magnet-type powers become precise instead of chaotic." },
+
+    { id: "goojar", name: "Glorp Goo Jar", cat: "glorptech", rarity: "glorptech",
+      effect: "Throw: target loses its movement for 1 round.",
+      quirk: "Hums show tunes at exactly 2:47." },
+    { id: "translator", name: "Courtesy Translator Pin", cat: "glorptech", rarity: "glorptech",
+      effect: "Understand all Glorpal chatter.",
+      quirk: "While worn you are physically incapable of rudeness. Even when you really need to be." },
+    { id: "podmint", name: "Pod Pillow Mint", cat: "glorptech", rarity: "glorptech",
+      effect: "Full heal to max HP. Once, ever.",
+      quirk: "You sleep 14 hours and wake TOO refreshed: advantage all day; your allies are unsettled." },
+    { id: "glove", name: "The Overseer's Glove", cat: "glorptech", rarity: "glorptech",
+      effect: "Opens pods and all Glorptech locks — this is 'the handshake.'",
+      quirk: "It waves at neighbors on its own. You feel it wanting to." },
+    { id: "shard", name: "Beacon Shard", cat: "glorptech", rarity: "glorptech",
+      effect: "1/session: reroll any die as if you'd spent Luck.",
+      quirk: "Every gnome within 30 feet slowly rotates to face you." },
+    { id: "sporebloom", name: "Spore Bloom in a Jar", cat: "glorptech", rarity: "glorptech",
+      effect: "Throw: instant lawn — difficult terrain for your enemies.",
+      quirk: "It whispers compliments. Accurate ones." },
+    { id: "gnorman", name: "Gary's Gnome, 'Gnorman'", cat: "glorptech", rarity: "glorptech",
+      effect: "Displayed on your person: clones treat you as a Verified Neighbor — auto-pass one clone check per scene.",
+      quirk: "You cannot shake the feeling that it is proud of you." },
+
+    { id: "form77b", name: "HOA Form 77-B (blank, notarized)", cat: "oddity", rarity: "oddity",
+      effect: "Requisition any one municipal thing, once, no questions asked." },
+    { id: "sentimental", name: "Your Sentimental Item", cat: "oddity", rarity: "oddity",
+      effect: "Once per campaign: invoke its story aloud and auto-succeed one roll. The GM must get emotional." }
+  ],
+
+  /* Curated "their thing" lines for recruitable allies — anyone in the census
+     can join the crew; these get bespoke help text, everyone else a generic. */
+  allyKits: {
+    wendell: "Gadgets & the flower van — jammers, blacklights, and a getaway that smells like carnations.",
+    priya: "Petunia the drone — eyes in the sky. Snacks up front, non-negotiable.",
+    marla: "Magnet hands & diner intel — she hears everything, and cutlery obeys her.",
+    deborah: "Bylaws as siege weapons — Form 77-B opens doors that salt can't.",
+    biscuit: "The nose. Every backyard, every shortcut, every secret. Rate: steak.",
+    hodge: "Crayon precognition and the Tuesday window he leaves unlatched 'for the moths.'",
+    dukekowalski: "The griddle perimeter, the bricked tunnel door, and eleven years of watching.",
+    gilherrera: "Eleven tons of pool salt and a laminated defense plan he wrote in 2011 with your name on it.",
+    nanaruthieokafor: "Sixty years of Polaroids, a salted doorstep, and gin rummy you cannot win honestly.",
+    dezwhitaker: "Unbothered night-shift omniscience — and the VHS deck that records what phones can't.",
+    terrence: "Twenty-two binders of 'fake birds' that are actually a flamingo deployment map.",
+    dianehenderson: "Snacks in proportion to danger, pepper spray, and forty years of casserole-arm."
+  },
+
+  marks: [
+    "The Bandage — worn like a medal. Start next session with +1 Luck.",
+    "Glorp-Stained Arm — glows near alien activity (free detection); you can't hide in the dark.",
+    "The Tic — you count stairs out loud now. In a whisper. They've noticed.",
+    "Biscuit's Ward — Biscuit refuses to leave your side. Snack budget doubled.",
+    "The Clock — you wake at 2:47 AM forever (gain the Night Owl spark).",
+    "The Gnome — Weird +1 permanently. A gnome stands on your lawn. It moved."
+  ],
+
+  cloneTells: [
+    "Never blinks. Ever. Not once.",
+    "Laughs exactly two seconds too late.",
+    "Drinks pickle brine like Gatorade.",
+    "Calls everyone 'FELLOW HUMAN.'",
+    "Mows the same strip of lawn for hours.",
+    "Uses windows instead of doors. Politely.",
+    "Waters the plastic flowers.",
+    "Smiles warmly while delivering terrible news.",
+    "Counts stairs out loud, in a whisper.",
+    "Bleeds green glitter from paper cuts.",
+    "Dogs won't come within thirty feet.",
+    "Uses your full legal name every single time."
+  ],
+
+  complications: [
+    "A gnome saw everything. Suspicion +1.",
+    "Your phone autoplays the 4,000 lawn photos at max brightness.",
+    "Biscuit announces your location. Lovingly. Loudly.",
+    "You step on spore-grass; your shoe starts photosynthesizing.",
+    "A clone appears to offer help. Genuinely. It's worse.",
+    "Deborah Vance issues YOU a violation notice.",
+    "Your power misfires adorably (GM's choice).",
+    "Mrs. Pemberton arrives with a casserole. It is moving.",
+    "Car alarm. Every car. Except yours, which unlocks itself.",
+    "It is suddenly 2:47 AM. How is it 2:47 AM?"
+  ],
+
+  pregens: [
+    { name: "Riley Park", concept: "Night-shift nurse (34) — awake at 2:47 by profession",
+      brawn: 1, brains: 3, charm: 0, weird: 2, powerId: "nose",
+      itemIds: ["coffee", "saltpacket", "sentimental"],
+      gear: "Trauma kit\nKeychain flashlight\nFanny pack" },
+    { name: "Dee Ramirez", concept: "Bike courier (17) — knows every shortcut and every dog",
+      brawn: 3, brains: 0, charm: 2, weird: 1, powerId: "hover",
+      itemIds: ["walkie", "steak", "sentimental"],
+      gear: "BMX 'The Comet'\nFanny pack" },
+    { name: "Chuck 'Boomer' Boone", concept: "Mall cop (58) — peaked in 1987, ready to re-peak",
+      brawn: 3, brains: 2, charm: 1, weird: 0, powerId: "shrug",
+      itemIds: ["bat", "camcorder", "sentimental"],
+      gear: "Segway (no charger)\nLaminated citizen's-arrest card\nFanny pack" },
+    { name: "Gwen Okafor", concept: "Substitute teacher (41) — feared in four school districts",
+      brawn: 0, brains: 2, charm: 3, weird: 1, powerId: "smalltalk",
+      itemIds: ["snacks", "coffee", "sentimental"],
+      gear: "The Look (patented)\nRed pens\nFanny pack" }
+  ],
+
+  tokenTypes: [
+    { id: "clone", emoji: "😐", name: "Neighborly Unit", hp: 6 },
+    { id: "gnome", emoji: "🍄", name: "Gnome Drone", hp: 2 },
+    { id: "flamingo", emoji: "🦩", name: "Flamingo Sentinel", hp: 4 },
+    { id: "mailman", emoji: "📬", name: "THE MAILMAN", hp: 14 },
+    { id: "sod", emoji: "🌱", name: "Sod Golem", hp: 10 },
+    { id: "marsh2", emoji: "🚔", name: "SHERIFF MARSH-2", hp: 12 },
+    { id: "crisp", emoji: "🕴️", name: "Overseer Crisp", hp: 12 },
+    { id: "glorp", emoji: "👾", name: "GLORP PRIME", hp: 30 },
+    { id: "biscuit", emoji: "🐕", name: "Biscuit (ally)", hp: 6, ally: true },
+    { id: "ally", emoji: "⭐", name: "Ally", hp: 6, ally: true }
+  ],
+
+  suspicionLabels: [
+    "A perfectly normal Tuesday.",
+    "Someone waved a little too long.",
+    "Sideways glances at the mailbox.",
+    "Your name came up at the HOA meeting.",
+    "You're on a list.",
+    "A gnome has appeared on your lawn.",
+    "The gnomes rotate to face you.",
+    "GARY-2 waves at your window. At night.",
+    "A 'wellness check' has been scheduled.",
+    "The mailman delivers only to you now.",
+    "THE NEIGHBORHOOD IS WATCHING."
+  ],
+
+  /* The second clock: how crazy the HUMANS think the PC is.
+     MARSH-2's gaslight campaign pushes it up; hard evidence pulls it down. */
+  reputationLabels: [
+    "Pillar of the community.",
+    "\"A little tired lately,\" folks say.",
+    "Asking odd questions around town.",
+    "The Gazette prints a 'concerned' item.",
+    "Casseroles arrive with sympathy cards.",
+    "Conversations stop when you enter Duke's.",
+    "The Truthers want you as their keynote speaker.",
+    "An intervention is being organized.",
+    "MARSH-2 has a file on you. It's thick.",
+    "There's talk of 'a nice facility upstate.'",
+    "THE VAN IS HERE. IT'S VERY COMFORTABLE."
+  ],
+
+  /* The Pinebrook Almanac — in-world documents. `open: true` entries are
+     player-visible from the start; the rest are revealed by the GM like clues. */
+  lore: [
+    { id: "l1", title: "“Welcome to Pinebrook!” (visitor pamphlet)", open: true,
+      text: "Pinebrook (pop. 8,213) welcomes you! Founded 1911 when the railroad missed us by nine miles and everyone agreed not to mention it. Home of the Fighting Beavers, the tri-county's third-largest water tower, and the ORIGINAL Duke's Diner (est. 1958, closed Mondays, Duke says hi — well, dings hi). Please enjoy our award-considered lawns. Pinebrook: You'll Never Want To Leave!*  (*Pamphlet revised 1987; earlier editions read 'You'll Never Leave!' — a typo, per the town council.)",
+      dm: "The 1987 revision date is a freebie clue hiding in plain sight. Coral has one un-revised 1986 pamphlet on the Removed by Request shelf." },
+    { id: "l2", title: "Duke's Diner menu (laminated, biblical)", open: true,
+      text: "COFFEE — bottomless. WAFFLES — like your grandmother's, assuming she loved you. HASH SITUATION — market price. TODAY'S MYSTERY CASSEROLE — ask Marla, or don't. FREE PRETZEL WITH EVERY MEAL, NO EXCEPTIONS, EVERYONE GETS THE PRETZEL, IT IS IMPORTANT TO DUKE THAT YOU TAKE THE PRETZEL. (No substitutions. Salt is complimentary and abundant.)",
+      dm: "The pretzel is the town-wide clone test (clones never touch it — they hold it politely). Sharp players can clock it from the menu alone." },
+    { id: "l3", title: "The Friendliest Town application, p.14 of 32 (1994)", open: false,
+      text: "…what makes Pinebrook the Friendliest Town is not merely our identical lawns and permanent smiles, but the DEPENDABILITY of our welcome. Here, every neighbor waves. Every casserole arrives on time. Every day resembles the last, in the best possible way. We are, in short, the town television promised…",
+      dm: "The Collective read this during their 1987 site survey — the current HOA newsletter quotes 'identical lawns and permanent smiles' VERBATIM. Hard evidence Crisp has read it, and the clearest window into WHY Pinebrook 'won.'" },
+    { id: "l4", title: "Pinebrook Gazette — June 12, 1987 (full clipping)", open: false,
+      text: "LIGHTS OVER RESERVOIR; THREE MISSING, RETURNED 'POLITE.' Residents report a 'patient, courteous' glow above the water Tuesday, 2:47 AM. Missing persons L. Crisp (14), G. Herrera (19), M. Okafor (22) were recovered Thursday, unharmed and 'noticeably more agreeable' (Sheriff Dunphy). Young Crisp, asked what he remembered, said only: 'It was warm. It asked first.' The Gazette will publish a follow-up.",
+      dm: "The follow-up was spiked (Arlene has it typeset in a locked drawer). 'It asked first' is Lawrence's whole tragedy in four words — and G. Herrera is Gil at the pool store, M. Okafor is a thread to Nana Ruthie's shoebox." },
+    { id: "l5", title: "HOA newsletter — current issue", open: false,
+      text: "NEIGHBORHOOD IMPROVEMENT ASSOCIATION BULLETIN. Motion 12 (margarita station) tabled, third consecutive session. Lawn Excellence Initiative enters Phase Three: identical lawns and permanent smiles for all! Reminder: potlucks remain sodium-free for reasons of heart health. Founders' Day volunteers report to Mr. Crisp. Attendance will be taken. It sure is weather, neighbors!",
+      dm: "Three clues in one page: the tabled salt motion, the verbatim application quote, and 'It sure is weather' spreading through the network like a software tic." },
+    { id: "l6", title: "Wendell's log — night 43", open: false,
+      text: "2:44 — static normal. 2:45 — static normal. 2:46 — THE FRIDGE NOTE. B-flat. Same as every fridge, every night, getting louder every year since '87 and NOBODY HEARS IT BUT ME. 2:47 — spike. Bearing 041. Tower. Duration 66 seconds. 2:49 — static normal. 2:50 — ate a sandwich. Still right about everything.",
+      dm: "Confirms the Lawn Frequency pattern and plants the B-flat motif. Bearing 041 from Wendell's Wires points at the water tower — a player with a map and a protractor gets there themselves. Let them." },
+    { id: "l7", title: "Founders' Day official program", open: false,
+      text: "10 AM — Pancake Gauntlet (Duke's). NOON — Yard of the Month (award pending). 2 PM — Fighting Beavers marching band (approved setlist). 4 PM — Remarks, HOA President Crisp ('ONE. TWO.'). 6 PM — Potluck (sodium-free). 8:45 PM — Assembly at the bandshell. 8:47 PM — SKY EVENT. (Program printed in advance for your convenience. Attendance will be taken.)",
+      dm: "8:47 PM — they moved the sacred number to evening for the Bloom. 'SKY EVENT' in a pre-printed program is the smoking gun for R6, and the finale's timetable in the player's hands." },
+    { id: "l8", title: "A note in perfect Times New Roman handwriting", open: false,
+      text: "COLLECTION AT 2:47. GUESTS: COMFORTABLE. ROUTE: STANDARD. THE MMS ON THE PILLOWS ARE RUNNING LOW; REQUISITION FILED. AWARD: STILL PENDING. WE ARE SO CLOSE, EVERYONE. — M.",
+      dm: "Maureen's out-tray, dropped by THE MAILMAN, or planted wherever the player is. 'M' is deniable (Maureen? The Mailman? Marsh-2?) — let the player argue about it. The misspelled 'MMS' (mints) is the one imperfection; clones find it deeply embarrassing." }
+  ],
+
+  /* The Revelation Web — the 8 things the player must eventually learn.
+     Every one is reachable by 3+ independent paths, so no missed scene can
+     break the mystery. Full sandbox rules: campaign/running-it-loose.md */
+  revelations: [
+    { id: "r1", title: "Gary was replaced — and he's not the only one",
+      paths: "Any clone-tell field test · Chet's Follicle File · Big Ang's snack spreadsheet · Hal Butterfield's mow-log · Dakota's Brine List" },
+    { id: "r2", title: "It happens at 2:47 AM, on a schedule",
+      paths: "Wendell's scanner log · Opal's split-log book · Priya's doorbell-reboot data · Dez's VHS bowling tape · staying up once" },
+    { id: "r3", title: "The HOA is the front; Crisp runs it",
+      paths: "Tilly's DECLINED letter · Maureen's permit trail · Carol Ann's verbatim minutes · the block-party keycard · the Gazette 1987 photo caption" },
+    { id: "r4", title: "The real neighbors are alive, beneath FreshMart",
+      paths: "Biscuit's nose · Gen-Gen's MALL BELOW map · buffering KYLE at the freight elevator · Fran's deli-schedule gap · Duke's bricked wall" },
+    { id: "r5", title: "The lawns are an antenna; the tower is the beacon",
+      paths: "Priya's drone photo · Gus's lawn diary · Walt Grubb's growth spreadsheets · climbing the tower · Doug Wexler's citation ledger" },
+    { id: "r6", title: "Founders' Day is the Bloom — fireworks + beacon = fleet",
+      paths: "The Undermart schematic wall · the fireworks invoice (Maureen OR Carol's shoebox) · a BEV-2 gossip trade · Arlene's spiked follow-up" },
+    { id: "r7", title: "Salt hurts them; weirdness jams them",
+      paths: "The spore-grass sample hissing · Nana Ruthie's doorstep · Duke's pretzel test · Terry Loomis's tape · any accidental buffer moment" },
+    { id: "r8", title: "The pods open to the Overseer's handshake",
+      paths: "The hand-shaped pod recesses · a KYLE or TODD-2 interrogation · a BEV-2 trade · Gil Herrera's 1989 memory" }
+  ],
+
+  /* STATIC — the identity-erosion track (0-9). Passing as perfect raises it;
+     being known lowers it. Full rules: campaign/whats-different.md */
+  staticLabels: [
+    "Fully yourself.",
+    "A little polished lately.",
+    "You said 'FELLOW' unironically. Once.",
+    "FLICKER — choose one small habit. It's gone.",
+    "Your handwriting is getting suspiciously neat.",
+    "You waved at a gnome. It felt... collegial.",
+    "FLICKER — your reflection waves first. First roll each scene at disadvantage until you surprise the network.",
+    "The casseroles have started tasting... correct.",
+    "GARY-2 calls you 'PRACTICALLY ONE OF THE FAMILY.'",
+    "SMOOTH — somewhere below FreshMart, a pod has fresh linens. The mint is on the pillow. It's warm."
+  ],
+
+  /* The Night Deck — dealt when the 2:47 Protocol begins. */
+  nightEvents: [
+    "THE SYNC — every clone in town freezes mid-step for 66 seconds. Any door is enterable. The countdown restarts exactly when the player is furthest from the exit.",
+    "THE TURNING — every gnome rotates to face the water tower. All of them. Even the one in the kitchen nobody has mentioned yet.",
+    "THE DELIVERY — a FRSHMRT truck idles outside a house that still has people in it. The driver waits. Checks a list. Waits.",
+    "TWO LOUDER — the Lawn Frequency rises by exactly two houses' worth. By morning, two more porch lights never turn off.",
+    "THE DOG KNOWS — Biscuit at the window: 'You need to see this. Bring the steak. Not for the mission. For me.'",
+    "BROADCAST NIGHT — every TV in every replaced house turns on at once: the same 1950s sitcom, laugh track two seconds late, blue light flickering down the street in unison.",
+    "THE TAKING — the beam comes for someone tonight, someone whose name the player knows. Intervene (loud, 👁+2) or witness (a clue, and the guilt).",
+    "AFTER HOURS — Duke's light is on. Marla is pouring coffee for a stranger in pajamas. The stranger's slippers are wet with reservoir water.",
+    "ONE RING — the phone rings once. Unknown number. Answered: 66 seconds of suburb ambience, then quietly: 'WE KNOW YOU'RE AWAKE.'",
+    "THE PATTERN — the sprinklers run in sequence. From a roof it's readable: an arrow. Or a countdown. Petunia could say which.",
+    "THE SILENCE — nothing happens. The first silent 2:47 in months, and that's the most frightening one yet. (GM: the network was busy elsewhere. Something big advanced.)",
+    "THE OLD PATTERN — the player's own porch light flickers in a rhythm they almost remember. Weird DC 8: a fragment of Thread B surfaces."
+  ],
+
+  /* The NOW WHAT? oracle — stall-breakers that push toward the web. */
+  nowWhat: [
+    "Biscuit arrives, eats something evidence-adjacent, and announces — between licks — exactly where he found it.",
+    "The phone rings: BEV-2, 'RECIPROCATING.' She leaks one real Vanguard fact and demands gossip back.",
+    "A MISSED DELIVERY slip on the door. Dated TOMORROW, 2:47 AM. The addressee is a neighbor the player likes.",
+    "Priya's drone crash-lands at their feet with eleven seconds of footage somebody clearly shot down to suppress.",
+    "The MARSH-2 cruiser rolls past at exactly two under the limit. Third time today. She waves. She's practicing waving.",
+    "Mrs. Pemberton needs her casserole back. It's 'restless.' It is pointing at something, the way a compass points.",
+    "A Tuesday Truther bursts in: their dumbest theory just accidentally produced a completely real document.",
+    "The gnome count on this street has changed since breakfast.",
+    "Wendell over the walkie, whisper-screaming: the Lawn Frequency just spiked — EARLY. It has never once been early.",
+    "A stranger in pajamas shuffles past, murmuring 'five more minutes.' Nobody recognizes them. The pods don't lose count. Do they?",
+    "Deborah cites a nearby clone for a violation — and its response is a sound no polite thing should make.",
+    "It is suddenly 2:46 AM. Wherever they are. Whatever they were doing. Something starts to hum."
+  ],
+
+  /* The Twist Deck — plant, then fire. Full write-ups in campaign/villains-and-twists.md. */
+  twists: [
+    { id: "t1", title: "The Gnome Indoors",
+      plant: "The lawn gnome appears at Suspicion 4. Let it sit for days.",
+      fire: "It's gone from the lawn — and standing in the PC's hallway, facing the bedroom door. Nobody moved it.",
+      fallout: "The house is no longer neutral ground. Pure dread, zero cost." },
+    { id: "t2", title: "One of Us",
+      plant: "Three retroactive tells on ONE ally (never Biscuit, never Hodge): wrong coffee order, too-clean laugh, first-ever full legal name.",
+      fire: "The PC catches them watering plastic flowers.",
+      fallout: "Their real self is in the Undermart; the Unit has fed Crisp everything for two sessions. Let the player recount every scene it attended." },
+    { id: "t3", title: "The Template",
+      plant: "The PC's Session-Zero 2:47 answer; Marla's 'nobody believed me either.'",
+      fire: "In Marsh's case file / the Undermart records: the PC's childhood file. Taken in '99. RETURNED: POLITE. NOTE: TEMPLATE RETAINED.",
+      fallout: "Their power is residue. Somewhere in the vault is an unactivated PC-2." },
+    { id: "t4", title: "The Ninth Gnome",
+      plant: "Priya's gnome count is always off by one; chalk arrows appear near danger.",
+      fire: "One gnome is a defector scout — it's been warning people for weeks. Nobody reads gnome.",
+      fallout: "A tiny, silent ceramic ally with total surveillance access. Pairs with Gnorman." },
+    { id: "t5", title: "Herb's Choice",
+      plant: "Deborah's husband, 'replaced in March'; the written apology.",
+      fire: "Herb's pod opens — and Herb asks for five more minutes.",
+      fallout: "The rescue turns morally itchy. Deborah's face does something nobody has ever seen it do." },
+    { id: "t6", title: "He Asked to Go",
+      plant: "The Gazette's spiked 1987 follow-up; Coral's 14-year microfiche checkout.",
+      fire: "Teenage Crisp VOLUNTEERED. The suit isn't a prison — it's a boy who never wanted to come back. His name is Lawrence.",
+      fallout: "The Treaty path opens; the finale's Charm DC drops if the PC uses his name." },
+    { id: "t7", title: "They're Already Here",
+      plant: "Doug Pramuk's 'primer flash' telescope log; the reservoir's wrong-way shadow.",
+      fire: "The fleet arrived in 1987. It's sleeping under the reservoir. The tower doesn't summon — it WAKES.",
+      fallout: "Optional Act Three escalation. Only for players who thrive under pressure." },
+    { id: "t8", title: "The Defector",
+      plant: "TODD-2's hidden hibachi; the soundless high-fives.",
+      fire: "TODD-2 flips and leaks one page of the schedule: the PC's own abduction date. It's this Friday.",
+      fallout: "A countdown on everything. Sleeping becomes a tactical decision. ('GANG. I SHOULDN'T BE TELLING YOU THIS, GANG.')" },
+    { id: "t9", title: "The Bundt Cake",
+      plant: "The Reputation-7 wellness check arrives bearing a gift.",
+      fire: "There's a pod-mint baked inside. They weren't checking on the PC — they were PRE-BOARDING them.",
+      fallout: "The wellness apparatus = the intake pipeline. The PC now holds Hard evidence you can eat." },
+    { id: "t10", title: "Hodge Knew",
+      plant: "Crayon drawings that were too accurate; the Tuesday window left unlatched; 'template incoherent.'",
+      fire: "The crayon box: real Marsh's case notes (she BELIEVED the PC — in writing), the handshake ledger, and a drawing labeled 'THE ONE WHO'LL FIX IT.'",
+      fallout: "Hodge was never dim — he was waiting for someone safe. The station becomes a Tuesday safehouse." }
+  ]
+};
