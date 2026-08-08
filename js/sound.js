@@ -177,7 +177,8 @@ const Sound = (() => {
 
   function play(name) { shots[name](); }
   const isLoop = (name) => name in loops;
+  const isActive = (name) => !!active[name];
   function setVolume(v) { ensure(); master.gain.value = v; }
 
-  return { toggle, play, isLoop, setVolume };
+  return { toggle, play, isLoop, isActive, setVolume };
 })();

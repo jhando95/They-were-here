@@ -41,11 +41,22 @@
             <stop offset="70%" stop-color="#000" stop-opacity="0"/>
             <stop offset="100%" stop-color="#000" stop-opacity="0.5"/>
           </radialGradient>
+          <radialGradient id="lamp">
+            <stop offset="0" stop-color="#ffcf6b" stop-opacity="0.16"/>
+            <stop offset="1" stop-color="#ffcf6b" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="fogBlur" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="18"/>
+          </filter>
         </defs>
 
         <!-- ground -->
         <rect x="0" y="0" width="1000" height="700" fill="#0e1a13"/>
 
+        <!-- optional AI-generated map: art/map.jpg is injected here at boot -->
+        <g id="customMap"></g>
+
+        <g id="terrain">
         <!-- park -->
         <ellipse cx="320" cy="222" rx="100" ry="62" fill="#152a1c"/>
         <circle cx="270" cy="205" r="16" fill="#1c3a26"/>
@@ -112,6 +123,24 @@
           <text transform="rotate(-90 136 322)" x="136" y="322" font-size="9">MARIGOLD LN</text>
         </g>
 
+        <!-- streetlight pools -->
+        <g pointer-events="none">
+          <circle cx="150" cy="362" r="52" fill="url(#lamp)"/>
+          <circle cx="520" cy="362" r="60" fill="url(#lamp)"/>
+          <circle cx="330" cy="360" r="42" fill="url(#lamp)"/>
+          <circle cx="720" cy="360" r="42" fill="url(#lamp)"/>
+          <circle cx="520" cy="580" r="46" fill="url(#lamp)"/>
+        </g>
+        </g><!-- /terrain -->
+
+        <!-- drifting night fog -->
+        <g id="fog" filter="url(#fogBlur)" pointer-events="none" opacity="0.55">
+          <ellipse cx="220" cy="120" rx="240" ry="46" fill="#9fc3d9" opacity="0.10"/>
+          <ellipse cx="640" cy="480" rx="300" ry="60" fill="#9fc3d9" opacity="0.08"/>
+          <ellipse cx="820" cy="240" rx="200" ry="44" fill="#9fc3d9" opacity="0.09"/>
+          <ellipse cx="380" cy="640" rx="260" ry="40" fill="#9fc3d9" opacity="0.07"/>
+        </g>
+
         <rect x="0" y="0" width="1000" height="700" fill="url(#vign)" pointer-events="none"/>
 
         <g id="markers"></g>
@@ -150,11 +179,12 @@
   <section class="col-panel">
     <div class="card panel-card">
       <nav class="tabs">
-        <button class="tab active" data-tab="sheet">Character</button>
+        <button class="tab active" data-tab="sheet">Sheet</button>
         <button class="tab" data-tab="dice">Dice</button>
         <button class="tab" data-tab="quests">Quests</button>
         <button class="tab" data-tab="clues">Clues</button>
         <button class="tab" data-tab="sounds">Sound</button>
+        <button class="tab" data-tab="scenes">Scenes</button>
       </nav>
 
       <!-- CHARACTER SHEET -->
@@ -290,9 +320,37 @@
         <p class="empty-note">All audio is synthesized live in the browser — no files, works offline.
           Cue the Hum whenever the pace sags. It is always almost 2:47.</p>
       </div>
+
+      <!-- SCENES -->
+      <div class="tab-page" id="page-scenes">
+        <button id="recapBtn" class="btn recap-btn">📻 &nbsp;“Previously, on Pinebrook…”</button>
+        <p class="empty-note recap-note">Auto-narrated from your completed quests and pinned clues —
+          play it at the top of every session.</p>
+        <div class="dm-only">
+          <h3 class="section-title dm-text">TRANSITION SCENES (GM) — CLICK TO ROLL FILM</h3>
+          <div id="sceneList"></div>
+        </div>
+        <p class="empty-note player-scenes-note">The rest of the projection booth is GM-only.
+          Ask your GM nicely. Or don't — attendance will be taken either way.</p>
+      </div>
     </div>
   </section>
 </main>
+
+<!-- CINEMATIC SCENE OVERLAY -->
+<div id="sceneOverlay" class="scene-overlay" hidden>
+  <div class="scene-stage">
+    <div class="scene-art" id="sceneArt"></div>
+    <div class="scene-scrim"></div>
+    <div class="scene-scanlines"></div>
+    <div class="scene-text">
+      <p class="scene-kicker" id="sceneKicker"></p>
+      <h2 class="scene-title" id="sceneTitle"></h2>
+      <p class="scene-narration" id="sceneNarration"></p>
+    </div>
+    <p class="scene-hint">click anywhere to fade out</p>
+  </div>
+</div>
 
 <footer class="foot">
   <span>PORCHLIGHT SYSTEM · one d20, four stats, zero homework</span>
@@ -303,6 +361,8 @@
 <script src="js/dice.js"></script>
 <script src="js/sound.js"></script>
 <script src="js/art.js"></script>
+<script src="js/scenes.js"></script>
+<script src="js/scene-art.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

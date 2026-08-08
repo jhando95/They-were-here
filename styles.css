@@ -83,6 +83,7 @@ body.dm .switch-label { color: var(--amber); }
 .card {
   background: var(--card); border: 1px solid var(--border); border-radius: 10px;
   padding: 14px; margin-bottom: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
 }
 
 /* ---------- map ---------- */
@@ -112,7 +113,20 @@ body.dm .switch-label { color: var(--amber); }
 #playerToken .ring {
   fill: rgba(95, 242, 214, 0.18); stroke: var(--accent); stroke-width: 2.5;
   filter: url(#glow);
+  animation: tokenPulse 2.8s ease-in-out infinite;
 }
+@keyframes tokenPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+/* map atmosphere */
+#fog { animation: fogDrift 75s ease-in-out infinite alternate; }
+@keyframes fogDrift {
+  from { transform: translateX(-28px); }
+  to { transform: translateX(34px); }
+}
+#map.has-custom-map #terrain { display: none; }
 #playerToken text {
   font-family: var(--mono); font-weight: bold; font-size: 13px; fill: var(--accent);
   text-anchor: middle; dominant-baseline: central; pointer-events: none;
@@ -158,8 +172,8 @@ body.dm .dm-only { display: block; }
 .tabs { display: flex; border-bottom: 1px solid var(--border); }
 .tab {
   flex: 1; background: var(--card-2); color: var(--muted); border: none;
-  border-right: 1px solid var(--border); padding: 11px 4px; font-size: 12px;
-  letter-spacing: 2px; cursor: pointer; text-transform: uppercase;
+  border-right: 1px solid var(--border); padding: 11px 2px; font-size: 11px;
+  letter-spacing: 1px; cursor: pointer; text-transform: uppercase;
 }
 .tab:last-child { border-right: none; }
 .tab.active { background: var(--card); color: var(--accent); box-shadow: inset 0 -2px 0 var(--accent); }
@@ -271,9 +285,12 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .custom-clue input, .custom-clue textarea { margin-bottom: 8px; }
 .empty-note { color: var(--muted); font-size: 13px; font-style: italic; }
 
-/* ---------- location art ---------- */
+/* ---------- location art (SVG fallback or dropped-in AI image) ---------- */
 .loc-art { margin: -14px -14px 12px; }
-.loc-art svg { display: block; width: 100%; height: 118px; border-radius: 9px 9px 0 0; }
+.loc-art .art-slot { height: 128px; overflow: hidden; border-radius: 9px 9px 0 0; }
+.loc-art .art-slot img, .loc-art .art-slot svg {
+  display: block; width: 100%; height: 128px; object-fit: cover;
+}
 
 /* ---------- encounter tokens ---------- */
 .token-tray { margin: 10px 6px 4px; }
@@ -311,6 +328,81 @@ body:not(.dm) .hpbadge { display: none; }
 }
 .vol-field { margin-top: 12px; }
 .vol-field input[type="range"] { width: 100%; accent-color: var(--accent); padding: 0; }
+
+/* ---------- transition scenes ---------- */
+.recap-btn {
+  width: 100%; padding: 14px; font-size: 14px; margin-bottom: 8px;
+  border-color: var(--accent); color: var(--accent);
+}
+.recap-note { margin-top: 0; }
+body.dm .player-scenes-note { display: none; }
+
+.scene-row {
+  display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+  background: var(--card-2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 12px; margin-bottom: 8px; cursor: pointer; color: var(--text);
+  font: inherit; transition: border-color 0.15s, transform 0.15s;
+}
+.scene-row:hover { border-color: var(--accent); transform: translateX(3px); }
+.scene-row-kicker {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 2px;
+  color: var(--amber); white-space: nowrap; min-width: 118px;
+}
+.scene-row-title { flex: 1; font-family: Georgia, "Times New Roman", serif; font-style: italic; font-size: 15px; }
+.scene-row-go { color: var(--accent); }
+
+/* the projector itself */
+.scene-overlay {
+  position: fixed; inset: 0; z-index: 100; background: #000;
+  opacity: 0; transition: opacity 0.6s ease; cursor: pointer;
+}
+.scene-overlay.open { opacity: 1; }
+.scene-stage { position: absolute; inset: 0; }
+.scene-art { position: absolute; left: 0; right: 0; top: 7vh; bottom: 7vh; overflow: hidden; }
+.scene-art .art-slot { width: 100%; height: 100%; }
+.scene-art img, .scene-art svg {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  animation: kenburns 32s ease-in-out infinite alternate;
+}
+@keyframes kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.09) translateX(-1.5%); }
+}
+.scene-scrim {
+  position: absolute; left: 0; right: 0; bottom: 7vh; height: 60%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+  pointer-events: none;
+}
+.scene-scanlines {
+  position: absolute; left: 0; right: 0; top: 7vh; bottom: 7vh;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.13) 0 1px, transparent 1px 3px);
+  pointer-events: none; opacity: 0.55;
+}
+.scene-text { position: absolute; left: 8%; right: 8%; bottom: 13vh; }
+.scene-kicker {
+  font-family: var(--mono); letter-spacing: 6px; color: var(--accent);
+  font-size: 13px; margin: 0 0 8px; animation: riseIn 0.8s 0.15s both;
+}
+.scene-title {
+  font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 600;
+  font-size: clamp(30px, 5vw, 56px); margin: 0 0 16px; color: #f4efe4;
+  text-shadow: 0 2px 26px rgba(0, 0, 0, 0.85); animation: riseIn 0.8s 0.4s both;
+}
+.scene-narration {
+  max-width: 72ch; font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(15px, 1.5vw, 19px); line-height: 1.75; color: #e6e1d3;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.95); margin: 0;
+  animation: riseIn 0.9s 0.75s both;
+}
+.scene-hint {
+  position: absolute; bottom: 2.4vh; width: 100%; text-align: center; margin: 0;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 3px; color: #5a6a76;
+  animation: riseIn 1s 2.2s both;
+}
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
 
 /* ---------- footer ---------- */
 .foot {

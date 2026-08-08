@@ -43,6 +43,17 @@ prefer). It also works great hosted on GitHub Pages.
 - 🔊 **Soundboard** — loopable ambience (the 2:47 Hum, suburban crickets,
   Gary's mower) and one-shot stings (abduction beam, doorbell, clone buffering,
   dread sting), all synthesized live in the browser. No audio files needed.
+- 🎬 **Transition scenes** — full-screen, letterboxed cinematic cards for every
+  major beat (act titles, the abduction, the pod vault, the finale, three
+  endings), each with Adventure-Zone-style read-aloud narration and an
+  automatic sound cue. Plus a **"Previously, on Pinebrook…"** button that
+  auto-narrates a recap from your completed quests — play it at the top of
+  every session.
+- 🖼 **Bring-your-own AI art** — drop images into an `art/` folder
+  (`art/map.jpg`, `art/loc-diner.jpg`, `art/scene-abduction.jpg`, …) and the
+  app uses them automatically, falling back to the built-in SVG art otherwise.
+  `campaign/art-prompts.md` is a ready-to-paste prompt pack with a consistent
+  style bible for every slot.
 - 🕵️ **GM Screen toggle** — flips the whole app: secret GM notes on every
   location/quest/clue, hidden locations (the crash site, the pod vault), quest
   state controls, and clue reveals. Leave it off when the player is looking.

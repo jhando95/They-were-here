@@ -289,3 +289,8 @@ ally. Give Biscuit a happy ending or your player will never forgive you.
 - **2:47 AM.** Always 2:47 AM.
 - Clone dialogue generator: pick two — *weather, lawns, the word "fellow,"
   aggressive agreement, laughing 2 seconds late.*
+- **Scene cards:** the app's Scenes tab (GM Screen on) has a full-screen
+  transition card with read-aloud narration for every major beat — cold open,
+  act titles, the abduction, MANDATORY FUN, the pod vault, Crisp unzipping,
+  and all three endings. Open every session with the **"Previously, on
+  Pinebrook…"** recap button; it narrates itself from your completed quests.

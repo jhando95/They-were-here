@@ -101,7 +101,7 @@
     }
     const visible = locVisible(loc);
     card.innerHTML = `
-      <div class="loc-art">${ART.get(loc.id)}</div>
+      <div class="loc-art"></div>
       <div class="loc-head"><span class="loc-emoji">${loc.emoji}</span><h2>${loc.name}</h2></div>
       <p class="loc-player">${loc.player}</p>
       <div class="dm-only"><div class="dm-note">${loc.dm}</div></div>
@@ -111,6 +111,7 @@
           ${visible ? "🙈 Hide from player" : "👁 Reveal to player"}
         </button>
       </div>`;
+    card.querySelector(".loc-art").appendChild(artNode("loc", loc.id, ART.get(loc.id)));
     $("#tokenHere").addEventListener("click", () => {
       state.token = { x: loc.x, y: loc.y - 34 };
       save();
@@ -169,6 +170,144 @@
     dragging = false;
     token.classList.remove("dragging");
     save();
+  });
+
+  /* ---------------- AI art with SVG fallback ----------------
+     If the GM drops a real image at art/<prefix>-<id>.jpg (or .png/.webp),
+     it's used automatically; otherwise the built-in SVG renders. */
+
+  const artCache = {}; // "prefix-id" -> image url, or null when no image exists
+
+  function artNode(prefix, id, fallbackSvg) {
+    const wrap = document.createElement("div");
+    wrap.className = "art-slot";
+    const key = `${prefix}-${id}`;
+
+    if (artCache[key] !== undefined) {
+      if (artCache[key]) {
+        const img = document.createElement("img");
+        img.alt = "";
+        img.src = artCache[key];
+        wrap.appendChild(img);
+      } else {
+        wrap.innerHTML = fallbackSvg;
+      }
+      return wrap;
+    }
+
+    const exts = ["jpg", "png", "webp"];
+    let i = 0;
+    const img = document.createElement("img");
+    img.alt = "";
+    img.onload = () => { artCache[key] = img.src; };
+    img.onerror = () => {
+      i++;
+      if (i < exts.length) img.src = `art/${key}.${exts[i]}`;
+      else { artCache[key] = null; wrap.innerHTML = fallbackSvg; }
+    };
+    img.src = `art/${key}.${exts[0]}`;
+    wrap.appendChild(img);
+    return wrap;
+  }
+
+  /* Optional AI-generated town map: art/map.jpg|png replaces the drawn terrain. */
+  (function probeCustomMap() {
+    const exts = ["jpg", "png", "webp"];
+    let i = 0;
+    const probe = new Image();
+    probe.onload = () => {
+      const image = el("image", { x: 0, y: 0, width: 1000, height: 700, preserveAspectRatio: "xMidYMid slice" });
+      image.setAttribute("href", probe.src);
+      $("#customMap").appendChild(image);
+      svg.classList.add("has-custom-map");
+    };
+    probe.onerror = () => { if (++i < exts.length) probe.src = `art/map.${exts[i]}`; };
+    probe.src = `art/map.${exts[0]}`;
+  })();
+
+  /* ---------------- transition scenes ---------------- */
+
+  const overlay = $("#sceneOverlay");
+  let sceneLoopStarted = null;
+
+  function playScene(scene) {
+    $("#sceneKicker").textContent = scene.kicker;
+    $("#sceneTitle").textContent = scene.title;
+    $("#sceneNarration").textContent = scene.narration;
+    const artBox = $("#sceneArt");
+    artBox.innerHTML = "";
+    artBox.appendChild(artNode("scene", scene.artId || scene.id, SCENE_ART.get(scene.artId || scene.id)));
+
+    overlay.hidden = false;
+    requestAnimationFrame(() => overlay.classList.add("open"));
+
+    sceneLoopStarted = null;
+    if (scene.sound) {
+      if (scene.sound.shot) Sound.play(scene.sound.shot);
+      if (scene.sound.loop && !Sound.isActive(scene.sound.loop)) {
+        Sound.toggle(scene.sound.loop);
+        sceneLoopStarted = scene.sound.loop;
+      }
+      syncSoundButtons();
+    }
+  }
+
+  function closeScene() {
+    overlay.classList.remove("open");
+    setTimeout(() => { overlay.hidden = true; }, 600);
+    if (sceneLoopStarted) {
+      if (Sound.isActive(sceneLoopStarted)) Sound.toggle(sceneLoopStarted);
+      sceneLoopStarted = null;
+      syncSoundButtons();
+    }
+  }
+
+  overlay.addEventListener("click", closeScene);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !overlay.hidden) closeScene();
+  });
+
+  function syncSoundButtons() {
+    document.querySelectorAll(".sound").forEach((btn) => {
+      const name = btn.dataset.sound;
+      if (Sound.isLoop(name)) btn.classList.toggle("playing", Sound.isActive(name));
+    });
+  }
+
+  function renderScenes() {
+    const list = $("#sceneList");
+    list.innerHTML = "";
+    for (const scene of SCENES) {
+      const row = document.createElement("button");
+      row.className = "scene-row";
+      row.innerHTML = `<span class="scene-row-kicker">${scene.kicker}</span>
+        <span class="scene-row-title">${scene.title}</span><span class="scene-row-go">▶</span>`;
+      row.addEventListener("click", () => playScene(scene));
+      list.appendChild(row);
+    }
+  }
+
+  $("#recapBtn").addEventListener("click", () => {
+    const done = DATA.quests.filter((q) => questState(q) === "done");
+    const clueCount = DATA.clues.filter((c) => state.clues[c.id]).length
+      + state.customClues.length;
+    let story;
+    if (!done.length) {
+      story = "Previously, on Pinebrook: nothing. Gloriously, suspiciously, nothing. " +
+        "The lawns were mowed. The casseroles were still. " +
+        "It was, as far as anyone could prove, a perfectly normal Tuesday. That ends tonight.";
+    } else {
+      const beats = done.map((q) => q.title.toUpperCase()).join(". Then — ").concat(".");
+      story = `Previously, on Pinebrook: ${beats} ` +
+        `${clueCount ? `The Truth Board holds ${clueCount} clue${clueCount === 1 ? "" : "s"} nobody else believes. ` : ""}` +
+        `The Neighborhood Watch stands at ${state.suspicion} out of 10 — ${DATA.suspicionLabels[state.suspicion].replace(/\.$/, "")}. ` +
+        "And somewhere beneath the sound of sprinklers, it is getting very close to 2:47.";
+    }
+    playScene({
+      id: "recap", artId: "cold-open",
+      kicker: "PREVIOUSLY", title: "…on Pinebrook",
+      narration: story, sound: { loop: "hum" }
+    });
   });
 
   /* ---------------- encounter tokens ---------------- */
@@ -678,6 +817,7 @@
     renderLog();
     renderQuests();
     renderClues();
+    renderScenes();
   }
 
   renderAll();
