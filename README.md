@@ -45,9 +45,11 @@ This repo auto-deploys the game to **GitHub Pages** on every push (via
 
 > **https://jhando95.github.io/They-were-here/**
 
-- First time only: if the URL 404s, go to repo **Settings → Pages** and set
-  **Source: GitHub Actions**, then re-run the "Deploy the Field Kit" workflow
-  from the Actions tab.
+- The workflow publishes to a `gh-pages` branch, which GitHub picks up
+  automatically. First time only: if the URL 404s after the workflow has run,
+  go to repo **Settings → Pages** and set **Source: Deploy from a branch →
+  `gh-pages` / (root)** — one click, once, and every future push deploys
+  itself.
 - **Only the app is published.** The `campaign/` folder — every spoiler, the
   GM guides, the census — stays in the repo, never on the public site. Your
   player can open the URL freely.
