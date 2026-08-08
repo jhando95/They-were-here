@@ -239,6 +239,18 @@ const DATA = {
       gear: "The Look (patented)\nRed pens\nEmergency snacks\nFanny pack" }
   ],
 
+  tokenTypes: [
+    { id: "clone", emoji: "😐", name: "Neighborly Unit", hp: 6 },
+    { id: "gnome", emoji: "🍄", name: "Gnome Drone", hp: 2 },
+    { id: "flamingo", emoji: "🦩", name: "Flamingo Sentinel", hp: 4 },
+    { id: "mailman", emoji: "📬", name: "THE MAILMAN", hp: 14 },
+    { id: "sod", emoji: "🌱", name: "Sod Golem", hp: 10 },
+    { id: "crisp", emoji: "🕴️", name: "Overseer Crisp", hp: 12 },
+    { id: "glorp", emoji: "👾", name: "GLORP PRIME", hp: 30 },
+    { id: "biscuit", emoji: "🐕", name: "Biscuit (ally)", hp: 6, ally: true },
+    { id: "ally", emoji: "⭐", name: "Ally", hp: 6, ally: true }
+  ],
+
   suspicionLabels: [
     "A perfectly normal Tuesday.",
     "Someone waved a little too long.",

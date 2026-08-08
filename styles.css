@@ -271,6 +271,47 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .custom-clue input, .custom-clue textarea { margin-bottom: 8px; }
 .empty-note { color: var(--muted); font-size: 13px; font-style: italic; }
 
+/* ---------- location art ---------- */
+.loc-art { margin: -14px -14px 12px; }
+.loc-art svg { display: block; width: 100%; height: 118px; border-radius: 9px 9px 0 0; }
+
+/* ---------- encounter tokens ---------- */
+.token-tray { margin: 10px 6px 4px; }
+.tray-add { display: flex; gap: 8px; margin-bottom: 8px; }
+.tray-add select { flex: 1; }
+.tray-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 4px 6px; border-bottom: 1px solid var(--border); font-size: 13px;
+}
+.tray-row.down { opacity: 0.45; }
+.tray-row.down .tray-name { text-decoration: line-through; }
+.tray-name { flex: 1; }
+.tray-hp { display: flex; align-items: center; gap: 6px; }
+.tray-hp b { font-family: var(--mono); color: var(--danger); min-width: 20px; text-align: center; }
+
+.enemy { cursor: grab; }
+.enemy .body { fill: rgba(30, 12, 12, 0.85); stroke: var(--danger); stroke-width: 2; }
+.enemy.ally .body { fill: rgba(40, 32, 10, 0.85); stroke: var(--amber); }
+.enemy.down { opacity: 0.4; }
+.enemy .en-emoji { font-size: 14px; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.enemy .hpbadge circle { fill: var(--danger); stroke: #0a0f14; stroke-width: 1.5; }
+.enemy.ally .hpbadge circle { fill: var(--amber); }
+.enemy .hpbadge text {
+  font-family: var(--mono); font-size: 9px; font-weight: bold; fill: #0a0f14;
+  text-anchor: middle; dominant-baseline: central;
+}
+body:not(.dm) .hpbadge { display: none; }
+
+/* ---------- soundboard ---------- */
+.sound-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px; }
+.sound { padding: 13px 6px; font-size: 13px; }
+.sound.playing {
+  border-color: var(--alien); color: var(--alien);
+  box-shadow: 0 0 12px rgba(157, 255, 112, 0.25), inset 0 0 8px rgba(157, 255, 112, 0.08);
+}
+.vol-field { margin-top: 12px; }
+.vol-field input[type="range"] { width: 100%; accent-color: var(--accent); padding: 0; }
+
 /* ---------- footer ---------- */
 .foot {
   display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;

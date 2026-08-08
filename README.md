@@ -35,8 +35,14 @@ No install, no build, no internet required — open `index.html` in any modern
 browser (double-click it, or serve it with `python3 -m http.server` if you
 prefer). It also works great hosted on GitHub Pages.
 
-- 🗺 **Interactive map of Pinebrook** — click locations for descriptions, drag
-  the glowing player token around town.
+- 🗺 **Interactive map of Pinebrook** — click locations for descriptions and a
+  hand-drawn night vignette of each spot, drag the glowing player token around town.
+- ⚔️ **Encounter tokens** (GM Screen) — drop clones, Gnome Drones, Flamingo
+  Sentinels, THE MAILMAN, or GLORP PRIME onto the map, drag them into position,
+  and track their HP from the tray under the map.
+- 🔊 **Soundboard** — loopable ambience (the 2:47 Hum, suburban crickets,
+  Gary's mower) and one-shot stings (abduction beam, doorbell, clone buffering,
+  dread sting), all synthesized live in the browser. No audio files needed.
 - 🕵️ **GM Screen toggle** — flips the whole app: secret GM notes on every
   location/quest/clue, hidden locations (the crash site, the pod vault), quest
   state controls, and clue reveals. Leave it off when the player is looking.

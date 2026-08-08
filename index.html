@@ -115,9 +115,18 @@
         <rect x="0" y="0" width="1000" height="700" fill="url(#vign)" pointer-events="none"/>
 
         <g id="markers"></g>
+        <g id="enemyLayer"></g>
         <g id="tokenLayer"></g>
       </svg>
       <p class="map-hint">Click a location for details · drag the glowing token to move your character</p>
+
+      <div class="dm-only token-tray">
+        <div class="tray-add">
+          <select id="enemyType"></select>
+          <button id="enemyAdd" class="btn small">+ Drop token</button>
+        </div>
+        <div id="enemyList"></div>
+      </div>
     </div>
 
     <div class="card suspicion-card">
@@ -145,6 +154,7 @@
         <button class="tab" data-tab="dice">Dice</button>
         <button class="tab" data-tab="quests">Quests</button>
         <button class="tab" data-tab="clues">Clues</button>
+        <button class="tab" data-tab="sounds">Sound</button>
       </nav>
 
       <!-- CHARACTER SHEET -->
@@ -258,6 +268,28 @@
           <button id="customClueAdd" class="btn small">📌 Pin it</button>
         </div>
       </div>
+
+      <!-- SOUNDBOARD -->
+      <div class="tab-page" id="page-sounds">
+        <h3 class="section-title">AMBIENCE — CLICK TO LOOP</h3>
+        <div class="sound-grid">
+          <button class="btn sound" data-sound="hum">🛸 The 2:47 Hum</button>
+          <button class="btn sound" data-sound="crickets">🦗 Suburban Night</button>
+          <button class="btn sound" data-sound="mower">🚜 Gary's Mower</button>
+        </div>
+        <h3 class="section-title">STINGS — ONE SHOT</h3>
+        <div class="sound-grid">
+          <button class="btn sound" data-sound="beam">🔦 Abduction Beam</button>
+          <button class="btn sound" data-sound="doorbell">🚪 Doorbell</button>
+          <button class="btn sound" data-sound="buffering">😐 Clone Buffering</button>
+          <button class="btn sound" data-sound="sting">👁 Dread Sting</button>
+        </div>
+        <label class="field vol-field">Volume
+          <input type="range" id="volSlider" min="0" max="100" value="60">
+        </label>
+        <p class="empty-note">All audio is synthesized live in the browser — no files, works offline.
+          Cue the Hum whenever the pace sags. It is always almost 2:47.</p>
+      </div>
     </div>
   </section>
 </main>
@@ -269,6 +301,8 @@
 
 <script src="js/data.js"></script>
 <script src="js/dice.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/art.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

@@ -20,7 +20,9 @@
     clues: {},        // id -> revealed
     customClues: [],  // {title, text}
     revealed: {},     // location id -> visibility override
-    log: []           // roll log, latest first
+    log: [],          // roll log, latest first
+    enemies: [],      // encounter tokens: {uid, type, hp, x, y}
+    enemySeq: 1
   });
 
   function load() {
@@ -99,6 +101,7 @@
     }
     const visible = locVisible(loc);
     card.innerHTML = `
+      <div class="loc-art">${ART.get(loc.id)}</div>
       <div class="loc-head"><span class="loc-emoji">${loc.emoji}</span><h2>${loc.name}</h2></div>
       <p class="loc-player">${loc.player}</p>
       <div class="dm-only"><div class="dm-note">${loc.dm}</div></div>
@@ -167,6 +170,131 @@
     token.classList.remove("dragging");
     save();
   });
+
+  /* ---------------- encounter tokens ---------------- */
+
+  const enemyLayer = $("#enemyLayer");
+  const enemyTypeSelect = $("#enemyType");
+  DATA.tokenTypes.forEach((t) => {
+    const opt = document.createElement("option");
+    opt.value = t.id;
+    opt.textContent = `${t.emoji} ${t.name} (HP ${t.hp})`;
+    enemyTypeSelect.appendChild(opt);
+  });
+
+  const tokenType = (e) => DATA.tokenTypes.find((t) => t.id === e.type);
+
+  function renderEnemies() {
+    enemyLayer.innerHTML = "";
+    for (const e of state.enemies) {
+      const type = tokenType(e);
+      if (!type) continue;
+      const g = el("g", { transform: `translate(${e.x}, ${e.y})` });
+      g.classList.add("enemy");
+      if (type.ally) g.classList.add("ally");
+      if (e.hp <= 0) g.classList.add("down");
+
+      g.appendChild(el("circle", { class: "body", r: 12 }));
+      const emoji = el("text", { class: "en-emoji" });
+      emoji.textContent = type.emoji;
+      g.appendChild(emoji);
+
+      const badge = el("g", { class: "hpbadge", transform: "translate(11, -11)" });
+      badge.appendChild(el("circle", { r: 7 }));
+      const hpText = el("text", {});
+      hpText.textContent = e.hp;
+      badge.appendChild(hpText);
+      g.appendChild(badge);
+
+      attachEnemyDrag(g, e);
+      enemyLayer.appendChild(g);
+    }
+    renderEnemyTray();
+  }
+
+  function attachEnemyDrag(g, e) {
+    let moving = false;
+    g.addEventListener("pointerdown", (evt) => {
+      moving = true;
+      g.setPointerCapture(evt.pointerId);
+      evt.preventDefault();
+    });
+    g.addEventListener("pointermove", (evt) => {
+      if (!moving) return;
+      const p = svgPoint(evt);
+      e.x = Math.min(Math.max(p.x, 16), 984);
+      e.y = Math.min(Math.max(p.y, 16), 684);
+      g.setAttribute("transform", `translate(${e.x}, ${e.y})`);
+    });
+    g.addEventListener("pointerup", () => {
+      moving = false;
+      save();
+    });
+  }
+
+  function renderEnemyTray() {
+    const list = $("#enemyList");
+    list.innerHTML = "";
+    for (const e of state.enemies) {
+      const type = tokenType(e);
+      if (!type) continue;
+      const row = document.createElement("div");
+      row.className = "tray-row" + (e.hp <= 0 ? " down" : "");
+      row.innerHTML = `
+        <span class="tray-name">${type.emoji} ${type.name}</span>
+        <span class="tray-hp">
+          <button class="btn tiny" data-hp="-1">−</button>
+          <b>${e.hp}</b>
+          <button class="btn tiny" data-hp="1">+</button>
+        </span>
+        <button class="btn tiny" data-remove title="Remove">✕</button>`;
+      row.querySelectorAll("[data-hp]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          e.hp = Math.max(0, e.hp + Number(btn.dataset.hp));
+          save();
+          renderEnemies();
+        });
+      });
+      row.querySelector("[data-remove]").addEventListener("click", () => {
+        state.enemies = state.enemies.filter((x) => x.uid !== e.uid);
+        save();
+        renderEnemies();
+      });
+      list.appendChild(row);
+    }
+  }
+
+  $("#enemyAdd").addEventListener("click", () => {
+    const type = DATA.tokenTypes.find((t) => t.id === enemyTypeSelect.value);
+    if (!type) return;
+    const n = state.enemies.length;
+    state.enemies.push({
+      uid: state.enemySeq++,
+      type: type.id,
+      hp: type.hp,
+      x: 470 + (n % 5) * 30,
+      y: 240 + Math.floor(n / 5) * 30
+    });
+    save();
+    renderEnemies();
+  });
+
+  /* ---------------- soundboard ---------------- */
+
+  document.querySelectorAll(".sound").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const name = btn.dataset.sound;
+      if (Sound.isLoop(name)) {
+        btn.classList.toggle("playing", Sound.toggle(name));
+      } else {
+        Sound.play(name);
+        btn.classList.add("playing");
+        setTimeout(() => btn.classList.remove("playing"), 600);
+      }
+    });
+  });
+  $("#volSlider").addEventListener("input", (e) =>
+    Sound.setVolume(Number(e.target.value) / 100));
 
   /* ---------------- suspicion ---------------- */
 
@@ -544,6 +672,7 @@
     renderMap();
     renderLocationCard();
     positionToken();
+    renderEnemies();
     renderSuspicion();
     renderSheet();
     renderLog();
