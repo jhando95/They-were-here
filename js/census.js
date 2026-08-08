@@ -122,8 +122,8 @@ DATA.npcs = [
     "where": "Sheriff's Office",
     "bit": "Dry, tired, competent. “I believe *you* believe that.”",
     "status": "human",
-    "secret": "She pulls the '87 file the night before she's taken. GM: flip her to REPLACED mid-Act Two — that's the gut-punch.",
-    "hook": "Rescued from her pod in Act Three, she wakes READY, badge already out."
+    "secret": "She pulls the '87 file the night before she's taken. GM: flip her to REPLACED mid-Act Two — and from that moment MARSH-2 is the campaign's gaslighter-in-chief, running the Reputation clock (see villains-and-twists.md). Tell: real Marsh drank coffee black, three sugars. MARSH-2 orders “COFFEE. TEMPERATURE: COFFEE.”",
+    "hook": "MARSH-2 hunts the INVESTIGATION, not the aliens: porch visits, confiscations, the Intervention. Her hidden case notes (side quest: The Marsh Files) prove the PC sane — and rescued from her pod in Act Three, the real Marsh wakes READY, badge already out."
   },
   {
     "id": "crisp",

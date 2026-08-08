@@ -29,6 +29,7 @@ powerful stat in the game.
 | `campaign/act2-guide.md` | Act Two: allies, block party, the Undermart | **GM ONLY** ⚠️ |
 | `campaign/act3-guide.md` | Act Three: the heist, GLORP PRIME, endings | **GM ONLY** ⚠️ |
 | `campaign/npcs-and-monsters.md` | Core NPC roster + stat blocks | **GM ONLY** ⚠️ |
+| `campaign/villains-and-twists.md` | Active villains (MARSH-2's gaslight campaign), the Reputation clock, evidence rules, the Twist Deck | **GM ONLY** ⚠️ |
 | `campaign/town-census.md` | 47 goofy residents, who's replaced, the Tuesday Truthers, the conspiracy corkboard | **GM ONLY** ⚠️ |
 | `campaign/tables.md` | Random tables: powers, clone tells, complications, loot | **GM ONLY** (mostly) |
 | `campaign/gm-screen.md` | Every rule, DC, and stat block on one page | **GM ONLY** |
@@ -76,8 +77,14 @@ prefer). It also works great hosted on GitHub Pages.
   completes them as the story unfolds.
 - 📌 **The Truth Board** — clues pin here as the player finds them (plus room
   for the player's own theories).
-- 👁 **Neighborhood Watch meter** — the town-wide Suspicion clock, 0 to 10,
-  from *"a perfectly normal Tuesday"* to *"THE NEIGHBORHOOD IS WATCHING."*
+- 👁🫥 **The two clocks** — **Neighborhood Watch** (how much the *aliens* have
+  noticed you, up to *"THE NEIGHBORHOOD IS WATCHING"*) and **Reputation**
+  (how crazy the *humans* think you are, down to *"THE VAN IS HERE. IT'S VERY
+  COMFORTABLE."*). Investigate loudly and the aliens notice; stay quiet and
+  the cloned Sheriff's gaslight campaign buries you. There is no safe lane.
+- 🎭 **The Twist Deck** — ten plant/fire/fallout twists tracked in the Scenes
+  tab (GM): replaced allies, the player's own alien file, the defector clone,
+  and what Deputy Hodge has been hiding in the crayon box.
 - 🏘 **The town census (Folks tab)** — all 47 residents of Pinebrook as
   searchable cards. The GM flips each person's status live as the invasion
   spreads (🙂 human / 😐 replaced / ❓ ???) with tells, secrets, and scene

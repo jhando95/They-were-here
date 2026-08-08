@@ -160,7 +160,7 @@
 
     <div class="card suspicion-card">
       <div class="suspicion-head">
-        <h2>NEIGHBORHOOD WATCH</h2>
+        <h2 title="How much the ALIENS have noticed you">NEIGHBORHOOD WATCH</h2>
         <div class="suspicion-btns">
           <button id="suspMinus" class="btn tiny">−</button>
           <button id="suspPlus" class="btn tiny">+</button>
@@ -168,6 +168,16 @@
       </div>
       <div id="suspicionTrack" class="suspicion-track"></div>
       <p id="suspicionLabel" class="suspicion-label"></p>
+
+      <div class="suspicion-head rep-head">
+        <h2 title="How crazy the HUMANS think you are — MARSH-2's gaslight campaign pushes it up, hard evidence pulls it down">REPUTATION</h2>
+        <div class="suspicion-btns">
+          <button id="repMinus" class="btn tiny">−</button>
+          <button id="repPlus" class="btn tiny">+</button>
+        </div>
+      </div>
+      <div id="repTrack" class="suspicion-track rep-track"></div>
+      <p id="repLabel" class="suspicion-label rep-label"></p>
     </div>
 
     <div class="card location-card" id="locationCard">
@@ -349,6 +359,10 @@
         <div class="dm-only">
           <h3 class="section-title dm-text">TRANSITION SCENES (GM) — CLICK TO ROLL FILM</h3>
           <div id="sceneList"></div>
+          <h3 class="section-title dm-text">THE TWIST DECK (GM) — PLANT, THEN FIRE</h3>
+          <p class="empty-note">One fired twist per session, tops. Never fire one you didn't plant.
+            Full write-ups in <b>villains-and-twists.md</b>.</p>
+          <div id="twistList"></div>
         </div>
         <p class="empty-note player-scenes-note">The rest of the projection booth is GM-only.
           Ask your GM nicely. Or don't — attendance will be taken either way.</p>

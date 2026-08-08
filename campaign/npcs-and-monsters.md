@@ -29,7 +29,8 @@ contradictions, and are *incapable of being rude first*.
 | **Neighborly Unit** (clone) | 6 | 11 | +2, casserole dish or hedge trimmer, 1d6 | Buffers for 1 round if asked a question with no polite answer. Bleeds green glitter. |
 | **Gnome Drone** | 2 | 14 | +4, zap, 1d4 | Lawn camera. Explodes into potpourri. Bug Zapper Aura pops them instantly. |
 | **Flamingo Sentinel** | 4 | 12 | +3, peck, 1d6 | Only moves when unobserved. Staring contests are a valid tactic. |
-| **THE MAILMAN** (miniboss) | 14 | 13 | +4, REGISTERED MAIL, 1d8 | Too many teeth. Always knows your address. Drops Crisp's spare keycard. |
+| **THE MAILMAN** (miniboss) | 14 | 13 | +4, REGISTERED MAIL, 1d8 | Too many teeth. Always knows your address. Drops Crisp's spare keycard. Doubles as the Vanguard's hunter — see `villains-and-twists.md`. |
+| **SHERIFF MARSH-2** (villain) | 12 | 12 | +3, baton 1d6 / taser 1d4 + lose action | The gaslighter-in-chief: "I'M CONCERNED" aura (PC has disadvantage on Charm with bystanders while she speaks), CONFISCATION on detainment. Full playbook + escalation ladder in `villains-and-twists.md`. |
 | **Sod Golem** | 10 | 9 | +3, turf slam, 1d6 | Made of spore-grass. Salt deals double; sprinklers set to brine melt it. |
 | **Overseer Crisp** (human suit) | 12 | 12 | talks, mostly | Never fights in the suit. Unzips politely when cornered → GLORP PRIME. |
 

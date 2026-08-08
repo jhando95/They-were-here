@@ -143,7 +143,10 @@ const DATA = {
       dm: "The drone-pigeon has filmed EVERYTHING since '87, including abductions. Its footage = undeniable proof, and it leads to the crash clearing. Terrence is insufferable about being right." },
     { id: "s6", group: "Side Quests", title: "Release the Deborah", state: "hidden",
       player: "HOA Vice-President Deborah Vance is the scariest thing in Pinebrook, and she is HUMAN. Point her at the truth.",
-      dm: "Convince her Crisp violated the bylaws (he has — Section 4: unapproved structures, i.e., a landing beacon). She can filibuster GLORP PRIME for one full round with a procedural objection." }
+      dm: "Convince her Crisp violated the bylaws (he has — Section 4: unapproved structures, i.e., a landing beacon). She can filibuster GLORP PRIME for one full round with a procedural objection." },
+    { id: "s7", group: "Side Quests", title: "The Marsh Files", state: "hidden",
+      player: "The Sheriff who believed you is gone — and the thing wearing her badge is telling everyone YOU'RE the problem. The real Marsh kept notes. Find them before it does.",
+      dm: "Activate after MARSH-2 appears. The Evidence Heist set-piece (villains-and-twists.md): the station lockup, box '2:47', Hodge's unlatched Tuesday window. Finding the notes fires Twist 10 (Hodge Knew) and can fire Twist 3 (The Template). The notes are Hard evidence: -2 Reputation when Arlene prints them." }
   ],
 
   clues: [
@@ -170,7 +173,13 @@ const DATA = {
     { id: "c11", title: "The Pod Manifest", text: "GUESTS: 47 · COMFORT: MAXIMUM · RETURN DATE: N/A.",
       dm: "47 = every replacement so far. The N/A is the horror beat. Play it straight for one beat, then let Biscuit break the tension." },
     { id: "c12", title: "The Fireworks Invoice", text: "Founders' Day fireworks: 'extra sparkle compound' — supplier: FRSHMRT LOGISTICS.",
-      dm: "The Bloom delivery system. Swap-or-salt at the loading dock is sabotage target #1." }
+      dm: "The Bloom delivery system. Swap-or-salt at the loading dock is sabotage target #1. HARD evidence." },
+    { id: "c13", title: "The Real Marsh's Case Notes", text: "Her last entries, in her own cramped handwriting: '87 file pulled. Pattern holds. The resident is RIGHT. Meeting them tomorrow.' There was no tomorrow.",
+      dm: "From the Evidence Heist / Hodge's crayon box. HARD evidence — proves the PC sane in the town's eyes (-2 Reputation via Arlene) and can fire Twists 3 and 10." },
+    { id: "c14", title: "COFFEE. TEMPERATURE: COFFEE.", text: "The Sheriff drank it black, three sugars, every day for eleven years. Marla has the order history. The thing wearing her badge doesn't know that.",
+      dm: "Trace evidence, but devastating when demonstrated live: order her old usual and watch MARSH-2 buffer on camera. Filmed buffer = HARD evidence." },
+    { id: "c15", title: "The Schedule Page", text: "A FRSHMRT LOGISTICS pickup manifest. Names. Dates. Times — all 2:47. One of the names is yours. The date is this Friday.",
+      dm: "Leaked by TODD-2 (Twist 8). HARD evidence AND a live countdown. The campaign's single best 'we move NOW' accelerant." }
   ],
 
   /* Tiers: Spark (free flavor) and Surge (1 WP, = desc) are known from the start.
@@ -368,6 +377,7 @@ const DATA = {
     { id: "flamingo", emoji: "🦩", name: "Flamingo Sentinel", hp: 4 },
     { id: "mailman", emoji: "📬", name: "THE MAILMAN", hp: 14 },
     { id: "sod", emoji: "🌱", name: "Sod Golem", hp: 10 },
+    { id: "marsh2", emoji: "🚔", name: "SHERIFF MARSH-2", hp: 12 },
     { id: "crisp", emoji: "🕴️", name: "Overseer Crisp", hp: 12 },
     { id: "glorp", emoji: "👾", name: "GLORP PRIME", hp: 30 },
     { id: "biscuit", emoji: "🐕", name: "Biscuit (ally)", hp: 6, ally: true },
@@ -386,5 +396,65 @@ const DATA = {
     "A 'wellness check' has been scheduled.",
     "The mailman delivers only to you now.",
     "THE NEIGHBORHOOD IS WATCHING."
+  ],
+
+  /* The second clock: how crazy the HUMANS think the PC is.
+     MARSH-2's gaslight campaign pushes it up; hard evidence pulls it down. */
+  reputationLabels: [
+    "Pillar of the community.",
+    "\"A little tired lately,\" folks say.",
+    "Asking odd questions around town.",
+    "The Gazette prints a 'concerned' item.",
+    "Casseroles arrive with sympathy cards.",
+    "Conversations stop when you enter Duke's.",
+    "The Truthers want you as their keynote speaker.",
+    "An intervention is being organized.",
+    "MARSH-2 has a file on you. It's thick.",
+    "There's talk of 'a nice facility upstate.'",
+    "THE VAN IS HERE. IT'S VERY COMFORTABLE."
+  ],
+
+  /* The Twist Deck — plant, then fire. Full write-ups in campaign/villains-and-twists.md. */
+  twists: [
+    { id: "t1", title: "The Gnome Indoors",
+      plant: "The lawn gnome appears at Suspicion 4. Let it sit for days.",
+      fire: "It's gone from the lawn — and standing in the PC's hallway, facing the bedroom door. Nobody moved it.",
+      fallout: "The house is no longer neutral ground. Pure dread, zero cost." },
+    { id: "t2", title: "One of Us",
+      plant: "Three retroactive tells on ONE ally (never Biscuit, never Hodge): wrong coffee order, too-clean laugh, first-ever full legal name.",
+      fire: "The PC catches them watering plastic flowers.",
+      fallout: "Their real self is in the Undermart; the Unit has fed Crisp everything for two sessions. Let the player recount every scene it attended." },
+    { id: "t3", title: "The Template",
+      plant: "The PC's Session-Zero 2:47 answer; Marla's 'nobody believed me either.'",
+      fire: "In Marsh's case file / the Undermart records: the PC's childhood file. Taken in '99. RETURNED: POLITE. NOTE: TEMPLATE RETAINED.",
+      fallout: "Their power is residue. Somewhere in the vault is an unactivated PC-2." },
+    { id: "t4", title: "The Ninth Gnome",
+      plant: "Priya's gnome count is always off by one; chalk arrows appear near danger.",
+      fire: "One gnome is a defector scout — it's been warning people for weeks. Nobody reads gnome.",
+      fallout: "A tiny, silent ceramic ally with total surveillance access. Pairs with Gnorman." },
+    { id: "t5", title: "Herb's Choice",
+      plant: "Deborah's husband, 'replaced in March'; the written apology.",
+      fire: "Herb's pod opens — and Herb asks for five more minutes.",
+      fallout: "The rescue turns morally itchy. Deborah's face does something nobody has ever seen it do." },
+    { id: "t6", title: "He Asked to Go",
+      plant: "The Gazette's spiked 1987 follow-up; Coral's 14-year microfiche checkout.",
+      fire: "Teenage Crisp VOLUNTEERED. The suit isn't a prison — it's a boy who never wanted to come back. His name is Lawrence.",
+      fallout: "The Treaty path opens; the finale's Charm DC drops if the PC uses his name." },
+    { id: "t7", title: "They're Already Here",
+      plant: "Doug Pramuk's 'primer flash' telescope log; the reservoir's wrong-way shadow.",
+      fire: "The fleet arrived in 1987. It's sleeping under the reservoir. The tower doesn't summon — it WAKES.",
+      fallout: "Optional Act Three escalation. Only for players who thrive under pressure." },
+    { id: "t8", title: "The Defector",
+      plant: "TODD-2's hidden hibachi; the soundless high-fives.",
+      fire: "TODD-2 flips and leaks one page of the schedule: the PC's own abduction date. It's this Friday.",
+      fallout: "A countdown on everything. Sleeping becomes a tactical decision. ('GANG. I SHOULDN'T BE TELLING YOU THIS, GANG.')" },
+    { id: "t9", title: "The Bundt Cake",
+      plant: "The Reputation-7 wellness check arrives bearing a gift.",
+      fire: "There's a pod-mint baked inside. They weren't checking on the PC — they were PRE-BOARDING them.",
+      fallout: "The wellness apparatus = the intake pipeline. The PC now holds Hard evidence you can eat." },
+    { id: "t10", title: "Hodge Knew",
+      plant: "Crayon drawings that were too accurate; the Tuesday window left unlatched; 'template incoherent.'",
+      fire: "The crayon box: real Marsh's case notes (she BELIEVED the PC — in writing), the handshake ledger, and a drawing labeled 'THE ONE WHO'LL FIX IT.'",
+      fallout: "Hodge was never dim — he was waiting for someone safe. The station becomes a Tuesday safehouse." }
   ]
 };

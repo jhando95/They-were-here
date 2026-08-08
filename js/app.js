@@ -18,6 +18,8 @@
     },
     token: { x: 95, y: 178 },
     suspicion: 2,
+    reputation: 1,   // the Discredit clock — how crazy the town thinks the PC is
+    twists: {},      // twist id -> "idle"|"armed"|"fired"
     dm: false,
     quests: {},       // id -> state override
     clues: {},        // id -> revealed
@@ -316,6 +318,42 @@
       row.addEventListener("click", () => playScene(scene));
       list.appendChild(row);
     }
+    renderTwists();
+  }
+
+  /* ---- the twist deck ---- */
+
+  function renderTwists() {
+    const box = $("#twistList");
+    box.innerHTML = "";
+    for (const t of DATA.twists || []) {
+      const st = state.twists[t.id] || "idle";
+      const div = document.createElement("div");
+      div.className = "twist-card twist-" + st;
+      div.innerHTML = `
+        <div class="quest-head">
+          <span class="quest-title">${t.title}</span>
+          <span class="quest-pill ${st === "fired" ? "done" : st === "armed" ? "active" : "hidden-pill"}">
+            ${st.toUpperCase()}
+          </span>
+        </div>
+        <p class="twist-line"><b>Plant:</b> ${t.plant}</p>
+        <p class="twist-line"><b>Fire:</b> ${t.fire}</p>
+        <p class="twist-line"><b>Fallout:</b> ${t.fallout}</p>
+        <div class="quest-controls">
+          ${["idle", "armed", "fired"].map((s) =>
+            `<button class="btn tiny ${s === st ? "active-state" : ""}" data-tw="${t.id}" data-s="${s}">${s}</button>`
+          ).join("")}
+        </div>`;
+      box.appendChild(div);
+    }
+    box.querySelectorAll("[data-tw]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.twists[btn.dataset.tw] = btn.dataset.s;
+        save();
+        renderTwists();
+      });
+    });
   }
 
   $("#recapBtn").addEventListener("click", () => {
@@ -468,36 +506,43 @@
 
   /* ---------------- suspicion ---------------- */
 
-  function renderSuspicion() {
-    const track = $("#suspicionTrack");
+  /* Two clocks, one renderer: Neighborhood Watch (aliens noticing you) and
+     Reputation (humans doubting you). The vise. */
+  function renderClock(trackSel, labelSel, key, labels) {
+    const track = $(trackSel);
     track.innerHTML = "";
+    const val = state[key];
     for (let i = 0; i <= 10; i++) {
       const seg = document.createElement("button");
       seg.className = "seg";
       seg.title = `Set to ${i}`;
-      if (i <= state.suspicion && state.suspicion > 0 && i > 0) {
+      if (i <= val && val > 0 && i > 0) {
         seg.classList.add(i <= 3 ? "on-low" : i <= 7 ? "on-mid" : "on-high");
       }
-      if (i === 0 && state.suspicion === 0) seg.classList.add("on-low");
+      if (i === 0 && val === 0) seg.classList.add("on-low");
       seg.addEventListener("click", () => {
-        state.suspicion = i;
+        state[key] = i;
         save();
-        renderSuspicion();
+        renderClocks();
       });
       track.appendChild(seg);
     }
-    $("#suspicionLabel").textContent =
-      `${state.suspicion}/10 — ${DATA.suspicionLabels[state.suspicion]}`;
+    $(labelSel).textContent = `${val}/10 — ${labels[val]}`;
   }
 
-  $("#suspMinus").addEventListener("click", () => {
-    state.suspicion = Math.max(0, state.suspicion - 1);
-    save(); renderSuspicion();
-  });
-  $("#suspPlus").addEventListener("click", () => {
-    state.suspicion = Math.min(10, state.suspicion + 1);
-    save(); renderSuspicion();
-  });
+  function renderClocks() {
+    renderClock("#suspicionTrack", "#suspicionLabel", "suspicion", DATA.suspicionLabels);
+    renderClock("#repTrack", "#repLabel", "reputation", DATA.reputationLabels);
+  }
+
+  function bumpClock(key, delta) {
+    state[key] = Math.min(10, Math.max(0, state[key] + delta));
+    save(); renderClocks();
+  }
+  $("#suspMinus").addEventListener("click", () => bumpClock("suspicion", -1));
+  $("#suspPlus").addEventListener("click", () => bumpClock("suspicion", 1));
+  $("#repMinus").addEventListener("click", () => bumpClock("reputation", -1));
+  $("#repPlus").addEventListener("click", () => bumpClock("reputation", 1));
 
   /* ---------------- tabs ---------------- */
 
@@ -1146,7 +1191,7 @@
     renderLocationCard();
     positionToken();
     renderEnemies();
-    renderSuspicion();
+    renderClocks();
     renderSheet();
     renderLog();
     renderQuests();

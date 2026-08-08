@@ -145,6 +145,9 @@ body.dm .switch-label { color: var(--amber); }
 .suspicion-track .seg.on-mid { background: #b98a2e; border-color: #b98a2e; }
 .suspicion-track .seg.on-high { background: #c0392b; border-color: #c0392b; }
 .suspicion-label { margin: 0; font-size: 12px; letter-spacing: 1px; color: var(--amber); min-height: 18px; }
+.rep-head { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
+.rep-track .seg.on-low { background: #2e5d7d; border-color: #2e5d7d; }
+.rep-label { color: #8fb8d4; }
 
 /* ---------- location card ---------- */
 .location-card .placeholder { color: var(--muted); text-align: center; font-style: italic; }
@@ -429,6 +432,16 @@ body.dm .player-scenes-note { display: none; }
 }
 .scene-row-title { flex: 1; font-family: Georgia, "Times New Roman", serif; font-style: italic; font-size: 15px; }
 .scene-row-go { color: var(--accent); }
+
+/* twist deck */
+.twist-card {
+  border: 1px solid var(--border); border-left: 3px solid var(--muted);
+  border-radius: 8px; background: var(--card-2); padding: 10px 12px; margin-bottom: 8px;
+}
+.twist-card.twist-armed { border-left-color: var(--amber); }
+.twist-card.twist-fired { border-left-color: var(--danger); opacity: 0.75; }
+.twist-line { margin: 5px 0 0; font-size: 12.5px; color: var(--muted); }
+.twist-line b { color: var(--text); font-family: var(--mono); font-size: 11px; letter-spacing: 1px; }
 
 /* the projector itself */
 .scene-overlay {

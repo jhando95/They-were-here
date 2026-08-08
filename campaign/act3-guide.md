@@ -79,6 +79,16 @@ block party?" Sheriff Marsh wakes *ready*, badge already out.
 day — a recurring two-clone tail that must be ditched (any stat DC 12, new
 method each time; repeats auto-fail and cost 1 round in the boss fight).
 
+**MARSH-2 runs Founders' Day "security."** She works the crowd all day —
+her "I'M CONCERNED" aura makes every public move harder, and if Reputation is
+7+, she has the Committal van parked behind the bandshell *for the PC*. Two
+ways to neutralize her before the boss: the coffee demonstration in front of
+the crowd (order her old usual, film the buffer — the town gasps), or
+Deborah's Section 9 procedural freeze. Done publicly, either one is worth
+−2 Reputation and turns the crowd from jury into audience. If the real Marsh
+is freed from her pod mid-fight, she walks up to her double, badge out:
+"You forgot the handshake." Let the table cheer.
+
 ## Scene 4 — GLORP PRIME
 
 Trigger: any two targets resolve, or the PC confronts Crisp. The mic feedback

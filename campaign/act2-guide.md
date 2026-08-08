@@ -80,6 +80,16 @@ one with the good posture."
 
 👁 +1 automatically. Authority is gone; it's the weirdos or nobody now.
 
+**And it gets worse: from this moment MARSH-2 is an ACTIVE VILLAIN.** She
+doesn't hunt the aliens — she hunts *the investigation*, and her weapon is
+concern. Open `villains-and-twists.md` and start running the **Reputation
+clock** (the second meter in the app) and her escalation ladder: porch visits,
+town-hall minutes, ally pressure, the Intervention. 📋 Activate side quest
+**The Marsh Files** — the real Sheriff's hidden case notes are the PC's
+best path to proving they're not the crazy one. Her tell, plantable
+immediately at Duke's: real Marsh drank coffee black with three sugars.
+MARSH-2 orders **"COFFEE. TEMPERATURE: COFFEE."** Marla drops the cup.
+
 ## Scene 4 — Set Piece: The Block Party
 
 The Community Center lot, Saturday. 🎬 The invitation already played; open on
