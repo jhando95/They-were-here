@@ -60,6 +60,27 @@ This repo auto-deploys the game to **GitHub Pages** on every push (via
 - Prefer another host? The app is plain static files — drag the folder into
   Netlify/Vercel/Cloudflare Pages and it just works.
 
+## 💻 Take it with you (no GitHub required)
+
+The whole game is plain files — GitHub is just where it lives today. To make
+it fully independent on your MacBook or Windows PC:
+
+1. **Get the folder**: on the repo page, **Code → Download ZIP**, unzip
+   anywhere (or `git clone` once; after that, the folder is self-sufficient).
+2. **Run it**, three ways — all fully offline:
+   - **Simplest:** double-click `index.html`. Everything works: map, GM
+     screen, scenes, sound, dice, the Player View window for Discord.
+   - **Nicest:** double-click **`run-mac.command`** (Mac — first time:
+     right-click → Open) or **`run-windows.bat`** (PC). It hosts the app at
+     `http://localhost:8247` and opens your browser — which also unlocks the
+     browser's **Install app** button, giving you a standalone desktop app.
+   - **Any static host** works too (Netlify/Vercel drag-and-drop, a home
+     server, a USB stick) — there's no build step and no dependencies.
+3. **Your campaign travels with you**: saves live in the browser, so when you
+   switch machines, hit **Export** on the old one and **Import** on the new
+   one — that JSON file is your whole campaign (character, clocks, quests,
+   clues, twist states, everyone's clone status).
+
 ## The companion app
 
 No install, no build, no internet required even without the deploy — open
