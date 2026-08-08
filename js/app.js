@@ -25,7 +25,9 @@
     revealed: {},     // location id -> visibility override
     log: [],          // roll log, latest first
     enemies: [],      // encounter tokens: {uid, type, hp, x, y}
-    enemySeq: 1
+    enemySeq: 1,
+    npcStatus: {},    // id -> "human"|"clone"|"unknown" (GM's live truth)
+    npcSus: {}        // id -> true (the player's own suspect list)
   });
 
   function load() {
@@ -821,7 +823,11 @@
   /* ---- generators ---- */
 
   function showGen(text, addable) {
-    $("#genResult").hidden = false;
+    const box = $("#genResult");
+    box.hidden = false;
+    [...box.children].forEach((ch) => {
+      if (ch.id !== "genText" && ch.id !== "genAdd") ch.remove();
+    });
     $("#genText").textContent = text;
     const addBtn = $("#genAdd");
     addBtn.hidden = !addable;
@@ -851,6 +857,17 @@
   $("#genMark").addEventListener("click", () => {
     lastGen = null;
     showGen(`🩹 Mark: ${Dice.pick(DATA.marks)}`, false);
+  });
+  $("#genConsp").addEventListener("click", () => {
+    lastGen = null;
+    const c = Dice.pick(DATA.conspiracies || [{ claim: "The Truthers are between theories right now.", rating: "false", gmNote: "" }]);
+    showGen(`🛰 Heard around town: “${c.claim}”`, false);
+    if (c.gmNote) {
+      const note = document.createElement("div");
+      note.className = "dm-only";
+      note.innerHTML = `<div class="dm-note"><b>${(c.rating || "").replace(/-/g, " ").toUpperCase()}</b> — ${c.gmNote}</div>`;
+      $("#genResult").appendChild(note);
+    }
   });
 
   $("#genAdd").addEventListener("click", () => {
@@ -983,6 +1000,86 @@
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
   }
 
+  /* ---------------- folks (town census) ---------------- */
+
+  let folksFilter = "all";
+
+  const npcStatus = (n) => state.npcStatus[n.id] || n.status;
+  const STATUS_LABEL = { human: "🙂 human", clone: "😐 replaced", unknown: "❓ ???" };
+
+  function renderFolks() {
+    const npcs = DATA.npcs || [];
+    const list = $("#folksList");
+    const q = $("#folksSearch").value.trim().toLowerCase();
+    list.innerHTML = "";
+
+    const chips = $("#folksChips");
+    chips.innerHTML = "";
+    const filters = [["all", "everyone"], ["sus", "🤨 my suspects"]];
+    if (state.dm) filters.push(["clone", "😐 replaced (GM)"], ["unknown", "❓ ??? (GM)"]);
+    if (!filters.some(([id]) => id === folksFilter)) folksFilter = "all";
+    for (const [id, label] of filters) {
+      const chip = document.createElement("button");
+      chip.className = "chip" + (id === folksFilter ? " on" : "");
+      chip.textContent = label;
+      chip.addEventListener("click", () => { folksFilter = id; renderFolks(); });
+      chips.appendChild(chip);
+    }
+
+    let shown = 0;
+    const replaced = npcs.filter((n) => npcStatus(n) === "clone").length;
+    const suspected = npcs.filter((n) => state.npcSus[n.id]).length;
+
+    for (const n of npcs) {
+      const st = npcStatus(n);
+      if (folksFilter === "sus" && !state.npcSus[n.id]) continue;
+      if (folksFilter === "clone" && st !== "clone") continue;
+      if (folksFilter === "unknown" && st !== "unknown") continue;
+      if (q && !(n.name + n.role + n.where + n.bit).toLowerCase().includes(q)) continue;
+      shown++;
+
+      const sus = !!state.npcSus[n.id];
+      const div = document.createElement("div");
+      div.className = "npc-card" + (state.dm && st === "clone" ? " is-clone" : "");
+      div.innerHTML = `
+        <div class="npc-head">
+          <span class="npc-name">${n.name}</span>
+          <button class="btn tiny sus-btn ${sus ? "on" : ""}" title="Mark as suspicious (player's own paranoia board)">🤨</button>
+        </div>
+        <p class="npc-role">${n.role} · <em>${n.where}</em></p>
+        <p class="npc-bit">${n.bit}</p>
+        <div class="dm-only">
+          <div class="npc-status-row">
+            ${["human", "clone", "unknown"].map((s) =>
+              `<button class="btn tiny ${s === st ? "active-state" : ""}" data-st="${s}">${STATUS_LABEL[s]}</button>`).join("")}
+          </div>
+          <div class="dm-note">
+            ${st === "clone" && n.tell ? `<b>Tell:</b> ${n.tell}<br>` : ""}
+            <b>Secret:</b> ${n.secret}<br><b>Hook:</b> ${n.hook}
+          </div>
+        </div>`;
+      div.querySelector(".sus-btn").addEventListener("click", () => {
+        if (state.npcSus[n.id]) delete state.npcSus[n.id];
+        else state.npcSus[n.id] = true;
+        save(); renderFolks();
+      });
+      div.querySelectorAll("[data-st]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          state.npcStatus[n.id] = btn.dataset.st;
+          save(); renderFolks();
+        });
+      });
+      list.appendChild(div);
+    }
+
+    if (!shown) list.innerHTML = `<p class="empty-note">Nobody matches. Which is exactly what they'd want.</p>`;
+    $("#folksCount").textContent = state.dm
+      ? `${npcs.length} residents on file · ${replaced} replaced · player suspects ${suspected}`
+      : `${npcs.length} residents on file · you suspect ${suspected}. Trust no lawn.`;
+  }
+
+  $("#folksSearch").addEventListener("input", renderFolks);
+
   /* ---------------- GM toggle ---------------- */
 
   $("#dmToggle").addEventListener("change", (e) => {
@@ -993,6 +1090,7 @@
     renderLocationCard();
     renderQuests();
     renderClues();
+    renderFolks();
   });
 
   /* ---------------- save management ---------------- */
@@ -1054,6 +1152,7 @@
     renderQuests();
     renderClues();
     renderScenes();
+    renderFolks();
   }
 
   renderAll();

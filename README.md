@@ -28,7 +28,8 @@ powerful stat in the game.
 | `campaign/act1-guide.md` | Act One, scene by scene: read-alouds, DCs, branches | **GM ONLY** ⚠️ |
 | `campaign/act2-guide.md` | Act Two: allies, block party, the Undermart | **GM ONLY** ⚠️ |
 | `campaign/act3-guide.md` | Act Three: the heist, GLORP PRIME, endings | **GM ONLY** ⚠️ |
-| `campaign/npcs-and-monsters.md` | NPC roster + stat blocks | **GM ONLY** ⚠️ |
+| `campaign/npcs-and-monsters.md` | Core NPC roster + stat blocks | **GM ONLY** ⚠️ |
+| `campaign/town-census.md` | 47 goofy residents, who's replaced, the Tuesday Truthers, the conspiracy corkboard | **GM ONLY** ⚠️ |
 | `campaign/tables.md` | Random tables: powers, clone tells, complications, loot | **GM ONLY** (mostly) |
 | `campaign/gm-screen.md` | Every rule, DC, and stat block on one page | **GM ONLY** |
 | `campaign/art-prompts.md` | AI image prompt pack for every art slot in the app | GM |
@@ -77,6 +78,14 @@ prefer). It also works great hosted on GitHub Pages.
   for the player's own theories).
 - 👁 **Neighborhood Watch meter** — the town-wide Suspicion clock, 0 to 10,
   from *"a perfectly normal Tuesday"* to *"THE NEIGHBORHOOD IS WATCHING."*
+- 🏘 **The town census (Folks tab)** — all 47 residents of Pinebrook as
+  searchable cards. The GM flips each person's status live as the invasion
+  spreads (🙂 human / 😐 replaced / ❓ ???) with tells, secrets, and scene
+  hooks behind the GM screen — while the player runs their own 🤨 suspect
+  list. Compare the two lists at the end of the campaign. Always funny.
+- 🛰 **Conspiracy generator** — one click deals out a Tuesday Truthers theory
+  ("The moon is a billboard"); the GM screen shows whether it's FALSE,
+  TRUEISH, or — twice — EXACTLY RIGHT.
 
 Everything auto-saves to the browser (localStorage). Use **Export / Import** to
 back up a campaign or move it between devices.

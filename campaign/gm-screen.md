@@ -39,6 +39,12 @@ Ally on-scene: +1d6 to one roll/scene; if it fails, the *ally* eats the complica
 **8:** wellness check (2 Units + clipboard + bundt cake) · **10:** 2:47 abduction attempt
 This is the pacing dial. Turn it with a smile.
 
+## The cast
+Need a face for any scene? `town-census.md` / the app's **Folks tab**: 47
+residents with bits, secrets, and hooks — flip statuses live as people get
+replaced. Need a rumor? The 🛰 Conspiracy button (Dice tab) deals a Truthers
+theory; GM view shows its truth rating.
+
 ## Clone quick-play
 Never blinks · laughs 2s late · "FELLOW HUMAN" · full legal names · can't be rude first ·
 bleeds green glitter · buffers on contradictions ("PLEASE HOLD").

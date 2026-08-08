@@ -185,6 +185,7 @@
         <button class="tab" data-tab="clues">Clues</button>
         <button class="tab" data-tab="sounds">Sound</button>
         <button class="tab" data-tab="scenes">Scenes</button>
+        <button class="tab" data-tab="folks">Folks</button>
       </nav>
 
       <!-- CHARACTER SHEET -->
@@ -286,6 +287,7 @@
           <button id="genComp" class="btn gen">🌀 Complication</button>
           <button id="genLoot" class="btn gen">🎁 Loot</button>
           <button id="genMark" class="btn gen">🩹 Mark (0 HP)</button>
+          <button id="genConsp" class="btn gen">🛰 Conspiracy</button>
         </div>
         <div id="genResult" class="gen-result" hidden>
           <p id="genText"></p>
@@ -351,6 +353,14 @@
         <p class="empty-note player-scenes-note">The rest of the projection booth is GM-only.
           Ask your GM nicely. Or don't — attendance will be taken either way.</p>
       </div>
+
+      <!-- FOLKS (town census) -->
+      <div class="tab-page" id="page-folks">
+        <p id="folksCount" class="folks-count"></p>
+        <input type="text" id="folksSearch" placeholder="Search the census…">
+        <div class="picker-chips" id="folksChips"></div>
+        <div id="folksList"></div>
+      </div>
     </div>
   </section>
 </main>
@@ -389,6 +399,7 @@
 </footer>
 
 <script src="js/data.js"></script>
+<script src="js/census.js"></script>
 <script src="js/dice.js"></script>
 <script src="js/sound.js"></script>
 <script src="js/art.js"></script>
