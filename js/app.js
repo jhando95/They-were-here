@@ -29,7 +29,8 @@
     enemies: [],      // encounter tokens: {uid, type, hp, x, y}
     enemySeq: 1,
     npcStatus: {},    // id -> "human"|"clone"|"unknown" (GM's live truth)
-    npcSus: {}        // id -> true (the player's own suspect list)
+    npcSus: {},       // id -> true (the player's own suspect list)
+    revelations: {}   // id -> true when the player has learned it
   });
 
   function load() {
@@ -903,6 +904,10 @@
     lastGen = null;
     showGen(`🩹 Mark: ${Dice.pick(DATA.marks)}`, false);
   });
+  $("#genNowWhat").addEventListener("click", () => {
+    lastGen = null;
+    showGen(`🧭 ${Dice.pick(DATA.nowWhat)}`, false);
+  });
   $("#genConsp").addEventListener("click", () => {
     lastGen = null;
     const c = Dice.pick(DATA.conspiracies || [{ claim: "The Truthers are between theories right now.", rating: "false", gmNote: "" }]);
@@ -925,7 +930,36 @@
 
   /* ---------------- quests ---------------- */
 
+  function renderTrail() {
+    const box = $("#trailList");
+    box.innerHTML = "";
+    let known = 0;
+    for (const r of DATA.revelations || []) {
+      const got = !!state.revelations[r.id];
+      if (got) known++;
+      const div = document.createElement("div");
+      div.className = "trail-row" + (got ? " got" : "");
+      div.innerHTML = `
+        <button class="trail-check ${got ? "on" : ""}" title="Toggle: the player has learned this">${got ? "✔" : ""}</button>
+        <div class="trail-body">
+          <span class="trail-title">${r.title}</span>
+          <span class="trail-paths">${r.paths}</span>
+        </div>`;
+      div.querySelector(".trail-check").addEventListener("click", () => {
+        if (state.revelations[r.id]) delete state.revelations[r.id];
+        else state.revelations[r.id] = true;
+        save(); renderTrail();
+      });
+      box.appendChild(div);
+    }
+    const head = document.createElement("p");
+    head.className = "trail-score";
+    head.textContent = `${known}/${(DATA.revelations || []).length} revelations landed`;
+    box.prepend(head);
+  }
+
   function renderQuests() {
+    renderTrail();
     const box = $("#questList");
     box.innerHTML = "";
     const groups = [...new Set(DATA.quests.map((q) => q.group))];

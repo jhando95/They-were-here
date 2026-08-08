@@ -298,6 +298,7 @@
           <button id="genLoot" class="btn gen">🎁 Loot</button>
           <button id="genMark" class="btn gen">🩹 Mark (0 HP)</button>
           <button id="genConsp" class="btn gen">🛰 Conspiracy</button>
+          <button id="genNowWhat" class="btn gen">🧭 Now What?</button>
         </div>
         <div id="genResult" class="gen-result" hidden>
           <p id="genText"></p>
@@ -310,6 +311,13 @@
 
       <!-- QUESTS -->
       <div class="tab-page" id="page-quests">
+        <div class="dm-only trail-box">
+          <h3 class="section-title dm-text">THE TRAIL — WHAT THEY MUST LEARN (GM)</h3>
+          <p class="empty-note">Every revelation has 3+ paths — no missed scene breaks the story.
+            Check them off as they land; the paths tell you what's still reachable from anywhere.
+            (<b>running-it-loose.md</b>)</p>
+          <div id="trailList"></div>
+        </div>
         <div id="questList"></div>
       </div>
 

@@ -76,6 +76,13 @@ Dialogue = pick two: weather, lawns, aggressive agreement, filed compliments.
 **Close:** flip quests in app → adjust Suspicion → award Glow at act ends →
 ask the act's closing question and WRITE IT DOWN (finale fuel).
 
+## When they go off-script (full toolkit: running-it-loose.md)
+Stuck? → **🧭 NOW WHAT? button** (Dice tab). Unprepped place? → **person + wrongness
++ thread.** Missed a clue? → **magnetic clue: move it to them** (every revelation
+has 3+ paths — THE TRAIL, Quests tab). Their theory's cooler? → **it was always
+true.** Their plan's airtight? → **it works; charge a cost.** Only three
+invariants: 2:47 · salt & weirdness work · the Collective is polite.
+
 ## The three secrets (never say out loud until earned)
 1. The Collective thinks the 1950s broadcasts were an *invitation*.
 2. Crisp was one of the three taken in '87 — the original suit.

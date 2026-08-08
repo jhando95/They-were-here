@@ -414,6 +414,44 @@ const DATA = {
     "THE VAN IS HERE. IT'S VERY COMFORTABLE."
   ],
 
+  /* The Revelation Web — the 8 things the player must eventually learn.
+     Every one is reachable by 3+ independent paths, so no missed scene can
+     break the mystery. Full sandbox rules: campaign/running-it-loose.md */
+  revelations: [
+    { id: "r1", title: "Gary was replaced — and he's not the only one",
+      paths: "Any clone-tell field test · Chet's Follicle File · Big Ang's snack spreadsheet · Hal Butterfield's mow-log · Dakota's Brine List" },
+    { id: "r2", title: "It happens at 2:47 AM, on a schedule",
+      paths: "Wendell's scanner log · Opal's split-log book · Priya's doorbell-reboot data · Dez's VHS bowling tape · staying up once" },
+    { id: "r3", title: "The HOA is the front; Crisp runs it",
+      paths: "Tilly's DECLINED letter · Maureen's permit trail · Carol Ann's verbatim minutes · the block-party keycard · the Gazette 1987 photo caption" },
+    { id: "r4", title: "The real neighbors are alive, beneath FreshMart",
+      paths: "Biscuit's nose · Gen-Gen's MALL BELOW map · buffering KYLE at the freight elevator · Fran's deli-schedule gap · Duke's bricked wall" },
+    { id: "r5", title: "The lawns are an antenna; the tower is the beacon",
+      paths: "Priya's drone photo · Gus's lawn diary · Walt Grubb's growth spreadsheets · climbing the tower · Doug Wexler's citation ledger" },
+    { id: "r6", title: "Founders' Day is the Bloom — fireworks + beacon = fleet",
+      paths: "The Undermart schematic wall · the fireworks invoice (Maureen OR Carol's shoebox) · a BEV-2 gossip trade · Arlene's spiked follow-up" },
+    { id: "r7", title: "Salt hurts them; weirdness jams them",
+      paths: "The spore-grass sample hissing · Nana Ruthie's doorstep · Duke's pretzel test · Terry Loomis's tape · any accidental buffer moment" },
+    { id: "r8", title: "The pods open to the Overseer's handshake",
+      paths: "The hand-shaped pod recesses · a KYLE or TODD-2 interrogation · a BEV-2 trade · Gil Herrera's 1989 memory" }
+  ],
+
+  /* The NOW WHAT? oracle — stall-breakers that push toward the web. */
+  nowWhat: [
+    "Biscuit arrives, eats something evidence-adjacent, and announces — between licks — exactly where he found it.",
+    "The phone rings: BEV-2, 'RECIPROCATING.' She leaks one real Vanguard fact and demands gossip back.",
+    "A MISSED DELIVERY slip on the door. Dated TOMORROW, 2:47 AM. The addressee is a neighbor the player likes.",
+    "Priya's drone crash-lands at their feet with eleven seconds of footage somebody clearly shot down to suppress.",
+    "The MARSH-2 cruiser rolls past at exactly two under the limit. Third time today. She waves. She's practicing waving.",
+    "Mrs. Pemberton needs her casserole back. It's 'restless.' It is pointing at something, the way a compass points.",
+    "A Tuesday Truther bursts in: their dumbest theory just accidentally produced a completely real document.",
+    "The gnome count on this street has changed since breakfast.",
+    "Wendell over the walkie, whisper-screaming: the Lawn Frequency just spiked — EARLY. It has never once been early.",
+    "A stranger in pajamas shuffles past, murmuring 'five more minutes.' Nobody recognizes them. The pods don't lose count. Do they?",
+    "Deborah cites a nearby clone for a violation — and its response is a sound no polite thing should make.",
+    "It is suddenly 2:46 AM. Wherever they are. Whatever they were doing. Something starts to hum."
+  ],
+
   /* The Twist Deck — plant, then fire. Full write-ups in campaign/villains-and-twists.md. */
   twists: [
     { id: "t1", title: "The Gnome Indoors",

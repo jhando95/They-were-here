@@ -32,6 +32,7 @@ powerful stat in the game.
 | `campaign/villains-and-twists.md` | Active villains (MARSH-2's gaslight campaign), the Reputation clock, evidence rules, the Twist Deck | **GM ONLY** ⚠️ |
 | `campaign/town-census.md` | 47 goofy residents, who's replaced, the Tuesday Truthers, the conspiracy corkboard | **GM ONLY** ⚠️ |
 | `campaign/tables.md` | Random tables: powers, clone tells, complications, loot | **GM ONLY** (mostly) |
+| `campaign/running-it-loose.md` | Sandbox toolkit: the Revelation Web, improv formulas, the NOW WHAT? oracle, 5-minute prep sheet | **GM ONLY** |
 | `campaign/gm-screen.md` | Every rule, DC, and stat block on one page | **GM ONLY** |
 | `campaign/art-prompts.md` | AI image prompt pack for every art slot in the app | GM |
 

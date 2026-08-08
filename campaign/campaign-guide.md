@@ -80,6 +80,11 @@ Their method, run by the advance team ("the Neighborhood Improvement Vanguard"):
 
 ---
 
+> **Player went off-plan?** Good — that's the game working. The mystery is a
+> web, not a line: see `running-it-loose.md` for the Revelation Web, the
+> five-minute prep sheet, and the NOW WHAT? oracle. The act guides describe
+> the *likely* path, never the required one.
+
 ## Running It Single-Player: 5 Rules of Thumb
 
 1. **The PC is never stuck.** No party means no one to bail them out — so every
