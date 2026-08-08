@@ -150,6 +150,18 @@ No install, no build, no internet required even without the deploy — open
 - 🎭 **The Twist Deck** — ten plant/fire/fallout twists tracked in the Scenes
   tab (GM): replaced allies, the player's own alien file, the defector clone,
   and what Deputy Hodge has been hiding in the crayon box.
+- 🌙 **The 2:47 Protocol** — the haunted hour as a game mode: one GM button
+  drops the whole app (and the shared Discord window) into night — darker
+  map, flickering title, the hum — deals a nocturnal event from the Night
+  Deck, and swaps the rules (clones sync, Weird at advantage, habits get
+  noticed).
+- 📡 **STATIC** — the anti-Weird meter: passing as perfect (Glorptech,
+  flawless normalcy, Crisp's gifts) erodes who you are, with thresholds at
+  3 (lose a habit), 6 (the network can predict you), and 9 (your pod is
+  being made up). Being unmistakably yourself washes it off.
+- 📻 **Transmissions** — the GM queues in-fiction messages between sessions;
+  a pulsing radio badge appears in the app, and opening one plays it as a
+  cinematic card, hum included. Session cold-opens, solved.
 - 🏘 **The town census (Folks tab)** — all 47 residents of Pinebrook as
   searchable cards. The GM flips each person's status live as the invasion
   spreads (🙂 human / 😐 replaced / ❓ ???) with tells, secrets, and scene

@@ -17,6 +17,8 @@
     <h1>THEY WERE HERE</h1>
     <p class="tagline">PINEBROOK FIELD KIT · POP. 8,213 · ALL NORMAL HERE</p>
   </div>
+  <button id="radioBadge" class="btn small radio-badge" hidden
+    title="Incoming transmission — received 2:47 AM">📻 <b id="radioCount">1</b></button>
   <div class="controls">
     <button id="playerViewBtn" class="btn small" title="Open a spoiler-free second window to share in Discord — it mirrors this one live">🖥 Player view</button>
     <label class="switch" title="Reveals GM notes, hidden locations, and quest controls">
@@ -256,6 +258,13 @@
             <button class="btn tiny" id="glowPlus">+</button>
             <span class="glow-hint">spend: +1 stat · new power · SUBLIME unlock</span>
           </div>
+          <div class="tracker">
+            <span class="tracker-name" title="The anti-Weird meter (0–9): how much of you the broadcast has overwritten. Passing as perfect raises it; being known lowers it. Thresholds at 3, 6, and 9.">STATIC</span>
+            <button class="btn tiny" id="staticMinus">−</button>
+            <b id="staticVal" class="static-val">0</b>
+            <button class="btn tiny" id="staticPlus">+</button>
+            <span class="glow-hint" id="staticLabel"></span>
+          </div>
         </div>
 
         <div class="section-head">
@@ -461,6 +470,27 @@
               </div>
             </div>
             <p class="empty-note">+ / advancing the round resets the buffer. Boss acts twice, minus buffered.</p>
+          </div>
+
+          <div class="gm-block">
+            <div class="section-head">
+              <h3 class="section-title dm-text">THE 2:47 PROTOCOL</h3>
+              <button id="nightToggle" class="btn tiny">🌙 enter 2:47</button>
+            </div>
+            <div id="nightEventBox" class="gen-result" hidden>
+              <p id="nightEventText"></p>
+              <button id="nightRedraw" class="btn tiny">redraw event</button>
+            </div>
+            <p class="empty-note">Clones sync (sneaking auto-succeeds) · Weird at advantage · Charm vs clones
+              impossible · everything alien glows · habits get noticed (👁 +1/night after two nights running).
+              Rules: <b>whats-different.md</b></p>
+          </div>
+
+          <div class="gm-block">
+            <h3 class="section-title dm-text">TRANSMISSIONS — 📻 BETWEEN SESSIONS</h3>
+            <textarea id="txInput" rows="3" placeholder="Short, concrete, timestamped 2:47 AM. Ten ready-made in whats-different.md."></textarea>
+            <button id="txQueue" class="btn small">📻 queue transmission</button>
+            <div id="txList"></div>
           </div>
 
           <div class="gm-block">

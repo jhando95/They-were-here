@@ -76,6 +76,14 @@ Dialogue = pick two: weather, lawns, aggressive agreement, filed compliments.
 **Close:** flip quests in app → adjust Suspicion → award Glow at act ends →
 ask the act's closing question and WRITE IT DOWN (finale fuel).
 
+## The haunted hour & the price of passing (whats-different.md)
+**2:47 Protocol** (GM tab → 🌙): clones sync (sneak = auto) · Weird at adv ·
+Charm vs clones impossible · alien stuff glows · night event dealt · habits
+noticed (👁 +1/night after two straight). **STATIC 0–9** (sheet): +1 Glorptech
+use / flawless normalcy, +2 Crisp's gifts · −1 SUBLIME / being-known moment,
+−2 your thing, badly, in public. Thresholds 3 / 6 / 9. **📻 Transmissions**:
+queue in GM tab; the glowing badge at session start is the cold open.
+
 ## When they go off-script (full toolkit: running-it-loose.md)
 Stuck? → **🧭 NOW WHAT? button** (Dice tab). Unprepped place? → **person + wrongness
 + thread.** Missed a clue? → **magnetic clue: move it to them** (every revelation

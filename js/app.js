@@ -16,10 +16,14 @@
       items: [],        // {id, qty}
       effects: [],      // temporary conditions & Marks (strings)
       sublimeUsed: {},  // power id -> true (once per session)
+      static: 0,        // identity erosion, 0-9 (whats-different.md)
       gear: "", notes: ""
     },
     lore: {},           // almanac doc id -> revealed
     crew: [],           // recruited allies: {id, helped, weird, status}
+    night: false,       // the 2:47 Protocol (haunted-hour mode)
+    nightEvent: "",     // the currently dealt night event
+    transmissions: [],  // between-session messages: {id, text, read}
     token: { x: 95, y: 178 },
     suspicion: 2,
     reputation: 1,   // the Discredit clock — how crazy the town thinks the PC is
@@ -67,6 +71,7 @@
     if (!Array.isArray(c.items)) c.items = [];
     if (!Array.isArray(c.effects)) c.effects = [];
     if (!c.sublimeUsed || typeof c.sublimeUsed !== "object") c.sublimeUsed = {};
+    if (typeof c.static !== "number") c.static = 0;
     if (typeof c.powers === "string" && c.powers.trim() && !c.powersKnown.length) {
       const leftovers = [];
       for (const line of c.powers.split("\n")) {
@@ -641,6 +646,9 @@
     $("#hpCur").textContent = c.hp;
     $("#hpMax").value = c.hpMax;
     $("#glowVal").textContent = c.glow;
+    $("#staticVal").textContent = c.static;
+    $("#staticLabel").textContent = DATA.staticLabels[c.static] || "";
+    $("#staticVal").className = "static-val" + (c.static >= 6 ? " hot" : c.static >= 3 ? " warm" : "");
     renderDerived();
     renderCheckConsole();
     renderPips("#wpPips", c.wp, "wp");
@@ -1093,6 +1101,14 @@
   $("#glowPlus").addEventListener("click", () => {
     state.character.glow = Math.min(9, state.character.glow + 1);
     save(); $("#glowVal").textContent = state.character.glow;
+  });
+  $("#staticMinus").addEventListener("click", () => {
+    state.character.static = Math.max(0, state.character.static - 1);
+    save(); renderSheet();
+  });
+  $("#staticPlus").addEventListener("click", () => {
+    state.character.static = Math.min(9, state.character.static + 1);
+    save(); renderSheet();
   });
 
   function renderDerived() {
@@ -1619,6 +1635,103 @@
       `${n.name} — ${n.role} (${npcStatus(n)}). ${n.bit}`;
   });
 
+  /* ---------------- the 2:47 Protocol (haunted-hour mode) ---------------- */
+
+  const FOOT_NORMAL = 'It is currently <b>2:47 AM</b> somewhere in Pinebrook.';
+  const FOOT_NIGHT = 'It is <b>2:47 AM</b>. It is always 2:47 AM. Do not check the porch.';
+
+  function renderNight() {
+    document.body.classList.toggle("night", state.night);
+    const foot = document.querySelector(".foot-time");
+    if (foot) foot.innerHTML = state.night ? FOOT_NIGHT : FOOT_NORMAL;
+    const btn = $("#nightToggle");
+    if (btn) btn.textContent = state.night ? "☀️ end 2:47" : "🌙 enter 2:47";
+    const box = $("#nightEventBox");
+    if (box) {
+      box.hidden = !(state.night && state.nightEvent);
+      $("#nightEventText").textContent = state.nightEvent;
+    }
+  }
+
+  function nightHum(on) {
+    // the hum belongs on the shared window when one is open
+    if (Sync.playerViewActive()) {
+      Sync.send({ type: "sound", name: "hum", loop: true });
+      remoteLoops.hum = on;
+    } else if (Sound.isActive("hum") !== on) {
+      Sound.toggle("hum");
+    }
+    syncSoundButtons();
+  }
+
+  $("#nightToggle").addEventListener("click", () => {
+    state.night = !state.night;
+    if (state.night) state.nightEvent = Dice.pick(DATA.nightEvents);
+    nightHum(state.night);
+    save();
+    renderNight();
+  });
+  $("#nightRedraw").addEventListener("click", () => {
+    state.nightEvent = Dice.pick(DATA.nightEvents);
+    save();
+    renderNight();
+  });
+
+  /* ---------------- transmissions (📻 between sessions) ---------------- */
+
+  function renderRadioBadge() {
+    const unread = state.transmissions.filter((t) => !t.read);
+    const badge = $("#radioBadge");
+    badge.hidden = unread.length === 0;
+    $("#radioCount").textContent = unread.length;
+  }
+
+  function renderTxList() {
+    const list = $("#txList");
+    if (!list) return;
+    list.innerHTML = "";
+    if (!state.transmissions.length) {
+      list.innerHTML = `<p class="empty-note">Nothing queued. The town is quiet. Suspiciously quiet.</p>`;
+      return;
+    }
+    state.transmissions.forEach((t) => {
+      const row = document.createElement("div");
+      row.className = "clue-vault-item";
+      row.innerHTML = `<span class="${t.read ? "tx-read" : ""}">${t.read ? "✓" : "📻"} ${escapeHtml(t.text.slice(0, 70))}${t.text.length > 70 ? "…" : ""}</span>
+        <button class="btn tiny" data-tx="${t.id}" title="Delete">✕</button>`;
+      list.appendChild(row);
+    });
+    list.querySelectorAll("[data-tx]").forEach((btn) =>
+      btn.addEventListener("click", () => {
+        state.transmissions = state.transmissions.filter((t) => String(t.id) !== btn.dataset.tx);
+        save(); renderTxList(); renderRadioBadge();
+      }));
+  }
+
+  $("#txQueue").addEventListener("click", () => {
+    const text = $("#txInput").value.trim();
+    if (!text) return;
+    state.transmissions.push({ id: Date.now() + Math.floor(Math.random() * 1000), text, read: false });
+    $("#txInput").value = "";
+    save(); renderTxList(); renderRadioBadge();
+  });
+
+  $("#radioBadge").addEventListener("click", () => {
+    const tx = state.transmissions.find((t) => !t.read);
+    if (!tx) return;
+    tx.read = true;
+    save();
+    renderRadioBadge();
+    renderTxList();
+    playScene({
+      id: "transmission", artId: "act-one",
+      kicker: "📻 INCOMING TRANSMISSION · RECEIVED 2:47 AM",
+      title: "— — —",
+      narration: tx.text,
+      sound: { loop: "hum" }
+    });
+  });
+
   /* ---------------- player view window ---------------- */
 
   $("#playerViewBtn").addEventListener("click", () => {
@@ -1709,6 +1822,9 @@
     renderScenes();
     renderFolks();
     renderGm();
+    renderNight();
+    renderRadioBadge();
+    renderTxList();
   }
 
   renderAll();

@@ -593,6 +593,43 @@ body.dm .gm-locked-note { display: none; }
 .gm-rules b { color: var(--amber); font-family: var(--mono); font-size: 11px; letter-spacing: 1px; }
 #gmNotes { font-family: system-ui, sans-serif; font-size: 13.5px; }
 
+/* ---------- static track ---------- */
+.static-val { font-family: var(--mono); font-size: 20px; color: var(--muted); min-width: 22px; text-align: center; }
+.static-val.warm { color: var(--amber); }
+.static-val.hot { color: var(--danger); text-shadow: 0 0 10px rgba(255, 107, 107, 0.5); }
+
+/* ---------- the 2:47 protocol (night mode) ---------- */
+body.night {
+  background: #04070b;
+  background-image: radial-gradient(ellipse at 50% -20%, #081019 0%, #04070b 60%);
+}
+body.night .card { background: #0b1017; }
+body.night #map { filter: brightness(0.62) saturate(0.75); }
+body.night .topbar { background: rgba(4, 7, 11, 0.9); }
+body.night .topbar h1 {
+  color: #8ffce4;
+  text-shadow: 0 0 26px rgba(95, 242, 214, 0.8);
+  animation: nightFlicker 4s ease-in-out infinite;
+}
+@keyframes nightFlicker {
+  0%, 92%, 96%, 100% { opacity: 1; }
+  94% { opacity: 0.55; }
+}
+body.night .foot-time b { color: var(--alien); }
+
+/* ---------- transmissions ---------- */
+.radio-badge {
+  border-color: var(--alien); color: var(--alien);
+  animation: radioPulse 2.2s ease-in-out infinite;
+}
+@keyframes radioPulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(157, 255, 112, 0); }
+  50% { box-shadow: 0 0 14px rgba(157, 255, 112, 0.5); }
+}
+.tx-read { opacity: 0.45; }
+#txInput { margin-bottom: 8px; }
+#txList { margin-top: 10px; }
+
 /* ---------- player view (Discord screen-share) ---------- */
 body.player-view .controls { display: none; }
 .pv-badge {

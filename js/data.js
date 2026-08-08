@@ -482,6 +482,37 @@ const DATA = {
       paths: "The hand-shaped pod recesses · a KYLE or TODD-2 interrogation · a BEV-2 trade · Gil Herrera's 1989 memory" }
   ],
 
+  /* STATIC — the identity-erosion track (0-9). Passing as perfect raises it;
+     being known lowers it. Full rules: campaign/whats-different.md */
+  staticLabels: [
+    "Fully yourself.",
+    "A little polished lately.",
+    "You said 'FELLOW' unironically. Once.",
+    "FLICKER — choose one small habit. It's gone.",
+    "Your handwriting is getting suspiciously neat.",
+    "You waved at a gnome. It felt... collegial.",
+    "FLICKER — your reflection waves first. First roll each scene at disadvantage until you surprise the network.",
+    "The casseroles have started tasting... correct.",
+    "GARY-2 calls you 'PRACTICALLY ONE OF THE FAMILY.'",
+    "SMOOTH — somewhere below FreshMart, a pod has fresh linens. The mint is on the pillow. It's warm."
+  ],
+
+  /* The Night Deck — dealt when the 2:47 Protocol begins. */
+  nightEvents: [
+    "THE SYNC — every clone in town freezes mid-step for 66 seconds. Any door is enterable. The countdown restarts exactly when the player is furthest from the exit.",
+    "THE TURNING — every gnome rotates to face the water tower. All of them. Even the one in the kitchen nobody has mentioned yet.",
+    "THE DELIVERY — a FRSHMRT truck idles outside a house that still has people in it. The driver waits. Checks a list. Waits.",
+    "TWO LOUDER — the Lawn Frequency rises by exactly two houses' worth. By morning, two more porch lights never turn off.",
+    "THE DOG KNOWS — Biscuit at the window: 'You need to see this. Bring the steak. Not for the mission. For me.'",
+    "BROADCAST NIGHT — every TV in every replaced house turns on at once: the same 1950s sitcom, laugh track two seconds late, blue light flickering down the street in unison.",
+    "THE TAKING — the beam comes for someone tonight, someone whose name the player knows. Intervene (loud, 👁+2) or witness (a clue, and the guilt).",
+    "AFTER HOURS — Duke's light is on. Marla is pouring coffee for a stranger in pajamas. The stranger's slippers are wet with reservoir water.",
+    "ONE RING — the phone rings once. Unknown number. Answered: 66 seconds of suburb ambience, then quietly: 'WE KNOW YOU'RE AWAKE.'",
+    "THE PATTERN — the sprinklers run in sequence. From a roof it's readable: an arrow. Or a countdown. Petunia could say which.",
+    "THE SILENCE — nothing happens. The first silent 2:47 in months, and that's the most frightening one yet. (GM: the network was busy elsewhere. Something big advanced.)",
+    "THE OLD PATTERN — the player's own porch light flickers in a rhythm they almost remember. Weird DC 8: a fragment of Thread B surfaces."
+  ],
+
   /* The NOW WHAT? oracle — stall-breakers that push toward the web. */
   nowWhat: [
     "Biscuit arrives, eats something evidence-adjacent, and announces — between licks — exactly where he found it.",

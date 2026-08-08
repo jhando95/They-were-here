@@ -111,6 +111,17 @@ or flagrantly abnormal; it falls with lying low or Visible Normalcy. Threshold
 events at 4 / 6 / 8 / 10 are in the campaign guide. It is the GM's pacing dial —
 turn it with a smile.
 
+## 5½. STATIC — the price of passing
+
+Pinebrook's second personal track (0–9, on the sheet): how much of you the
+broadcast has overwritten. **Passing as perfect raises it** (Glorptech quirks,
+flawless normalcy, Crisp's gifts); **being known lowers it** (SUBLIME uses,
+telling an ally something true, doing your thing badly in public, on
+purpose). Thresholds at 3 (lose a habit — you pick), 6 (the network predicts
+you — first roll each scene at disadvantage until you surprise it), and 9
+(SMOOTH: a pod is being made up with your linens). Full rules and the
+2:47 Protocol: `whats-different.md`.
+
 ## 6. Getting stronger — Gear & Glow
 
 The full equipment compendium (garage weapons, Wendell's gadgets, Glorptech
