@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THEY WERE HERE — Pinebrook Field Kit</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="title-block">
+    <h1>THEY WERE HERE</h1>
+    <p class="tagline">PINEBROOK FIELD KIT · POP. 8,213 · ALL NORMAL HERE</p>
+  </div>
+  <div class="controls">
+    <label class="switch" title="Reveals GM notes, hidden locations, and quest controls">
+      <input type="checkbox" id="dmToggle">
+      <span class="slider"></span>
+      <span class="switch-label">GM SCREEN</span>
+    </label>
+    <button id="exportBtn" class="btn small" title="Download save file">Export</button>
+    <button id="importBtn" class="btn small" title="Load a save file">Import</button>
+    <input type="file" id="importFile" accept=".json" hidden>
+    <button id="resetBtn" class="btn small danger" title="Erase everything and start over">Reset</button>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ======================= LEFT: MAP ======================= -->
+  <section class="col-map">
+    <div class="card map-card">
+      <svg id="map" viewBox="0 0 1000 700" aria-label="Map of Pinebrook">
+        <defs>
+          <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="6" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <radialGradient id="vign" cx="50%" cy="45%" r="75%">
+            <stop offset="70%" stop-color="#000" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#000" stop-opacity="0.5"/>
+          </radialGradient>
+        </defs>
+
+        <!-- ground -->
+        <rect x="0" y="0" width="1000" height="700" fill="#0e1a13"/>
+
+        <!-- park -->
+        <ellipse cx="320" cy="222" rx="100" ry="62" fill="#152a1c"/>
+        <circle cx="270" cy="205" r="16" fill="#1c3a26"/>
+        <circle cx="355" cy="240" r="13" fill="#1c3a26"/>
+        <circle cx="330" cy="195" r="11" fill="#1c3a26"/>
+
+        <!-- reservoir -->
+        <ellipse cx="845" cy="602" rx="125" ry="70" fill="#0f2437" stroke="#1e4560" stroke-width="3"/>
+        <path d="M 770 590 q 20 -10 40 0 q 20 10 40 0 q 20 -10 40 0" fill="none" stroke="#1e4560" stroke-width="2" opacity="0.7"/>
+
+        <!-- whisper woods -->
+        <g fill="#18301f">
+          <circle cx="920" cy="180" r="24"/><circle cx="960" cy="230" r="20"/>
+          <circle cx="900" cy="255" r="18"/><circle cx="950" cy="300" r="24"/>
+          <circle cx="895" cy="350" r="20"/><circle cx="945" cy="385" r="17"/>
+          <circle cx="905" cy="420" r="15"/><circle cx="960" cy="120" r="18"/>
+          <circle cx="875" cy="205" r="14"/><circle cx="935" cy="345" r="14"/>
+        </g>
+
+        <!-- roads -->
+        <g stroke="#242c34" fill="none" stroke-linecap="round">
+          <path d="M 30 360 H 970" stroke-width="28"/>
+          <path d="M 520 30 V 670" stroke-width="28"/>
+          <path d="M 150 360 V 214" stroke-width="22"/>
+        </g>
+        <circle cx="150" cy="170" r="44" fill="none" stroke="#242c34" stroke-width="24"/>
+        <circle cx="150" cy="170" r="18" fill="#152a1c"/>
+        <path d="M 520 92 L 828 108" stroke="#33302a" stroke-width="9" stroke-dasharray="10 8" fill="none"/>
+
+        <!-- centerlines -->
+        <g stroke="#4d4c39" stroke-width="2" stroke-dasharray="14 12" fill="none" opacity="0.8">
+          <path d="M 30 360 H 970"/>
+          <path d="M 520 30 V 670"/>
+        </g>
+
+        <!-- freshmart parking -->
+        <rect x="455" y="515" width="155" height="82" rx="8" fill="#1a2128"/>
+        <g stroke="#3a4450" stroke-width="2">
+          <line x1="480" y1="525" x2="480" y2="545"/><line x1="505" y1="525" x2="505" y2="545"/>
+          <line x1="530" y1="525" x2="530" y2="545"/><line x1="555" y1="525" x2="555" y2="545"/>
+        </g>
+
+        <!-- decorative houses -->
+        <g class="deco-houses">
+          <g transform="translate(105,248)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(120,318)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(185,318)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#9dff70"/></g>
+          <g transform="translate(250,395)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(430,395)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#9dff70"/></g>
+          <g transform="translate(700,318)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(795,318)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(810,395)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#9dff70"/></g>
+          <g transform="translate(470,120)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(545,185)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+          <g transform="translate(470,250)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#9dff70"/></g>
+          <g transform="translate(545,435)"><rect width="24" height="17" rx="2" fill="#1b222b" stroke="#2b3642"/><rect x="15" y="5" width="5" height="5" fill="#ffd98a"/></g>
+        </g>
+
+        <!-- street names -->
+        <g class="street-names" fill="#46545f" font-size="11" letter-spacing="3">
+          <text x="240" y="352">SYCAMORE AVE</text>
+          <text x="700" y="352">SYCAMORE AVE</text>
+          <text transform="rotate(-90 536 250)" x="536" y="250">MAIN ST</text>
+          <text transform="rotate(-90 136 322)" x="136" y="322" font-size="9">MARIGOLD LN</text>
+        </g>
+
+        <rect x="0" y="0" width="1000" height="700" fill="url(#vign)" pointer-events="none"/>
+
+        <g id="markers"></g>
+        <g id="tokenLayer"></g>
+      </svg>
+      <p class="map-hint">Click a location for details · drag the glowing token to move your character</p>
+    </div>
+
+    <div class="card suspicion-card">
+      <div class="suspicion-head">
+        <h2>NEIGHBORHOOD WATCH</h2>
+        <div class="suspicion-btns">
+          <button id="suspMinus" class="btn tiny">−</button>
+          <button id="suspPlus" class="btn tiny">+</button>
+        </div>
+      </div>
+      <div id="suspicionTrack" class="suspicion-track"></div>
+      <p id="suspicionLabel" class="suspicion-label"></p>
+    </div>
+
+    <div class="card location-card" id="locationCard">
+      <p class="placeholder">— Click somewhere on the map. Pinebrook has nothing to hide. —</p>
+    </div>
+  </section>
+
+  <!-- ======================= RIGHT: PANEL ======================= -->
+  <section class="col-panel">
+    <div class="card panel-card">
+      <nav class="tabs">
+        <button class="tab active" data-tab="sheet">Character</button>
+        <button class="tab" data-tab="dice">Dice</button>
+        <button class="tab" data-tab="quests">Quests</button>
+        <button class="tab" data-tab="clues">Clues</button>
+      </nav>
+
+      <!-- CHARACTER SHEET -->
+      <div class="tab-page active" id="page-sheet">
+        <div class="pregen-row">
+          <select id="pregenSelect">
+            <option value="">— Load a pregen… —</option>
+          </select>
+          <button id="pregenLoad" class="btn small">Load</button>
+        </div>
+
+        <label class="field">Name
+          <input type="text" id="chName" placeholder="Who are you?">
+        </label>
+        <label class="field">Known around town for…
+          <input type="text" id="chConcept" placeholder="e.g. night-shift nurse, awake at 2:47 by profession">
+        </label>
+
+        <div class="stats-grid">
+          <label class="stat">BRAWN<input type="number" id="stBrawn" min="-1" max="5" value="0"></label>
+          <label class="stat">BRAINS<input type="number" id="stBrains" min="-1" max="5" value="0"></label>
+          <label class="stat">CHARM<input type="number" id="stCharm" min="-1" max="5" value="0"></label>
+          <label class="stat">WEIRD<input type="number" id="stWeird" min="-1" max="5" value="0"></label>
+        </div>
+        <p class="derived">Dodge <b id="dvDodge">10</b> · suggested Max HP <b id="dvHp">8</b> (8 + Brawn)</p>
+
+        <div class="trackers">
+          <div class="tracker">
+            <span class="tracker-name">HP</span>
+            <button class="btn tiny" id="hpMinus">−</button>
+            <span class="hp-read"><b id="hpCur">8</b>/<input type="number" id="hpMax" min="1" max="20" value="8"></span>
+            <button class="btn tiny" id="hpPlus">+</button>
+          </div>
+          <div class="tracker">
+            <span class="tracker-name" title="Weird Points — fuel for your power">WP</span>
+            <div class="pips" id="wpPips" data-max="3"></div>
+          </div>
+          <div class="tracker">
+            <span class="tracker-name" title="Spend to reroll anything">LUCK</span>
+            <div class="pips" id="luckPips" data-max="3"></div>
+          </div>
+        </div>
+
+        <label class="field">Wacky Power(s)
+          <textarea id="chPowers" rows="2" placeholder="Roll one on the Dice tab →"></textarea>
+        </label>
+        <label class="field">Gear
+          <textarea id="chGear" rows="4" placeholder="Fanny pack&#10;Flashlight&#10;One sentimental item…"></textarea>
+        </label>
+        <label class="field">Notes
+          <textarea id="chNotes" rows="3" placeholder="Suspicions, promises, steak owed to Biscuit…"></textarea>
+        </label>
+      </div>
+
+      <!-- DICE -->
+      <div class="tab-page" id="page-dice">
+        <div class="dice-buttons">
+          <button class="die" data-sides="4">d4</button>
+          <button class="die" data-sides="6">d6</button>
+          <button class="die" data-sides="8">d8</button>
+          <button class="die" data-sides="10">d10</button>
+          <button class="die" data-sides="12">d12</button>
+          <button class="die d20" data-sides="20">d20</button>
+          <button class="die" data-sides="100">d100</button>
+        </div>
+        <div class="dice-options">
+          <label>Qty <input type="number" id="diceQty" min="1" max="6" value="1"></label>
+          <label>Mod <input type="number" id="diceMod" min="-5" max="10" value="0"></label>
+          <select id="diceAdv" title="Advantage / disadvantage (single d20 only)">
+            <option value="normal">Normal</option>
+            <option value="adv">Advantage</option>
+            <option value="dis">Disadvantage</option>
+          </select>
+        </div>
+        <div id="diceResult" class="dice-result">
+          <span class="dice-total">—</span>
+          <span class="dice-detail">Pick a die. The universe is watching politely.</span>
+        </div>
+
+        <div class="generators">
+          <button id="genPower" class="btn gen">🛸 Wacky Power</button>
+          <button id="genTell" class="btn gen">👁 Clone Tell</button>
+          <button id="genComp" class="btn gen">🌀 Complication</button>
+        </div>
+        <div id="genResult" class="gen-result" hidden>
+          <p id="genText"></p>
+          <button id="genAdd" class="btn small" hidden>+ Add to sheet</button>
+        </div>
+
+        <h3 class="log-title">ROLL LOG</h3>
+        <ol id="diceLog" class="dice-log"></ol>
+      </div>
+
+      <!-- QUESTS -->
+      <div class="tab-page" id="page-quests">
+        <div id="questList"></div>
+      </div>
+
+      <!-- CLUES -->
+      <div class="tab-page" id="page-clues">
+        <h3 class="section-title">THE TRUTH BOARD</h3>
+        <div id="clueList"></div>
+        <div class="dm-only">
+          <h3 class="section-title dm-text">UNREVEALED (GM)</h3>
+          <div id="clueVault"></div>
+        </div>
+        <div class="custom-clue">
+          <h3 class="section-title">PIN YOUR OWN CLUE</h3>
+          <input type="text" id="customClueTitle" placeholder="Title — e.g. 'The humming yogurt'">
+          <textarea id="customClueText" rows="2" placeholder="What did you find?"></textarea>
+          <button id="customClueAdd" class="btn small">📌 Pin it</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>PORCHLIGHT SYSTEM · one d20, four stats, zero homework</span>
+  <span class="foot-time">It is currently <b>2:47 AM</b> somewhere in Pinebrook.</span>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/dice.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
