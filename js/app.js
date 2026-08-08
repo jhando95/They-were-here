@@ -79,7 +79,39 @@
   let selectedLoc = null;
   let lastGen = null; // {type: "power"|"item", ref}
 
-  const save = () => localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+  /* -------- remote play (Discord screen-share) -------- */
+  const IS_PLAYER_VIEW = Sync.isPlayer;
+  let applyingRemote = false;
+  const remoteLoops = {}; // GM-side mirror of loops running in the Player View
+
+  if (IS_PLAYER_VIEW) {
+    state.dm = false;
+    document.body.classList.add("player-view");
+  }
+
+  const save = () => {
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+    if (!applyingRemote) Sync.send({ type: "state", state });
+  };
+
+  Sync.on("state", (m) => {
+    applyingRemote = true;
+    const base = defaultState();
+    state = {
+      ...base, ...m.state,
+      character: { ...base.character, ...(m.state.character || {}) },
+      token: { ...base.token, ...(m.state.token || {}) }
+    };
+    if (IS_PLAYER_VIEW) state.dm = false;
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+    renderAll();
+    applyingRemote = false;
+  });
+
+  Sync.on("hello", () => {
+    // a Player View just (re)connected — give it the current world
+    Sync.send({ type: "state", state });
+  });
 
   const questState = (q) => state.quests[q.id] || q.state;
   const locVisible = (loc) =>
@@ -264,7 +296,7 @@
   const overlay = $("#sceneOverlay");
   let sceneLoopStarted = null;
 
-  function playScene(scene) {
+  function playScene(scene, fromRemote) {
     $("#sceneKicker").textContent = scene.kicker;
     $("#sceneTitle").textContent = scene.title;
     $("#sceneNarration").textContent = scene.narration;
@@ -275,8 +307,13 @@
     overlay.hidden = false;
     requestAnimationFrame(() => overlay.classList.add("open"));
 
+    // Mirror to the shared Player View — and let IT carry the audio, so the
+    // sound reaches Discord (and doesn't double up on the GM's machine).
+    const routeAudioRemote = !fromRemote && Sync.playerViewActive();
+    if (!fromRemote) Sync.send({ type: "scene", scene });
+
     sceneLoopStarted = null;
-    if (scene.sound) {
+    if (scene.sound && !routeAudioRemote) {
       if (scene.sound.shot) Sound.play(scene.sound.shot);
       if (scene.sound.loop && !Sound.isActive(scene.sound.loop)) {
         Sound.toggle(scene.sound.loop);
@@ -286,9 +323,10 @@
     }
   }
 
-  function closeScene() {
+  function closeScene(fromRemote) {
     overlay.classList.remove("open");
     setTimeout(() => { overlay.hidden = true; }, 600);
+    if (!fromRemote) Sync.send({ type: "scene-close" });
     if (sceneLoopStarted) {
       if (Sound.isActive(sceneLoopStarted)) Sound.toggle(sceneLoopStarted);
       sceneLoopStarted = null;
@@ -296,7 +334,10 @@
     }
   }
 
-  overlay.addEventListener("click", closeScene);
+  Sync.on("scene", (m) => playScene(m.scene, true));
+  Sync.on("scene-close", () => closeScene(true));
+
+  overlay.addEventListener("click", () => closeScene());
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !overlay.hidden) closeScene();
   });
@@ -493,6 +534,19 @@
   document.querySelectorAll(".sound").forEach((btn) => {
     btn.addEventListener("click", () => {
       const name = btn.dataset.sound;
+      // With a Player View open, audio belongs on the shared window so it
+      // reaches Discord; the GM window just mirrors the button state.
+      if (Sync.playerViewActive()) {
+        Sync.send({ type: "sound", name, loop: Sound.isLoop(name) });
+        if (Sound.isLoop(name)) {
+          remoteLoops[name] = !remoteLoops[name];
+          btn.classList.toggle("playing", remoteLoops[name]);
+        } else {
+          btn.classList.add("playing");
+          setTimeout(() => btn.classList.remove("playing"), 600);
+        }
+        return;
+      }
       if (Sound.isLoop(name)) {
         btn.classList.toggle("playing", Sound.toggle(name));
       } else {
@@ -501,6 +555,12 @@
         setTimeout(() => btn.classList.remove("playing"), 600);
       }
     });
+  });
+
+  Sync.on("sound", (m) => {
+    if (m.loop) Sound.toggle(m.name);
+    else Sound.play(m.name);
+    syncSoundButtons();
   });
   $("#volSlider").addEventListener("input", (e) =>
     Sound.setVolume(Number(e.target.value) / 100));
@@ -857,6 +917,7 @@
       const mod = Number($("#diceMod").value) || 0;
       const adv = $("#diceAdv").value;
       const result = Dice.rollDice(sides, qty, mod, adv);
+      if (Sync.playerViewActive()) Sync.send({ type: "roll", result });
       Dice.animateRoll($("#diceResult"), result, () => {
         state.log.unshift({ txt: result.detail, total: result.total });
         state.log = state.log.slice(0, 30);
@@ -865,6 +926,9 @@
       });
     });
   });
+
+  /* rolls made in the GM window replay, animated, on the shared window */
+  Sync.on("roll", (m) => Dice.animateRoll($("#diceResult"), m.result, null));
 
   /* ---- generators ---- */
 
@@ -1159,9 +1223,25 @@
 
   $("#folksSearch").addEventListener("input", renderFolks);
 
+  /* ---------------- player view window ---------------- */
+
+  $("#playerViewBtn").addEventListener("click", () => {
+    const url = location.href.split(/[?#]/)[0] + "?view=player";
+    const w = window.open(url, "twhPlayerView", "width=1280,height=820");
+    if (w) Sync.setPeer(w);
+  });
+
+  if (IS_PLAYER_VIEW) {
+    const badge = document.createElement("div");
+    badge.className = "pv-badge";
+    badge.textContent = "PLAYER VIEW · SHARE THIS WINDOW IN DISCORD (WITH AUDIO)";
+    document.querySelector(".topbar").appendChild(badge);
+  }
+
   /* ---------------- GM toggle ---------------- */
 
   $("#dmToggle").addEventListener("change", (e) => {
+    if (IS_PLAYER_VIEW) { e.target.checked = false; return; }
     state.dm = e.target.checked;
     save();
     document.body.classList.toggle("dm", state.dm);

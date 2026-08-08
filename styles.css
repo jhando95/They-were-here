@@ -515,6 +515,14 @@ body.dm .player-scenes-note { display: none; }
   to { opacity: 1; transform: none; }
 }
 
+/* ---------- player view (Discord screen-share) ---------- */
+body.player-view .controls { display: none; }
+.pv-badge {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 2px;
+  color: var(--alien); border: 1px dashed var(--alien); border-radius: 6px;
+  padding: 6px 12px; white-space: nowrap;
+}
+
 /* ---------- folks (town census) ---------- */
 .folks-count { margin: 0 0 10px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 1px; color: var(--muted); }
 #folksSearch { margin-bottom: 6px; }

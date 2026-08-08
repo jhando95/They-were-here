@@ -98,6 +98,36 @@ prefer). It also works great hosted on GitHub Pages.
 Everything auto-saves to the browser (localStorage). Use **Export / Import** to
 back up a campaign or move it between devices.
 
+## 🎙 Playing over Discord (PC + voice)
+
+Built for exactly this setup — two PCs, voice chat, GM screen-sharing:
+
+1. **GM:** open `index.html`, flip **GM SCREEN on**. This window is yours;
+   it never gets shared.
+2. Click **🖥 Player view** in the header — a second, spoiler-free window
+   opens and mirrors the first, live.
+3. In Discord: **Share Screen → pick the Player View *window*** (not the
+   whole screen), and enable **"Share audio."**
+4. Play. Everything routes automatically:
+   - Move the token, reveal locations, flip quests, pin clues, nudge the
+     clocks in your GM window → the shared window updates instantly.
+   - Play a **scene card** → the cinematic (and its sound cue) plays on the
+     shared window, so your player gets the full letterboxed moment while
+     your window stays on the controls.
+   - **Soundboard and dice** route to the shared window too — the 2:47 Hum
+     reaches Discord, and your rolls animate on stream.
+   - GM notes, hidden locations, the Twist Deck, THE TRAIL, and everyone's
+     clone status stay in your private window only.
+5. **The player** just talks: "I knock on the Hendersons' door." You drive.
+   For dice, either roll on stream when they act, or let them roll physical
+   dice on camera and honor the result — both feel great.
+
+**Tips:** have the player open their own copy of the app (or a printout of
+`rules.md`) as a personal character-sheet reference — the shared window
+already shows the live sheet, but it's nice in their hands. Turn off Discord
+message notifications on the GM machine before sharing. If the Player View
+ever gets closed, just click 🖥 again — it reconnects and re-syncs itself.
+
 ## Running the game in 5 steps
 
 1. **GM:** read `campaign-guide.md`, `npcs-and-monsters.md`, and skim `tables.md`.
