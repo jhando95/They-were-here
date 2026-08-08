@@ -424,8 +424,18 @@
       <!-- SCENES -->
       <div class="tab-page" id="page-scenes">
         <button id="recapBtn" class="btn recap-btn">📻 &nbsp;“Previously, on Pinebrook…”</button>
-        <p class="empty-note recap-note">Auto-narrated from your completed quests and pinned clues —
-          play it at the top of every session.</p>
+        <p class="empty-note recap-note">Auto-narrated from your completed quests, pinned clues, and
+          the chronicle below — play it at the top of every session.</p>
+
+        <div class="section-head">
+          <h3 class="section-title">THE STORY SO FAR</h3>
+          <button id="storyDownload" class="btn tiny" title="Download the chronicle as a markdown file — the campaign's trophy">⬇ save story</button>
+        </div>
+        <div class="chron-add">
+          <input type="text" id="chronInput" placeholder="Record a moment or a table quote…">
+          <button id="chronAdd" class="btn tiny">💬 add</button>
+        </div>
+        <div id="chronList" class="chron-list"></div>
         <div class="dm-only">
           <h3 class="section-title dm-text">TRANSITION SCENES (GM) — CLICK TO ROLL FILM</h3>
           <div id="sceneList"></div>

@@ -162,6 +162,13 @@ No install, no build, no internet required even without the deploy — open
 - 📻 **Transmissions** — the GM queues in-fiction messages between sessions;
   a pulsing radio badge appears in the app, and opening one plays it as a
   cinematic card, hum included. Session cold-opens, solved.
+- 📖 **The Chronicle** — the campaign writes its own history: every quest
+  flip, clue pinned, scene played, Glow gained, ally recruited, and clock
+  threshold auto-records into a session-by-session "story so far" (GM-secret
+  events — twists, replacements — visible only behind the screen). Add table
+  quotes by hand, feed it into the "Previously on…" recap, and download the
+  whole saga as a markdown file when the campaign ends. That file is the
+  trophy.
 - 🏘 **The town census (Folks tab)** — all 47 residents of Pinebrook as
   searchable cards. The GM flips each person's status live as the invasion
   spreads (🙂 human / 😐 replaced / ❓ ???) with tells, secrets, and scene

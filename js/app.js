@@ -24,6 +24,8 @@
     night: false,       // the 2:47 Protocol (haunted-hour mode)
     nightEvent: "",     // the currently dealt night event
     transmissions: [],  // between-session messages: {id, text, read}
+    sessionNum: 1,
+    chronicle: [],      // the auto-journal: {s, icon, text, gm}
     token: { x: 95, y: 178 },
     suspicion: 2,
     reputation: 1,   // the Discredit clock — how crazy the town thinks the PC is
@@ -129,6 +131,14 @@
   });
 
   const questState = (q) => state.quests[q.id] || q.state;
+
+  /* The Chronicle — the campaign writes its own history. gmOnly entries stay
+     behind the GM screen. Callers save() afterward. */
+  function chron(icon, text, gmOnly) {
+    state.chronicle.push({ s: state.sessionNum, icon, text, gm: !!gmOnly });
+    if (state.chronicle.length > 400) state.chronicle = state.chronicle.slice(-400);
+    renderChronicle();
+  }
   const locVisible = (loc) =>
     state.revealed[loc.id] !== undefined ? state.revealed[loc.id] : !loc.hidden;
 
@@ -326,6 +336,10 @@
     // sound reaches Discord (and doesn't double up on the GM's machine).
     const routeAudioRemote = !fromRemote && Sync.playerViewActive();
     if (!fromRemote) Sync.send({ type: "scene", scene });
+    if (!fromRemote && !IS_PLAYER_VIEW && scene.id !== "recap" && scene.id !== "transmission") {
+      chron("🎬", `Scene: ${scene.title}`);
+      save();
+    }
 
     sceneLoopStarted = null;
     if (scene.sound && !routeAudioRemote) {
@@ -378,6 +392,62 @@
     renderTwists();
   }
 
+  /* ---- the chronicle (the story so far) ---- */
+
+  function renderChronicle() {
+    const box = $("#chronList");
+    if (!box) return;
+    box.innerHTML = "";
+    const visible = state.chronicle.filter((e) => state.dm || !e.gm);
+    if (!visible.length) {
+      box.innerHTML = `<p class="empty-note">Nothing has happened yet. Officially, nothing ever does.</p>`;
+      return;
+    }
+    // newest session first; entries within a session read in order
+    const sessions = [...new Set(visible.map((e) => e.s))].sort((a, b) => b - a);
+    for (const s of sessions) {
+      const head = document.createElement("h4");
+      head.className = "chron-session";
+      head.textContent = `SESSION ${s}`;
+      box.appendChild(head);
+      for (const e of visible.filter((x) => x.s === s)) {
+        const row = document.createElement("p");
+        row.className = "chron-entry" + (e.gm ? " chron-gm" : "");
+        row.innerHTML = `<span class="chron-icon">${e.icon}</span> ${escapeHtml(e.text)}${e.gm ? " <em>(GM)</em>" : ""}`;
+        box.appendChild(row);
+      }
+    }
+  }
+
+  $("#chronAdd").addEventListener("click", () => {
+    const v = $("#chronInput").value.trim();
+    if (!v) return;
+    chron("💬", v);
+    $("#chronInput").value = "";
+    save();
+  });
+  $("#chronInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") $("#chronAdd").click();
+  });
+
+  $("#storyDownload").addEventListener("click", () => {
+    const vis = state.chronicle.filter((e) => state.dm || !e.gm);
+    let md = "# They Were Here — The Story So Far\n";
+    md += `\n*${state.character.name || "An unnamed resident"} vs. the Neighborhood Improvement Association.*\n`;
+    let cur = null;
+    for (const e of vis) {
+      if (e.s !== cur) { cur = e.s; md += `\n## Session ${cur}\n\n`; }
+      md += `- ${e.icon} ${e.text}${e.gm ? " *(GM)*" : ""}\n`;
+    }
+    md += "\n*It is always almost 2:47.*\n";
+    const blob = new Blob([md], { type: "text/markdown" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "pinebrook-story.md";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
   /* ---- the twist deck ---- */
 
   function renderTwists() {
@@ -406,7 +476,12 @@
     }
     box.querySelectorAll("[data-tw]").forEach((btn) => {
       btn.addEventListener("click", () => {
+        const prev = state.twists[btn.dataset.tw] || "idle";
         state.twists[btn.dataset.tw] = btn.dataset.s;
+        if (btn.dataset.s !== prev && btn.dataset.s !== "idle") {
+          const t = DATA.twists.find((x) => x.id === btn.dataset.tw);
+          chron("🎭", `Twist ${btn.dataset.s}: ${t.title}`, true);
+        }
         save();
         renderTwists();
       });
@@ -429,6 +504,11 @@
         `The Neighborhood Watch stands at ${state.suspicion} out of 10 — ${DATA.suspicionLabels[state.suspicion].replace(/\.$/, "")}. ` +
         "And somewhere beneath the sound of sprinklers, it is getting very close to 2:47.";
     }
+    const recent = state.chronicle
+      .filter((e) => !e.gm && e.icon !== "🎬")
+      .slice(-3)
+      .map((e) => e.text.replace(/\.$/, ""));
+    if (recent.length) story += ` Most recently: ${recent.join(". ")}.`;
     playScene({
       id: "recap", artId: "cold-open",
       kicker: "PREVIOUSLY", title: "…on Pinebrook",
@@ -612,7 +692,14 @@
   }
 
   function bumpClock(key, delta) {
+    const prev = state[key];
     state[key] = Math.min(10, Math.max(0, state[key] + delta));
+    const thresholds = key === "suspicion" ? [4, 6, 8, 10] : [3, 5, 7, 9];
+    if (delta > 0 && thresholds.includes(state[key]) && state[key] !== prev) {
+      const labels = key === "suspicion" ? DATA.suspicionLabels : DATA.reputationLabels;
+      chron(key === "suspicion" ? "👁" : "🫥",
+        `${key === "suspicion" ? "Neighborhood Watch" : "Reputation"} hit ${state[key]}: ${labels[state[key]]}`);
+    }
     save(); renderClocks();
   }
   $("#suspMinus").addEventListener("click", () => bumpClock("suspicion", -1));
@@ -711,6 +798,9 @@
       });
       div.querySelectorAll("[data-ast]").forEach((b) =>
         b.addEventListener("click", () => {
+          if (a.status !== b.dataset.ast && b.dataset.ast !== "ready") {
+            chron("😨", `${n.name} is ${b.dataset.ast}.`, true);
+          }
           a.status = b.dataset.ast;
           save(); renderCrew();
         }));
@@ -946,6 +1036,7 @@
         state.character.sublimeUsed[k.id] = true;
         state.log.unshift({ txt: `🌟 ${p.name} — SUBLIME`, total: "−2 WP" });
         state.log = state.log.slice(0, 30);
+        chron("🌟", `SUBLIME: ${p.name}.`);
         save(); renderSheet(); renderLog();
       });
       div.querySelector(".pc-remove").addEventListener("click", () => {
@@ -1100,6 +1191,7 @@
   });
   $("#glowPlus").addEventListener("click", () => {
     state.character.glow = Math.min(9, state.character.glow + 1);
+    chron("✨", "Gained a Glow.");
     save(); $("#glowVal").textContent = state.character.glow;
   });
   $("#staticMinus").addEventListener("click", () => {
@@ -1283,6 +1375,7 @@
     if (lastGen.type === "power") learnPower(lastGen.ref.id);
     else if (lastGen.type === "mark") {
       state.character.effects.push("🩹 " + lastGen.ref);
+      chron("🩹", `Marked: ${lastGen.ref}`);
       save(); renderEffects();
     } else gainItem(lastGen.ref.id);
     $("#genAdd").textContent = "✓ added";
@@ -1361,7 +1454,11 @@
 
     box.querySelectorAll("[data-q]").forEach((btn) => {
       btn.addEventListener("click", () => {
+        const q = DATA.quests.find((x) => x.id === btn.dataset.q);
+        const prev = questState(q);
         state.quests[btn.dataset.q] = btn.dataset.s;
+        if (btn.dataset.s === "active" && prev !== "active") chron("📋", `Quest started: ${q.title}`);
+        if (btn.dataset.s === "done" && prev !== "done") chron("✅", `Quest completed: ${q.title}`);
         save();
         renderQuests();
       });
@@ -1417,7 +1514,12 @@
     }
     vault.querySelectorAll("[data-clue]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        state.clues[btn.dataset.clue] = !state.clues[btn.dataset.clue];
+        const nowOn = !state.clues[btn.dataset.clue];
+        state.clues[btn.dataset.clue] = nowOn;
+        if (nowOn) {
+          const c = DATA.clues.find((x) => x.id === btn.dataset.clue);
+          chron("📌", `Clue pinned: ${c.title}`);
+        }
         save();
         renderClues();
       });
@@ -1459,7 +1561,12 @@
     }
     vault.querySelectorAll("[data-lore]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        state.lore[btn.dataset.lore] = !state.lore[btn.dataset.lore];
+        const nowOn = !state.lore[btn.dataset.lore];
+        state.lore[btn.dataset.lore] = nowOn;
+        if (nowOn) {
+          const l = (DATA.lore || []).find((x) => x.id === btn.dataset.lore);
+          chron("📄", `Document obtained: ${l.title}`);
+        }
         save();
         renderClues();
       });
@@ -1471,6 +1578,7 @@
     const text = $("#customClueText").value.trim();
     if (!title && !text) return;
     state.customClues.push({ title: title || "Untitled hunch", text });
+    chron("📌", `Clue pinned: ${title || "an untitled hunch"}`);
     $("#customClueTitle").value = "";
     $("#customClueText").value = "";
     save();
@@ -1550,12 +1658,20 @@
         save(); renderFolks();
       });
       div.querySelector(".crew-btn").addEventListener("click", () => {
-        if (inCrew) state.crew = state.crew.filter((c) => c.id !== n.id);
-        else state.crew.push({ id: n.id, helped: false, weird: true, status: "ready" });
+        if (inCrew) {
+          state.crew = state.crew.filter((c) => c.id !== n.id);
+          chron("👋", `${n.name} left the crew.`);
+        } else {
+          state.crew.push({ id: n.id, helped: false, weird: true, status: "ready" });
+          chron("🤝", `${n.name} joined the crew.`);
+        }
         save(); renderFolks(); renderCrew();
       });
       div.querySelectorAll("[data-st]").forEach((btn) => {
         btn.addEventListener("click", () => {
+          if (npcStatus(n) !== btn.dataset.st && btn.dataset.st === "clone") {
+            chron("😐", `${n.name} was replaced.`, true);
+          }
           state.npcStatus[n.id] = btn.dataset.st;
           save(); renderFolks();
         });
@@ -1623,6 +1739,8 @@
     state.gmPrep = {};
     state.character.luck = 3;
     state.character.sublimeUsed = {};
+    state.sessionNum++;
+    chron("🎬", `Session ${state.sessionNum} begins.`);
     save(); renderGm(); renderSheet();
   });
   $("#gmNotes").addEventListener("input", (e) => {
@@ -1666,7 +1784,10 @@
 
   $("#nightToggle").addEventListener("click", () => {
     state.night = !state.night;
-    if (state.night) state.nightEvent = Dice.pick(DATA.nightEvents);
+    if (state.night) {
+      state.nightEvent = Dice.pick(DATA.nightEvents);
+      chron("🌙", `2:47 AM. ${state.nightEvent.split(" — ")[0]}.`, true);
+    }
     nightHum(state.night);
     save();
     renderNight();
@@ -1720,6 +1841,7 @@
     const tx = state.transmissions.find((t) => !t.read);
     if (!tx) return;
     tx.read = true;
+    chron("📻", `Transmission received: “${tx.text.slice(0, 60)}${tx.text.length > 60 ? "…" : ""}”`);
     save();
     renderRadioBadge();
     renderTxList();
@@ -1759,6 +1881,7 @@
     renderQuests();
     renderClues();
     renderFolks();
+    renderChronicle();
   });
 
   /* ---------------- save management ---------------- */
@@ -1825,6 +1948,7 @@
     renderNight();
     renderRadioBadge();
     renderTxList();
+    renderChronicle();
   }
 
   renderAll();

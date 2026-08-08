@@ -524,6 +524,19 @@ body.dm .player-scenes-note { display: none; }
 .twist-line { margin: 5px 0 0; font-size: 12.5px; color: var(--muted); }
 .twist-line b { color: var(--text); font-family: var(--mono); font-size: 11px; letter-spacing: 1px; }
 
+/* the chronicle */
+.chron-add { display: flex; gap: 8px; margin-bottom: 10px; }
+.chron-list { max-height: 300px; overflow-y: auto; padding-right: 4px; margin-bottom: 14px; }
+.chron-session {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 3px; color: var(--accent);
+  margin: 12px 0 6px; border-bottom: 1px solid var(--border); padding-bottom: 4px;
+}
+.chron-session:first-child { margin-top: 0; }
+.chron-entry { margin: 4px 0; font-size: 12.5px; color: var(--text); line-height: 1.45; }
+.chron-entry .chron-icon { display: inline-block; width: 20px; }
+.chron-entry.chron-gm { color: var(--amber); opacity: 0.85; }
+.chron-entry em { color: var(--muted); font-size: 10.5px; }
+
 /* the projector itself */
 .scene-overlay {
   position: fixed; inset: 0; z-index: 100; background: #000;
