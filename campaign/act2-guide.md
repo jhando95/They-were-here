@@ -129,6 +129,29 @@ unobserved. Run the fight as a lights-flicker staring contest with d12 pecks in
 the dark. Clones do not brawl at parties; they *escort*, politely, toward the
 punch table. 👁 +2 for a loud exit.
 
+**Thread B echo at the party:** the trivia scanner blinks *amber*, not red,
+at the PC — "RETURNING... GUEST?" — before a Unit apologetically overrides it.
+And afterward Priya, checking her gnome charts: the gnome on the PC's lawn
+faces **the door**, not the street. "They only do that at houses they've
+already done." Let it sit. Change the subject before the player can.
+
+## Scene 4½ — THE OFFER (the midpoint — run it a day or two after the party)
+
+Every good mystery pauses in the middle so the villain can offer the hero a
+door marked EXIT. 🎬 Play **Lemonade with Mr. Crisp** and run the porch scene
+from `story-bible.md` §3: the handwritten invitation, the practiced
+lemonade, the one-second "SOUR. AND YET." — and the offer itself, built from
+the player's own Session Zero answer, perfected forever. His reason should
+genuinely rattle: *"THE OTHER RESIDENTS WATCH TELEVISION. YOU — YOU WATCH THE
+STREET. WE ARE THE SAME, YOU AND I."*
+
+Polite refusal costs nothing and earns his respect ("THEY SAID YOU WOULD SAY
+THAT. I AM... GLAD."). Rude refusal skips MARSH-2 a ladder rung. Acceptance —
+real or faked — opens the double-agent path: Suspicion −2, intel drips, ally
+trust erodes one heart-to-heart at a time, and the bribe arrives: the thing
+they love, impossibly perfected, which is creepier than any threat. All three
+roads lead somewhere good. This is the scene the finale will rhyme with.
+
 ## Scene 5 — The Undermart
 
 Keycard + freight elevator behind the yogurt (Biscuit or the blacklight finds
@@ -143,6 +166,14 @@ all), Sheriff Marsh, the real mailman (normal number of teeth). 📌 *The Pod
 Manifest*. Pods won't open: each has a hand-shaped recess. Glorptech. **The
 Overseer's handshake** (📋 activate **The Beacon** as the schematic wall
 explains Founders' Day — 📌 *The Fireworks Invoice*).
+
+**The back row (Thread B — the campaign's quietest gut-punch):** one pod
+stands apart. Empty. Made up like a guest room — folded blanket, a mint on
+the pillow — and a nameplate older than all the others, its tape gone
+yellow. **The PC's name. RESERVED SINCE '99.** They kept the room ready.
+They always believed the PC would come back. Run it with no sting, no sound
+cue; let the player read the nameplate aloud themselves. They will. (This
+plants Twist 3 — The Template — whether or not you ever fire it.)
 
 **Then the escape chase.** THE MAILMAN steps out of the dark sorting alcove:
 "YOU ARE OUTSIDE YOUR DELIVERY AREA." Miniboss + 2 Gnome Drones, run as a

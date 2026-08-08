@@ -25,6 +25,7 @@ powerful stat in the game.
 | `campaign/rules.md` | The PORCHLIGHT rules-lite system + pregen characters | Both |
 | `campaign/gear-and-glow.md` | Gear compendium, Glorptech artifacts, power tiers, advancement, Marks | Both |
 | `campaign/campaign-guide.md` | Campaign overview: the secret, the acts, the endings | **GM ONLY** ⚠️ |
+| `campaign/story-bible.md` | The editor's cut: theme, the double mystery, motif table, running gags, Lawrence's arc, final images | **GM ONLY** ⚠️ |
 | `campaign/act1-guide.md` | Act One, scene by scene: read-alouds, DCs, branches | **GM ONLY** ⚠️ |
 | `campaign/act2-guide.md` | Act Two: allies, block party, the Undermart | **GM ONLY** ⚠️ |
 | `campaign/act3-guide.md` | Act Three: the heist, GLORP PRIME, endings | **GM ONLY** ⚠️ |

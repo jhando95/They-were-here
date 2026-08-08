@@ -80,6 +80,23 @@ Their method, run by the advance team ("the Neighborhood Improvement Vanguard"):
 
 ---
 
+## The Spine (read `story-bible.md` before session one)
+
+- **Theme:** *Being known beats being perfect.* The Collective built a
+  religion out of television's idea of home; the PC wins by paying real
+  attention to real people. The Weirdness Gambit is specificity, not
+  randomness.
+- **The double mystery:** the surface question is *what happened to Gary.*
+  The buried question is *why does the PC wake at 2:47* — threaded through
+  all three acts (the light that pauses, "WELCOME BACK—", the amber scanner,
+  the door-facing gnome) and answered in the vault: an empty pod, made up
+  like a guest room, with the PC's name on it. RESERVED SINCE '99.
+- **The midpoint:** after the block party, Crisp invites the PC for
+  lemonade and offers them the thing they love, perfected. Never skip it.
+- **Opening image:** the PC's porch light, flickering at 2:47. Every ending
+  closes on porch lights. The story bible has the three final images, the
+  motif table, the running gags, and Lawrence's whole sad arc.
+
 > **Player went off-plan?** Good — that's the game working. The mystery is a
 > web, not a line: see `running-it-loose.md` for the Revelation Web, the
 > five-minute prep sheet, and the NOW WHAT? oracle. The act guides describe

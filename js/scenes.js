@@ -67,6 +67,20 @@ const SCENES = [
       "No — check again. They're all facing you."
   },
   {
+    id: "the-offer",
+    kicker: "A CUL-DE-SAC CONSULTATION",
+    title: "Lemonade with Mr. Crisp",
+    sound: { shot: "doorbell" },
+    narration:
+      "The invitation is handwritten. Real handwriting — you can tell somebody practiced. Two wicker " +
+      "chairs on a porch that has never once been sat on. A pitcher of lemonade, beading in the heat. " +
+      "Real lemonade — he researched it. He has been practicing being a person all week, and he has " +
+      "been practicing for you. Mr. Crisp pours two glasses. Tastes his. And for exactly one second, " +
+      "he looks surprised. 'SOUR,' he says. 'AND YET.' Then he folds his hands, and the porch gets " +
+      "very quiet. 'THE OTHER RESIDENTS WATCH TELEVISION. YOU — YOU WATCH THE STREET. LET US TALK, " +
+      "WATCHER TO WATCHER.'"
+  },
+  {
     id: "undermart",
     kicker: "BENEATH FRESHMART",
     title: "Comfort: Maximum",

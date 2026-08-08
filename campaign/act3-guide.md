@@ -132,6 +132,16 @@ let them. Charm DC 16, dropping to DC 8 if they invoke their Session Zero
 answers ("what do you love about your dumb little town") to explain what the
 broadcasts *got wrong*. Success = the Treaty path opens mid-fight.
 
+**Play Lawrence, not a boss** (voice drift and his three endings:
+`story-bible.md` §6): at half HP drop your volume and drop the caps. If the
+player ever uses his name — *Lawrence* — long pause, then quietly:
+"...nobody has used that name since the reservoir." The Charm DC falls to 8
+and the fight can end mid-round if the player has something true to say.
+If they discovered the RESERVED pod, this is where it pays: the Collective
+considers the PC *family who chose the other side* — which means, for the
+first time, the other side must have something worth choosing. Let the
+player make that argument. It's the whole campaign in one speech.
+
 ## Scene 5 — Wake the Neighbors & Endings
 
 📋 **Wake the Neighbors** as the dust settles. Then pick the ending the player
@@ -139,12 +149,29 @@ earned (they'll know which one it is):
 
 - **🕊 The Treaty of Pinebrook** — 🎬 play it. The Collective is mortified,
   releases everyone, re-sods the lawns properly, keeps one model home as an
-  embassy. The gift baskets begin immediately.
+  embassy. The gift baskets begin immediately (each contains one mint;
+  nobody ever eats it). Then the beat the whole table earns: Deborah —
+  "Motion to accept Lawrence Crisp. As-is. No amendments." Unanimous. He
+  buffers for nine seconds, the longest ever recorded in Pinebrook, and
+  weeps green glitter into the coleslaw, and nobody minds.
+  **Final image:** at 2:47 AM, every porch light on Marigold Lane blinks
+  twice — on purpose, together. Goodnight. The PC's light blinks back.
 - **💥 The Big Boom** — 🎬 play it. The tower goes up; the fleet reroutes to
-  Ohio. Salt rain. Gary hugs the PC and never lets go of the gnome.
+  Ohio. Salt rain. Gary hugs the PC and never lets go of the gnome. A week
+  later, Lawrence's suit washes up at the reservoir — empty, folded neatly,
+  with a thank-you note. Arlene writes the headline gently.
+  **Final image:** at 2:47 AM, nothing happens. No hum, no light. The PC
+  sits on the porch anyway, out of habit, and finds — annoyingly, privately —
+  that they miss it a little. Biscuit puts his head on their knee.
+  "Yeah," he says. "Me too."
 - **🌱 Pinebrook, Perfected** — 🎬 only if the player truly lost (both
-  fireworks AND beacon failed, boss unbeaten). Play it straight, no jokes,
-  then offer the sequel hook: *someone* is still human out there. Season two.
+  fireworks AND beacon failed, boss unbeaten). Play it straight, no jokes.
+  Lawrence wins Friendliest Neighbor, and in the perfectly synchronized
+  applause he looks, for one frame, completely alone — he got everything he
+  asked the light for in 1987. Then the sequel hook: *someone* out there is
+  still human. Season two.
+  **Final image:** at 2:47 AM, every light in Pinebrook comes on at once.
+  Steady. Bright. Nothing in this town will ever flicker again.
 
 **Epilogues:** roll or choose from the d6 table in `tables.md` for each
 surviving ally, but hand-write two:

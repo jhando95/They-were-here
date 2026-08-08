@@ -145,6 +145,42 @@ const SCENE_ART = (() => {
       <rect x="0" y="352" width="800" height="4" fill="#131c14"/>`,
       { glow: "#9dff70" }),
 
+    "the-offer": cine("of", "#101720", "#1c2531", `
+      <rect y="330" width="800" height="120" fill="#131b23"/>
+      <g stroke="#0d141b" stroke-width="10">
+        <line x1="120" y1="330" x2="120" y2="60"/><line x1="680" y1="330" x2="680" y2="60"/>
+      </g>
+      <rect x="80" y="40" width="640" height="26" fill="#0d141b"/>
+      <circle cx="400" cy="120" r="60" fill="url(#glow-of)" opacity="0.8"/>
+      <circle cx="400" cy="108" r="12" fill="#ffcf6b"/>
+      <g transform="translate(230 250)">
+        <rect x="-40" y="0" width="80" height="12" rx="4" fill="#22303c"/>
+        <path d="M-34 12 L-40 80 M34 12 L40 80" stroke="#22303c" stroke-width="7"/>
+        <path d="M-40 -34 q 40 -22 80 0 l 0 34 l -80 0 Z" fill="#22303c"/>
+      </g>
+      <g transform="translate(570 250)">
+        <rect x="-40" y="0" width="80" height="12" rx="4" fill="#22303c"/>
+        <path d="M-34 12 L-40 80 M34 12 L40 80" stroke="#22303c" stroke-width="7"/>
+        <path d="M-40 -34 q 40 -22 80 0 l 0 34 l -80 0 Z" fill="#22303c"/>
+      </g>
+      <g transform="translate(400 262)">
+        <rect x="-52" y="0" width="104" height="10" fill="#1a232d"/>
+        <rect x="-6" y="10" width="12" height="58" fill="#1a232d"/>
+        <path d="M-18 -34 h28 l6 34 h-40 Z" fill="#e8e2d0" opacity="0.9"/>
+        <rect x="-22" y="-38" width="44" height="6" rx="3" fill="#e8e2d0" opacity="0.9"/>
+        <rect x="-14" y="-28" width="20" height="22" fill="#ffcf6b" opacity="0.45"/>
+      </g>
+      <g transform="translate(660 180)">
+        <circle cx="0" cy="-56" r="17" fill="#0b1119"/>
+        <path d="M-30 -36 Q 0 -50 30 -36 L 40 90 L -40 90 Z" fill="#0b1119"/>
+        <path d="M-5 -34 L0 -26 L5 -34 L2 6 L-2 6 Z" fill="#1a2531"/>
+      </g>
+      <g stroke="#0d141b" stroke-width="4" opacity="0.9">
+        <line x1="60" y1="360" x2="740" y2="360"/>
+        <line x1="90" y1="330" x2="90" y2="356"/><line x1="710" y1="330" x2="710" y2="356"/>
+      </g>`,
+      { glow: "#ffcf6b", stars: false }),
+
     "undermart": cine("um", "#04070c", "#071624", `
       <circle cx="400" cy="220" r="200" fill="url(#glow-um)" opacity="0.18"/>
       ${[

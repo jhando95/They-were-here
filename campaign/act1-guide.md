@@ -55,14 +55,26 @@ Marigold Lane**.
 - **Do nothing and watch** — reward the horror-movie discipline: they see a
   second, smaller shape float up after Gary. (It's the gnome's twin. Do not explain.)
 
+**Thread B plant (Weird DC 8, offer the roll unprompted):** the light *paused
+over the PC's house first.* A breath. Like it was checking an address. Do not
+explain, do not repeat, do not confirm. (`story-bible.md` §2 — the buried
+mystery starts here.)
+
 **End the scene** the moment the light dies. Hard cut: "It's 7 AM. Sprinklers."
 
 ## Scene 2 — The Morning After
 
 > Gary Henderson is mowing his lawn. He has been mowing the same strip for
 > three hours. He is wearing a suit. He sees you, raises one hand like he's
-> practiced it in a mirror, and says: "HELLO, FELLOW HUMAN NEIGHBOR. IT SURE
-> IS WEATHER TODAY."
+> practiced it in a mirror, and says: "WELCOME BACK—"
+>
+> A pause. Three full seconds. Something recalibrates behind his eyes.
+>
+> "—HELLO, FELLOW HUMAN NEIGHBOR. IT SURE IS WEATHER TODAY."
+
+If pressed about "welcome back," GARY-2 has no memory of saying it — and he
+truly doesn't. *The network said it.* (Thread B, second plant. Move on
+briskly; the briskness is what makes it stick.)
 
 📋 Activate **Something's Off About Gary**. GARY-2 is *friendly, wrong, and
 unfailable* — he cannot be caught in a lie because he doesn't know he's lying.
