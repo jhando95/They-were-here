@@ -118,9 +118,19 @@ No install, no build, no internet required even without the deploy — open
   searchable 36-item compendium (garage weapons → Glorptech artifacts with
   Quirks) and 20 powers with three unlockable tiers (✨ Spark / ⚡ Surge /
   🌟 SUBLIME).
-- 🎲 **Dice roller** — d4–d100, advantage/disadvantage, crit/fumble callouts,
-  roll log, plus one-click generators for Wacky Powers, Clone Tells, and
-  Complications.
+- 🎲 **Dice that know your character** — click a stat (on the sheet or the
+  check console) to roll d20 + your live modifier against a DC picker, with
+  automatic SUCCESS / *progress + complication* verdicts (a failed check
+  deals a complication suggestion; a nat 1 auto-grants the WP the rules
+  promise). Plus raw d4–d100, advantage/disadvantage, custom formulas
+  (`2d6+3` for salt bursts), a roll log, and one-click generators.
+- ⚡ **Powers you can press** — Surge and SUBLIME buttons spend WP
+  automatically, SUBLIME enforces once-per-session, 😴 Rest rolls its own
+  healing, and an Effects & Marks tracker keeps rimmed weapons, hiccups, and
+  0-HP Marks pinned to the sheet.
+- 📄 **The Pinebrook Almanac** — unlockable in-world documents (the visitor
+  pamphlet, Duke's menu, the full 1987 clipping, the Founders' Day program
+  with its 8:47 PM "SKY EVENT") that the GM hands over like evidence.
 - 📋 **Quest tracker** — main quest by act + side quests; the GM reveals and
   completes them as the story unfolds.
 - 📌 **The Truth Board** — clues pin here as the player finds them (plus room

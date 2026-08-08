@@ -195,8 +195,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .field input, .field textarea { margin-top: 4px; font-family: system-ui, sans-serif; font-size: 14px; }
 
 .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 12px 0 4px; }
-.stat { font-size: 11px; letter-spacing: 1px; color: var(--muted); text-align: center; }
-.stat input { margin-top: 4px; text-align: center; font-size: 18px; font-family: var(--mono); }
+.stat { font-size: 11px; letter-spacing: 1px; color: var(--muted); text-align: center; display: flex; flex-direction: column; gap: 4px; }
+.stat input { margin-top: 0; text-align: center; font-size: 18px; font-family: var(--mono); }
+.stat-roll { font-size: 10px; padding: 3px 2px; letter-spacing: 0; }
 .derived { font-size: 12.5px; color: var(--muted); margin: 6px 0 12px; }
 .derived b { color: var(--accent); }
 
@@ -260,6 +261,27 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .ic-effect { margin: 6px 0 0; font-size: 13px; }
 .ic-quirk { margin: 5px 0 0; font-size: 12.5px; color: var(--alien); font-style: italic; }
 
+/* ---------- effects & marks ---------- */
+.effect-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.fx-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12.5px; background: rgba(255, 207, 107, 0.07);
+  border: 1px dashed var(--amber); border-radius: 12px; padding: 4px 10px;
+}
+.fx-x {
+  background: none; border: none; color: var(--muted); cursor: pointer;
+  font-size: 11px; padding: 0;
+}
+.fx-x:hover { color: var(--danger); }
+.effect-add { display: flex; gap: 8px; margin-bottom: 12px; }
+.pc-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.pc-actions button[disabled] { opacity: 0.4; cursor: default; }
+
+/* ---------- almanac ---------- */
+.lore-card { border-left-color: #8a7fd4; }
+.lore-card h4 { color: #b3a8f0; }
+.lore-public { font-size: 11px; color: var(--muted); font-style: normal; font-family: var(--mono); }
+
 /* ---------- compendium picker ---------- */
 .picker-overlay {
   position: fixed; inset: 0; z-index: 90; background: rgba(4, 8, 12, 0.75);
@@ -294,6 +316,15 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .picker-row.known { opacity: 0.45; cursor: default; }
 
 /* ---------- dice ---------- */
+.check-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+.check-btn {
+  font-family: var(--mono); font-size: 12px; padding: 10px 2px;
+  border-color: var(--alien); color: var(--text);
+}
+.check-btn b { color: var(--alien); }
+.check-btn:hover { color: var(--alien); }
+#formulaInput { width: 76px; }
+
 .dice-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
 .die {
   background: #1b2733; color: var(--text); border: 1px solid var(--border);

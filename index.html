@@ -221,10 +221,14 @@
         </label>
 
         <div class="stats-grid">
-          <label class="stat">BRAWN<input type="number" id="stBrawn" min="-1" max="5" value="0"></label>
-          <label class="stat">BRAINS<input type="number" id="stBrains" min="-1" max="5" value="0"></label>
-          <label class="stat">CHARM<input type="number" id="stCharm" min="-1" max="5" value="0"></label>
-          <label class="stat">WEIRD<input type="number" id="stWeird" min="-1" max="5" value="0"></label>
+          <label class="stat">BRAWN<input type="number" id="stBrawn" min="-1" max="5" value="0">
+            <button class="btn tiny stat-roll" data-stat="brawn" title="Roll d20 + Brawn (uses the DC and adv/dis set on the Dice tab)">🎲 check</button></label>
+          <label class="stat">BRAINS<input type="number" id="stBrains" min="-1" max="5" value="0">
+            <button class="btn tiny stat-roll" data-stat="brains" title="Roll d20 + Brains">🎲 check</button></label>
+          <label class="stat">CHARM<input type="number" id="stCharm" min="-1" max="5" value="0">
+            <button class="btn tiny stat-roll" data-stat="charm" title="Roll d20 + Charm">🎲 check</button></label>
+          <label class="stat">WEIRD<input type="number" id="stWeird" min="-1" max="5" value="0">
+            <button class="btn tiny stat-roll" data-stat="weird" title="Roll d20 + Weird">🎲 check</button></label>
         </div>
         <p class="derived">Dodge <b id="dvDodge">10</b> · suggested Max HP <b id="dvHp">8</b> (8 + Brawn)</p>
 
@@ -234,6 +238,7 @@
             <button class="btn tiny" id="hpMinus">−</button>
             <span class="hp-read"><b id="hpCur">8</b>/<input type="number" id="hpMax" min="1" max="20" value="8"></span>
             <button class="btn tiny" id="hpPlus">+</button>
+            <button class="btn tiny" id="restBtn" title="Rest: heal 1d6 HP and regain 1 WP">😴 rest</button>
           </div>
           <div class="tracker">
             <span class="tracker-name" title="Weird Points — fuel for your power">WP</span>
@@ -264,6 +269,15 @@
         </div>
         <div id="itemCards"></div>
 
+        <div class="section-head">
+          <h3 class="section-title" title="Temporary conditions, blessings, curses, and Marks">EFFECTS &amp; MARKS</h3>
+        </div>
+        <div id="effectChips" class="effect-chips"></div>
+        <div class="effect-add">
+          <input type="text" id="effectInput" placeholder="e.g. Rimmed bat: 3 salt hits left">
+          <button id="effectAdd" class="btn tiny">+ add</button>
+        </div>
+
         <label class="field">Pocket lint &amp; misc
           <textarea id="chGear" rows="3" placeholder="Fanny pack&#10;Keys to a car you no longer trust…"></textarea>
         </label>
@@ -274,6 +288,23 @@
 
       <!-- DICE -->
       <div class="tab-page" id="page-dice">
+        <h3 class="section-title">CHECKS — d20 + your live stat</h3>
+        <div class="check-stats" id="checkStats"></div>
+        <div class="dice-options">
+          <label>vs DC
+            <select id="checkDC">
+              <option value="">—</option>
+              <option value="8">Easy 8</option>
+              <option value="12">Tricky 12</option>
+              <option value="16">Hard 16</option>
+              <option value="20">Cosmic 20</option>
+            </select>
+          </label>
+          <label>Formula <input type="text" id="formulaInput" placeholder="2d6+3" size="7"></label>
+          <button id="formulaRoll" class="btn small">Roll it</button>
+        </div>
+
+        <h3 class="section-title">RAW DICE</h3>
         <div class="dice-buttons">
           <button class="die" data-sides="4">d4</button>
           <button class="die" data-sides="6">d6</button>
@@ -340,6 +371,14 @@
           <input type="text" id="customClueTitle" placeholder="Title — e.g. 'The humming yogurt'">
           <textarea id="customClueText" rows="2" placeholder="What did you find?"></textarea>
           <button id="customClueAdd" class="btn small">📌 Pin it</button>
+        </div>
+
+        <h3 class="section-title">PINEBROOK ALMANAC</h3>
+        <p class="empty-note">Documents, pamphlets, and papers gathered along the way.</p>
+        <div id="loreList"></div>
+        <div class="dm-only">
+          <h3 class="section-title dm-text">UNRELEASED DOCUMENTS (GM)</h3>
+          <div id="loreVault"></div>
         </div>
       </div>
 

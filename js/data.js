@@ -414,6 +414,35 @@ const DATA = {
     "THE VAN IS HERE. IT'S VERY COMFORTABLE."
   ],
 
+  /* The Pinebrook Almanac — in-world documents. `open: true` entries are
+     player-visible from the start; the rest are revealed by the GM like clues. */
+  lore: [
+    { id: "l1", title: "“Welcome to Pinebrook!” (visitor pamphlet)", open: true,
+      text: "Pinebrook (pop. 8,213) welcomes you! Founded 1911 when the railroad missed us by nine miles and everyone agreed not to mention it. Home of the Fighting Beavers, the tri-county's third-largest water tower, and the ORIGINAL Duke's Diner (est. 1958, closed Mondays, Duke says hi — well, dings hi). Please enjoy our award-considered lawns. Pinebrook: You'll Never Want To Leave!*  (*Pamphlet revised 1987; earlier editions read 'You'll Never Leave!' — a typo, per the town council.)",
+      dm: "The 1987 revision date is a freebie clue hiding in plain sight. Coral has one un-revised 1986 pamphlet on the Removed by Request shelf." },
+    { id: "l2", title: "Duke's Diner menu (laminated, biblical)", open: true,
+      text: "COFFEE — bottomless. WAFFLES — like your grandmother's, assuming she loved you. HASH SITUATION — market price. TODAY'S MYSTERY CASSEROLE — ask Marla, or don't. FREE PRETZEL WITH EVERY MEAL, NO EXCEPTIONS, EVERYONE GETS THE PRETZEL, IT IS IMPORTANT TO DUKE THAT YOU TAKE THE PRETZEL. (No substitutions. Salt is complimentary and abundant.)",
+      dm: "The pretzel is the town-wide clone test (clones never touch it — they hold it politely). Sharp players can clock it from the menu alone." },
+    { id: "l3", title: "The Friendliest Town application, p.14 of 32 (1994)", open: false,
+      text: "…what makes Pinebrook the Friendliest Town is not merely our identical lawns and permanent smiles, but the DEPENDABILITY of our welcome. Here, every neighbor waves. Every casserole arrives on time. Every day resembles the last, in the best possible way. We are, in short, the town television promised…",
+      dm: "The Collective read this during their 1987 site survey — the current HOA newsletter quotes 'identical lawns and permanent smiles' VERBATIM. Hard evidence Crisp has read it, and the clearest window into WHY Pinebrook 'won.'" },
+    { id: "l4", title: "Pinebrook Gazette — June 12, 1987 (full clipping)", open: false,
+      text: "LIGHTS OVER RESERVOIR; THREE MISSING, RETURNED 'POLITE.' Residents report a 'patient, courteous' glow above the water Tuesday, 2:47 AM. Missing persons L. Crisp (14), G. Herrera (19), M. Okafor (22) were recovered Thursday, unharmed and 'noticeably more agreeable' (Sheriff Dunphy). Young Crisp, asked what he remembered, said only: 'It was warm. It asked first.' The Gazette will publish a follow-up.",
+      dm: "The follow-up was spiked (Arlene has it typeset in a locked drawer). 'It asked first' is Lawrence's whole tragedy in four words — and G. Herrera is Gil at the pool store, M. Okafor is a thread to Nana Ruthie's shoebox." },
+    { id: "l5", title: "HOA newsletter — current issue", open: false,
+      text: "NEIGHBORHOOD IMPROVEMENT ASSOCIATION BULLETIN. Motion 12 (margarita station) tabled, third consecutive session. Lawn Excellence Initiative enters Phase Three: identical lawns and permanent smiles for all! Reminder: potlucks remain sodium-free for reasons of heart health. Founders' Day volunteers report to Mr. Crisp. Attendance will be taken. It sure is weather, neighbors!",
+      dm: "Three clues in one page: the tabled salt motion, the verbatim application quote, and 'It sure is weather' spreading through the network like a software tic." },
+    { id: "l6", title: "Wendell's log — night 43", open: false,
+      text: "2:44 — static normal. 2:45 — static normal. 2:46 — THE FRIDGE NOTE. B-flat. Same as every fridge, every night, getting louder every year since '87 and NOBODY HEARS IT BUT ME. 2:47 — spike. Bearing 041. Tower. Duration 66 seconds. 2:49 — static normal. 2:50 — ate a sandwich. Still right about everything.",
+      dm: "Confirms the Lawn Frequency pattern and plants the B-flat motif. Bearing 041 from Wendell's Wires points at the water tower — a player with a map and a protractor gets there themselves. Let them." },
+    { id: "l7", title: "Founders' Day official program", open: false,
+      text: "10 AM — Pancake Gauntlet (Duke's). NOON — Yard of the Month (award pending). 2 PM — Fighting Beavers marching band (approved setlist). 4 PM — Remarks, HOA President Crisp ('ONE. TWO.'). 6 PM — Potluck (sodium-free). 8:45 PM — Assembly at the bandshell. 8:47 PM — SKY EVENT. (Program printed in advance for your convenience. Attendance will be taken.)",
+      dm: "8:47 PM — they moved the sacred number to evening for the Bloom. 'SKY EVENT' in a pre-printed program is the smoking gun for R6, and the finale's timetable in the player's hands." },
+    { id: "l8", title: "A note in perfect Times New Roman handwriting", open: false,
+      text: "COLLECTION AT 2:47. GUESTS: COMFORTABLE. ROUTE: STANDARD. THE MMS ON THE PILLOWS ARE RUNNING LOW; REQUISITION FILED. AWARD: STILL PENDING. WE ARE SO CLOSE, EVERYONE. — M.",
+      dm: "Maureen's out-tray, dropped by THE MAILMAN, or planted wherever the player is. 'M' is deniable (Maureen? The Mailman? Marsh-2?) — let the player argue about it. The misspelled 'MMS' (mints) is the one imperfection; clones find it deeply embarrassing." }
+  ],
+
   /* The Revelation Web — the 8 things the player must eventually learn.
      Every one is reachable by 3+ independent paths, so no missed scene can
      break the mystery. Full sandbox rules: campaign/running-it-loose.md */

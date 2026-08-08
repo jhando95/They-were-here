@@ -14,8 +14,11 @@
       hp: 8, hpMax: 8, wp: 2, luck: 3, glow: 0,
       powersKnown: [],  // {id, sublime}
       items: [],        // {id, qty}
+      effects: [],      // temporary conditions & Marks (strings)
+      sublimeUsed: {},  // power id -> true (once per session)
       gear: "", notes: ""
     },
+    lore: {},           // almanac doc id -> revealed
     token: { x: 95, y: 178 },
     suspicion: 2,
     reputation: 1,   // the Discredit clock — how crazy the town thinks the PC is
@@ -61,6 +64,8 @@
   function migrateCharacter(c) {
     if (!Array.isArray(c.powersKnown)) c.powersKnown = [];
     if (!Array.isArray(c.items)) c.items = [];
+    if (!Array.isArray(c.effects)) c.effects = [];
+    if (!c.sublimeUsed || typeof c.sublimeUsed !== "object") c.sublimeUsed = {};
     if (typeof c.powers === "string" && c.powers.trim() && !c.powersKnown.length) {
       const leftovers = [];
       for (const line of c.powers.split("\n")) {
@@ -611,14 +616,15 @@
 
   /* ---------------- tabs ---------------- */
 
-  document.querySelectorAll(".tab").forEach((tab) => {
-    tab.addEventListener("click", () => {
-      document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
-      document.querySelectorAll(".tab-page").forEach((p) => p.classList.remove("active"));
-      tab.classList.add("active");
-      $(`#page-${tab.dataset.tab}`).classList.add("active");
-    });
-  });
+  function switchTab(name) {
+    document.querySelectorAll(".tab").forEach((t) =>
+      t.classList.toggle("active", t.dataset.tab === name));
+    document.querySelectorAll(".tab-page").forEach((p) =>
+      p.classList.toggle("active", p.id === "page-" + name));
+  }
+
+  document.querySelectorAll(".tab").forEach((tab) =>
+    tab.addEventListener("click", () => switchTab(tab.dataset.tab)));
 
   /* ---------------- character sheet ---------------- */
 
@@ -635,12 +641,140 @@
     $("#hpMax").value = c.hpMax;
     $("#glowVal").textContent = c.glow;
     renderDerived();
+    renderCheckConsole();
     renderPips("#wpPips", c.wp, "wp");
     renderPips("#luckPips", c.luck, "luck");
     renderPowerCards();
     renderItemCards();
+    renderEffects();
     positionToken();
   }
+
+  /* ---- dynamic checks: d20 + live stat, with DC verdicts ---- */
+
+  function renderCheckConsole() {
+    const box = $("#checkStats");
+    box.innerHTML = "";
+    for (const key of ["brawn", "brains", "charm", "weird"]) {
+      const mod = Number(state.character[key]) || 0;
+      const b = document.createElement("button");
+      b.className = "btn check-btn";
+      b.innerHTML = `${key.toUpperCase()} <b>${mod >= 0 ? "+" + mod : mod}</b>`;
+      b.addEventListener("click", () => statCheck(key));
+      box.appendChild(b);
+    }
+  }
+
+  function statCheck(key) {
+    const mod = Number(state.character[key]) || 0;
+    const adv = $("#diceAdv").value;
+    const dcv = $("#checkDC").value;
+    const result = Dice.rollDice(20, 1, mod, adv);
+    result.detail = `${key.toUpperCase()} ${mod >= 0 ? "+" + mod : mod} · ${result.detail}`;
+    if (dcv) {
+      const dc = Number(dcv);
+      result.detail += result.total >= dc
+        ? ` · vs DC ${dc}: SUCCESS`
+        : ` · vs DC ${dc}: MISS — progress + complication`;
+    }
+    switchTab("dice");
+    if (Sync.playerViewActive()) Sync.send({ type: "roll", result });
+    Dice.animateRoll($("#diceResult"), result, () => {
+      if (result.fumble) {
+        state.character.wp = Math.min(3, state.character.wp + 1);
+        renderPips("#wpPips", state.character.wp, "wp");
+      }
+      if (dcv && result.total < Number(dcv)) {
+        lastGen = null;
+        showGen(`🌀 Suggested complication: ${Dice.pick(DATA.complications)}`, false);
+      }
+      state.log.unshift({ txt: result.detail, total: result.total });
+      state.log = state.log.slice(0, 30);
+      save();
+      renderLog();
+    });
+  }
+
+  document.querySelectorAll(".stat-roll").forEach((b) =>
+    b.addEventListener("click", (e) => {
+      e.preventDefault();
+      statCheck(b.dataset.stat);
+    }));
+
+  /* ---- custom formula (e.g. 2d6+3 for a salt burst) ---- */
+
+  function rollFormula() {
+    const m = $("#formulaInput").value.trim().toLowerCase()
+      .match(/^(\d{0,2})d(\d{1,3})\s*([+-]\s*\d{1,2})?$/);
+    if (!m) {
+      lastGen = null;
+      showGen("🎲 Formulas look like: 2d6+3 (up to 6 dice)", false);
+      switchTab("dice");
+      return;
+    }
+    const qty = Number(m[1] || 1);
+    const sides = Number(m[2]);
+    const mod = Number((m[3] || "0").replace(/\s/g, ""));
+    const result = Dice.rollDice(sides, qty, mod, "normal");
+    if (Sync.playerViewActive()) Sync.send({ type: "roll", result });
+    Dice.animateRoll($("#diceResult"), result, () => {
+      state.log.unshift({ txt: result.detail, total: result.total });
+      state.log = state.log.slice(0, 30);
+      save();
+      renderLog();
+    });
+  }
+  $("#formulaRoll").addEventListener("click", rollFormula);
+  $("#formulaInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") rollFormula();
+  });
+
+  /* ---- rest & effects ---- */
+
+  $("#restBtn").addEventListener("click", () => {
+    const c = state.character;
+    const heal = Math.floor(Math.random() * 6) + 1;
+    c.hp = Math.min(c.hpMax, c.hp + heal);
+    c.wp = Math.min(3, c.wp + 1);
+    state.log.unshift({ txt: `😴 Rest — healed 1d6 = ${heal}, regained 1 WP`, total: `${c.hp} HP` });
+    state.log = state.log.slice(0, 30);
+    save();
+    renderSheet();
+    renderLog();
+  });
+
+  function renderEffects() {
+    const box = $("#effectChips");
+    box.innerHTML = "";
+    const list = state.character.effects;
+    if (!list.length) {
+      box.innerHTML = `<p class="empty-note">No lingering weirdness. Yet.</p>`;
+      return;
+    }
+    list.forEach((t, i) => {
+      const chip = document.createElement("span");
+      chip.className = "fx-chip";
+      chip.innerHTML = `${escapeHtml(t)} <button class="fx-x" title="Clear effect">✕</button>`;
+      chip.querySelector(".fx-x").addEventListener("click", () => {
+        state.character.effects.splice(i, 1);
+        save();
+        renderEffects();
+      });
+      box.appendChild(chip);
+    });
+  }
+
+  $("#effectAdd").addEventListener("click", () => {
+    const v = $("#effectInput").value.trim();
+    if (!v) return;
+    state.character.effects.push(v);
+    $("#effectInput").value = "";
+    save();
+    renderEffects();
+  });
+  $("#effectInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") $("#effectAdd").click();
+  });
 
   /* ---- power & item cards ---- */
 
@@ -672,7 +806,27 @@
           ? `<p class="pc-sublime">🌟 ${p.sublime}</p>`
           : `<p class="pc-sublime dim">🌟 ${p.sublime}</p>
              <button class="btn tiny pc-unlock">Unlock SUBLIME (1 Glow)</button>`}
+        <div class="pc-actions">
+          <button class="btn tiny pc-surge" ${state.character.wp < 1 ? "disabled" : ""}>⚡ Use Surge (−1 WP)</button>
+          ${k.sublime ? `<button class="btn tiny pc-sub"
+              ${state.character.sublimeUsed[k.id] || state.character.wp < 2 ? "disabled" : ""}>
+              🌟 SUBLIME (−2 WP)${state.character.sublimeUsed[k.id] ? " — used this session" : ""}</button>` : ""}
+        </div>
       `;
+      div.querySelector(".pc-surge").addEventListener("click", () => {
+        state.character.wp = Math.max(0, state.character.wp - 1);
+        state.log.unshift({ txt: `⚡ ${p.name} — Surge`, total: "−1 WP" });
+        state.log = state.log.slice(0, 30);
+        save(); renderSheet(); renderLog();
+      });
+      const subBtn = div.querySelector(".pc-sub");
+      if (subBtn) subBtn.addEventListener("click", () => {
+        state.character.wp = Math.max(0, state.character.wp - 2);
+        state.character.sublimeUsed[k.id] = true;
+        state.log.unshift({ txt: `🌟 ${p.name} — SUBLIME`, total: "−2 WP" });
+        state.log = state.log.slice(0, 30);
+        save(); renderSheet(); renderLog();
+      });
       div.querySelector(".pc-remove").addEventListener("click", () => {
         state.character.powersKnown = known.filter((x) => x.id !== k.id);
         save(); renderPowerCards();
@@ -838,7 +992,7 @@
     $("#" + id).addEventListener("input", (e) => {
       const isStat = id.startsWith("st");
       state.character[key] = isStat ? Number(e.target.value) : e.target.value;
-      if (isStat) renderDerived();
+      if (isStat) { renderDerived(); renderCheckConsole(); }
       if (id === "chName") positionToken();
       save();
     });
@@ -945,7 +1099,10 @@
     $("#genText").textContent = text;
     const addBtn = $("#genAdd");
     addBtn.hidden = !addable;
-    if (addable) addBtn.textContent = lastGen.type === "power" ? "+ Learn this power" : "+ Add to gear";
+    if (addable) {
+      addBtn.textContent = lastGen.type === "power" ? "+ Learn this power"
+        : lastGen.type === "mark" ? "+ Add Mark to sheet" : "+ Add to gear";
+    }
   }
 
   $("#genPower").addEventListener("click", () => {
@@ -969,8 +1126,9 @@
     showGen(`🌀 Complication: ${Dice.pick(DATA.complications)}`, false);
   });
   $("#genMark").addEventListener("click", () => {
-    lastGen = null;
-    showGen(`🩹 Mark: ${Dice.pick(DATA.marks)}`, false);
+    const mark = Dice.pick(DATA.marks);
+    lastGen = { type: "mark", ref: mark };
+    showGen(`🩹 Mark: ${mark}`, true);
   });
   $("#genNowWhat").addEventListener("click", () => {
     lastGen = null;
@@ -991,7 +1149,10 @@
   $("#genAdd").addEventListener("click", () => {
     if (!lastGen) return;
     if (lastGen.type === "power") learnPower(lastGen.ref.id);
-    else gainItem(lastGen.ref.id);
+    else if (lastGen.type === "mark") {
+      state.character.effects.push("🩹 " + lastGen.ref);
+      save(); renderEffects();
+    } else gainItem(lastGen.ref.id);
     $("#genAdd").textContent = "✓ added";
     setTimeout(() => { $("#genAdd").hidden = true; }, 900);
   });
@@ -1125,6 +1286,48 @@
     vault.querySelectorAll("[data-clue]").forEach((btn) => {
       btn.addEventListener("click", () => {
         state.clues[btn.dataset.clue] = !state.clues[btn.dataset.clue];
+        save();
+        renderClues();
+      });
+    });
+
+    renderLore();
+  }
+
+  /* ---- the Pinebrook Almanac (unlockable in-world documents) ---- */
+
+  function renderLore() {
+    const list = $("#loreList");
+    list.innerHTML = "";
+    const visible = (DATA.lore || []).filter((l) => l.open || state.lore[l.id]);
+    if (!visible.length) {
+      list.innerHTML = `<p class="empty-note">No documents collected yet.</p>`;
+    }
+    for (const l of visible) {
+      const div = document.createElement("div");
+      div.className = "clue lore-card";
+      div.innerHTML = `<h4>📄 ${l.title}</h4><p>${l.text}</p>
+        <div class="dm-only"><div class="dm-note">${l.dm}</div></div>`;
+      list.appendChild(div);
+    }
+
+    const vault = $("#loreVault");
+    vault.innerHTML = "";
+    for (const l of DATA.lore || []) {
+      const row = document.createElement("div");
+      row.className = "clue-vault-item";
+      if (l.open) {
+        row.innerHTML = `<span>${l.title}</span><em class="lore-public">always public</em>`;
+      } else {
+        const revealed = !!state.lore[l.id];
+        row.innerHTML = `<span>${l.title}</span>
+          <button class="btn tiny" data-lore="${l.id}">${revealed ? "Withdraw" : "Hand over"}</button>`;
+      }
+      vault.appendChild(row);
+    }
+    vault.querySelectorAll("[data-lore]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.lore[btn.dataset.lore] = !state.lore[btn.dataset.lore];
         save();
         renderClues();
       });
@@ -1275,7 +1478,11 @@
       state.buffered = Number(b.dataset.buf); save(); renderGm();
     }));
   $("#prepReset").addEventListener("click", () => {
-    state.gmPrep = {}; save(); renderGm();
+    // new session: fresh checklist, Luck back to 3, SUBLIME uses restored
+    state.gmPrep = {};
+    state.character.luck = 3;
+    state.character.sublimeUsed = {};
+    save(); renderGm(); renderSheet();
   });
   $("#gmNotes").addEventListener("input", (e) => {
     state.gmNotes = e.target.value; save();
