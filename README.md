@@ -128,6 +128,13 @@ No install, no build, no internet required even without the deploy — open
   automatically, SUBLIME enforces once-per-session, 😴 Rest rolls its own
   healing, and an Effects & Marks tracker keeps rimmed weapons, hiccups, and
   0-HP Marks pinned to the sheet.
+- 🤝 **The Crew** — recruit any of the 47 townsfolk from the census into the
+  party. Ally cards track each weirdo's signature help (+1d6 once per scene —
+  after any d20 roll, an *ally assist* bar lets you bolt their d6 onto the
+  result, flipping a MISS to "SUCCESS, with help"), their finale Weirdness
+  charge, and their state (ready / shaken / podded, GM-flippable — yes,
+  allies can get replaced). 🎬 New scene refreshes the help dice, and 🖨
+  prints a paper copy of the whole sheet.
 - 📄 **The Pinebrook Almanac** — unlockable in-world documents (the visitor
   pamphlet, Duke's menu, the full 1987 clipping, the Founders' Day program
   with its 8:47 PM "SKY EVENT") that the GM hands over like evidence.

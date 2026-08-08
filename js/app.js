@@ -19,6 +19,7 @@
       gear: "", notes: ""
     },
     lore: {},           // almanac doc id -> revealed
+    crew: [],           // recruited allies: {id, helped, weird, status}
     token: { x: 95, y: 178 },
     suspicion: 2,
     reputation: 1,   // the Discredit clock — how crazy the town thinks the PC is
@@ -646,9 +647,78 @@
     renderPips("#luckPips", c.luck, "luck");
     renderPowerCards();
     renderItemCards();
+    renderCrew();
     renderEffects();
     positionToken();
   }
+
+  /* ---- the crew (allies as game pieces) ---- */
+
+  const ALLY_STATUS = { ready: "ready", shaken: "😨 shaken", podded: "🛌 podded" };
+
+  function renderCrew() {
+    const box = $("#crewCards");
+    box.innerHTML = "";
+    if (!state.crew.length) {
+      box.innerHTML = `<p class="empty-note">Nobody yet. Recruit your weirdos from the Folks tab — they were right all along.</p>`;
+      return;
+    }
+    for (const a of state.crew) {
+      const n = (DATA.npcs || []).find((x) => x.id === a.id);
+      if (!n) continue;
+      const kit = DATA.allyKits[a.id] || `${n.bit} — applied with enthusiasm.`;
+      const div = document.createElement("div");
+      div.className = `ally-card ally-${a.status}`;
+      div.innerHTML = `
+        <div class="ic-head">
+          <span class="ic-name">${n.name}</span>
+          <span class="ally-status st-${a.status}">${ALLY_STATUS[a.status]}</span>
+          <button class="btn tiny ally-weird ${a.weird ? "on" : ""}"
+            title="Finale Weirdness charge — each ally's signature bit removes one GLORP PRIME action, once">🌟</button>
+          <button class="btn tiny ally-x" title="Leaves the crew">✕</button>
+        </div>
+        <p class="ic-effect">${kit}</p>
+        <div class="quest-controls">
+          <button class="btn tiny ally-help" ${a.helped || a.status !== "ready" ? "disabled" : ""}>
+            🎲 help +1d6${a.helped ? " — used this scene" : ""}</button>
+          <span class="dm-only ally-st-btns">
+            ${Object.keys(ALLY_STATUS).map((s) =>
+              `<button class="btn tiny ${s === a.status ? "active-state" : ""}" data-ast="${s}">${s}</button>`).join("")}
+          </span>
+        </div>`;
+      div.querySelector(".ally-help").addEventListener("click", () => {
+        const bonus = Math.floor(Math.random() * 6) + 1;
+        a.helped = true;
+        state.log.unshift({ txt: `🤝 ${n.name} helps (+1d6). If this fails, THEY eat the complication.`, total: bonus });
+        state.log = state.log.slice(0, 30);
+        save(); renderCrew(); renderLog();
+      });
+      div.querySelector(".ally-weird").addEventListener("click", () => {
+        a.weird = !a.weird;
+        save(); renderCrew();
+      });
+      div.querySelector(".ally-x").addEventListener("click", () => {
+        state.crew = state.crew.filter((x) => x !== a);
+        save(); renderCrew(); renderFolks();
+      });
+      div.querySelectorAll("[data-ast]").forEach((b) =>
+        b.addEventListener("click", () => {
+          a.status = b.dataset.ast;
+          save(); renderCrew();
+        }));
+      box.appendChild(div);
+    }
+  }
+
+  $("#newSceneBtn").addEventListener("click", () => {
+    state.crew.forEach((a) => { a.helped = false; });
+    save(); renderCrew();
+  });
+
+  $("#printSheet").addEventListener("click", () => {
+    switchTab("sheet");
+    setTimeout(() => window.print(), 120);
+  });
 
   /* ---- dynamic checks: d20 + live stat, with DC verdicts ---- */
 
@@ -678,6 +748,7 @@
         : ` · vs DC ${dc}: MISS — progress + complication`;
     }
     switchTab("dice");
+    $("#assistRow").hidden = true;
     if (Sync.playerViewActive()) Sync.send({ type: "roll", result });
     Dice.animateRoll($("#diceResult"), result, () => {
       if (result.fumble) {
@@ -688,10 +759,12 @@
         lastGen = null;
         showGen(`🌀 Suggested complication: ${Dice.pick(DATA.complications)}`, false);
       }
-      state.log.unshift({ txt: result.detail, total: result.total });
+      const entry = { txt: result.detail, total: result.total };
+      state.log.unshift(entry);
       state.log = state.log.slice(0, 30);
       save();
       renderLog();
+      showAssistRow(entry, dcv ? Number(dcv) : null);
     });
   }
 
@@ -700,6 +773,46 @@
       e.preventDefault();
       statCheck(b.dataset.stat);
     }));
+
+  /* ---- ally assist: bolt a crew member's d6 onto the roll just made ---- */
+
+  function showAssistRow(entry, dc) {
+    const row = $("#assistRow");
+    row.innerHTML = "";
+    const candidates = state.crew.filter((a) => a.status === "ready" && !a.helped);
+    if (!candidates.length || typeof entry.total !== "number") { row.hidden = true; return; }
+
+    const label = document.createElement("span");
+    label.className = "assist-label";
+    label.textContent = "ally assist (+1d6, one per roll):";
+    row.appendChild(label);
+
+    for (const a of candidates) {
+      const n = (DATA.npcs || []).find((x) => x.id === a.id);
+      if (!n) continue;
+      const first = n.name.replace(/^(The|Mrs?\.|Mr\.|Nana|Big|Deputy|Sheriff)\s+/i, "").split(" ")[0];
+      const b = document.createElement("button");
+      b.className = "btn tiny";
+      b.textContent = `+ ${first}`;
+      b.title = `${n.name} adds +1d6. If the roll still fails, THEY eat the complication.`;
+      b.addEventListener("click", () => {
+        const bonus = Math.floor(Math.random() * 6) + 1;
+        a.helped = true;
+        entry.total += bonus;
+        entry.txt += ` + ${first} d6[${bonus}]`;
+        if (dc && entry.total >= dc) {
+          entry.txt = entry.txt.replace(/vs DC \d+: MISS — progress \+ complication/,
+            `vs DC ${dc}: SUCCESS, with help`);
+        }
+        $("#diceResult .dice-total").textContent = entry.total;
+        $("#diceResult .dice-detail").textContent = entry.txt;
+        row.hidden = true;
+        save(); renderLog(); renderCrew();
+      });
+      row.appendChild(b);
+    }
+    row.hidden = false;
+  }
 
   /* ---- custom formula (e.g. 2d6+3 for a salt burst) ---- */
 
@@ -1075,12 +1188,15 @@
       const mod = Number($("#diceMod").value) || 0;
       const adv = $("#diceAdv").value;
       const result = Dice.rollDice(sides, qty, mod, adv);
+      $("#assistRow").hidden = true;
       if (Sync.playerViewActive()) Sync.send({ type: "roll", result });
       Dice.animateRoll($("#diceResult"), result, () => {
-        state.log.unshift({ txt: result.detail, total: result.total });
+        const entry = { txt: result.detail, total: result.total };
+        state.log.unshift(entry);
         state.log = state.log.slice(0, 30);
         save();
         renderLog();
+        if (sides === 20) showAssistRow(entry, null);
       });
     });
   });
@@ -1389,11 +1505,15 @@
       shown++;
 
       const sus = !!state.npcSus[n.id];
+      const inCrew = state.crew.some((c) => c.id === n.id);
       const div = document.createElement("div");
       div.className = "npc-card" + (state.dm && st === "clone" ? " is-clone" : "");
       div.innerHTML = `
         <div class="npc-head">
           <span class="npc-name">${n.name}</span>
+          <button class="btn tiny crew-btn ${inCrew ? "on" : ""}"
+            title="${inCrew ? "In the crew — click to remove" : "Recruit to the crew (+1d6 help, a Weirdness charge)"}">
+            ${inCrew ? "⭐ crew" : "+ crew"}</button>
           <button class="btn tiny sus-btn ${sus ? "on" : ""}" title="Mark as suspicious (player's own paranoia board)">🤨</button>
         </div>
         <p class="npc-role">${n.role} · <em>${n.where}</em></p>
@@ -1412,6 +1532,11 @@
         if (state.npcSus[n.id]) delete state.npcSus[n.id];
         else state.npcSus[n.id] = true;
         save(); renderFolks();
+      });
+      div.querySelector(".crew-btn").addEventListener("click", () => {
+        if (inCrew) state.crew = state.crew.filter((c) => c.id !== n.id);
+        else state.crew.push({ id: n.id, helped: false, weird: true, status: "ready" });
+        save(); renderFolks(); renderCrew();
       });
       div.querySelectorAll("[data-st]").forEach((btn) => {
         btn.addEventListener("click", () => {

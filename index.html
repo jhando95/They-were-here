@@ -211,6 +211,7 @@
             <option value="">— Load a pregen… —</option>
           </select>
           <button id="pregenLoad" class="btn small">Load</button>
+          <button id="printSheet" class="btn small" title="Print a paper copy of this sheet">🖨</button>
         </div>
 
         <label class="field">Name
@@ -270,6 +271,12 @@
         <div id="itemCards"></div>
 
         <div class="section-head">
+          <h3 class="section-title" title="Recruited allies: +1d6 help once per scene each; one Weirdness charge each for the finale">THE CREW</h3>
+          <button class="btn tiny" id="newSceneBtn" title="New scene: every ally's help die refreshes">🎬 new scene</button>
+        </div>
+        <div id="crewCards"></div>
+
+        <div class="section-head">
           <h3 class="section-title" title="Temporary conditions, blessings, curses, and Marks">EFFECTS &amp; MARKS</h3>
         </div>
         <div id="effectChips" class="effect-chips"></div>
@@ -327,6 +334,7 @@
           <span class="dice-total">—</span>
           <span class="dice-detail">Pick a die. The universe is watching politely.</span>
         </div>
+        <div id="assistRow" class="assist-row" hidden></div>
 
         <div class="generators">
           <button id="genPower" class="btn gen">🛸 Wacky Power</button>

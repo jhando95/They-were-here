@@ -315,6 +315,23 @@ const DATA = {
       effect: "Once per campaign: invoke its story aloud and auto-succeed one roll. The GM must get emotional." }
   ],
 
+  /* Curated "their thing" lines for recruitable allies — anyone in the census
+     can join the crew; these get bespoke help text, everyone else a generic. */
+  allyKits: {
+    wendell: "Gadgets & the flower van — jammers, blacklights, and a getaway that smells like carnations.",
+    priya: "Petunia the drone — eyes in the sky. Snacks up front, non-negotiable.",
+    marla: "Magnet hands & diner intel — she hears everything, and cutlery obeys her.",
+    deborah: "Bylaws as siege weapons — Form 77-B opens doors that salt can't.",
+    biscuit: "The nose. Every backyard, every shortcut, every secret. Rate: steak.",
+    hodge: "Crayon precognition and the Tuesday window he leaves unlatched 'for the moths.'",
+    dukekowalski: "The griddle perimeter, the bricked tunnel door, and eleven years of watching.",
+    gilherrera: "Eleven tons of pool salt and a laminated defense plan he wrote in 2011 with your name on it.",
+    nanaruthieokafor: "Sixty years of Polaroids, a salted doorstep, and gin rummy you cannot win honestly.",
+    dezwhitaker: "Unbothered night-shift omniscience — and the VHS deck that records what phones can't.",
+    terrence: "Twenty-two binders of 'fake birds' that are actually a flamingo deployment map.",
+    dianehenderson: "Snacks in proportion to danger, pepper spray, and forty years of casserole-arm."
+  },
+
   marks: [
     "The Bandage — worn like a medal. Start next session with +1 Luck.",
     "Glorp-Stained Arm — glows near alien activity (free detection); you can't hide in the dark.",
