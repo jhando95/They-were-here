@@ -23,9 +23,15 @@ powerful stat in the game.
 |---|---|---|
 | `index.html` | **The Pinebrook Field Kit** — companion web app | Both, at the table |
 | `campaign/rules.md` | The PORCHLIGHT rules-lite system + pregen characters | Both |
-| `campaign/campaign-guide.md` | The full campaign: secrets, acts, scenes, endings | **GM ONLY** ⚠️ |
+| `campaign/gear-and-glow.md` | Gear compendium, Glorptech artifacts, power tiers, advancement, Marks | Both |
+| `campaign/campaign-guide.md` | Campaign overview: the secret, the acts, the endings | **GM ONLY** ⚠️ |
+| `campaign/act1-guide.md` | Act One, scene by scene: read-alouds, DCs, branches | **GM ONLY** ⚠️ |
+| `campaign/act2-guide.md` | Act Two: allies, block party, the Undermart | **GM ONLY** ⚠️ |
+| `campaign/act3-guide.md` | Act Three: the heist, GLORP PRIME, endings | **GM ONLY** ⚠️ |
 | `campaign/npcs-and-monsters.md` | NPC roster + stat blocks | **GM ONLY** ⚠️ |
 | `campaign/tables.md` | Random tables: powers, clone tells, complications, loot | **GM ONLY** (mostly) |
+| `campaign/gm-screen.md` | Every rule, DC, and stat block on one page | **GM ONLY** |
+| `campaign/art-prompts.md` | AI image prompt pack for every art slot in the app | GM |
 
 **Players:** read `rules.md`, open the app, and stop there. The mystery is the game.
 
@@ -57,8 +63,11 @@ prefer). It also works great hosted on GitHub Pages.
 - 🕵️ **GM Screen toggle** — flips the whole app: secret GM notes on every
   location/quest/clue, hidden locations (the crash site, the pod vault), quest
   state controls, and clue reveals. Leave it off when the player is looking.
-- 🧑‍🚀 **Character sheet** — four stats, HP / Weird Points / Luck trackers, gear,
-  powers, and one-click pregen loading.
+- 🧑‍🚀 **Character sheet** — four stats, HP / Weird Points / Luck / **Glow**
+  trackers, one-click pregen loading, and full card-based gear & powers: a
+  searchable 36-item compendium (garage weapons → Glorptech artifacts with
+  Quirks) and 20 powers with three unlockable tiers (✨ Spark / ⚡ Surge /
+  🌟 SUBLIME).
 - 🎲 **Dice roller** — d4–d100, advantage/disadvantage, crit/fumble callouts,
   roll log, plus one-click generators for Wacky Powers, Clone Tells, and
   Complications.

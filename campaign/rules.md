@@ -110,3 +110,12 @@ A 0–10 track in the app, starting at **2**. It rises when the PC is loud, caug
 or flagrantly abnormal; it falls with lying low or Visible Normalcy. Threshold
 events at 4 / 6 / 8 / 10 are in the campaign guide. It is the GM's pacing dial —
 turn it with a smile.
+
+## 6. Getting stronger — Gear & Glow
+
+The full equipment compendium (garage weapons, Wendell's gadgets, Glorptech
+artifacts with Quirks), the **Glow** advancement system (1 per act: +1 stat,
+new power, or a SUBLIME unlock), the three power tiers
+(✨ Spark / ⚡ Surge / 🌟 SUBLIME), and the **Marks** table for hitting 0 HP all
+live in **`gear-and-glow.md`** — and in the app's Sheet tab, which tracks all
+of it with cards and pickers.

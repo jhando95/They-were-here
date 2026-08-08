@@ -226,13 +226,29 @@
             <span class="tracker-name" title="Spend to reroll anything">LUCK</span>
             <div class="pips" id="luckPips" data-max="3"></div>
           </div>
+          <div class="tracker">
+            <span class="tracker-name" title="Advancement — gained at act ends. Spend on +1 stat, a new power, or a SUBLIME unlock.">GLOW</span>
+            <button class="btn tiny" id="glowMinus">−</button>
+            <b id="glowVal" class="glow-val">0</b>
+            <button class="btn tiny" id="glowPlus">+</button>
+            <span class="glow-hint">spend: +1 stat · new power · SUBLIME unlock</span>
+          </div>
         </div>
 
-        <label class="field">Wacky Power(s)
-          <textarea id="chPowers" rows="2" placeholder="Roll one on the Dice tab →"></textarea>
-        </label>
-        <label class="field">Gear
-          <textarea id="chGear" rows="4" placeholder="Fanny pack&#10;Flashlight&#10;One sentimental item…"></textarea>
+        <div class="section-head">
+          <h3 class="section-title">WACKY POWERS</h3>
+          <button class="btn tiny" id="addPowerBtn">+ add</button>
+        </div>
+        <div id="powerCards"></div>
+
+        <div class="section-head">
+          <h3 class="section-title">GEAR</h3>
+          <button class="btn tiny" id="addItemBtn">+ add</button>
+        </div>
+        <div id="itemCards"></div>
+
+        <label class="field">Pocket lint &amp; misc
+          <textarea id="chGear" rows="3" placeholder="Fanny pack&#10;Keys to a car you no longer trust…"></textarea>
         </label>
         <label class="field">Notes
           <textarea id="chNotes" rows="3" placeholder="Suspicions, promises, steak owed to Biscuit…"></textarea>
@@ -268,6 +284,8 @@
           <button id="genPower" class="btn gen">🛸 Wacky Power</button>
           <button id="genTell" class="btn gen">👁 Clone Tell</button>
           <button id="genComp" class="btn gen">🌀 Complication</button>
+          <button id="genLoot" class="btn gen">🎁 Loot</button>
+          <button id="genMark" class="btn gen">🩹 Mark (0 HP)</button>
         </div>
         <div id="genResult" class="gen-result" hidden>
           <p id="genText"></p>
@@ -336,6 +354,19 @@
     </div>
   </section>
 </main>
+
+<!-- COMPENDIUM PICKER -->
+<div id="pickerOverlay" class="picker-overlay" hidden>
+  <div class="picker-modal card">
+    <div class="picker-head">
+      <h3 class="section-title" id="pickerTitle">ADD FROM COMPENDIUM</h3>
+      <button class="btn tiny" id="pickerClose">✕</button>
+    </div>
+    <input type="text" id="pickerSearch" placeholder="Search…">
+    <div class="picker-chips" id="pickerChips"></div>
+    <div class="picker-list" id="pickerList"></div>
+  </div>
+</div>
 
 <!-- CINEMATIC SCENE OVERLAY -->
 <div id="sceneOverlay" class="scene-overlay" hidden>

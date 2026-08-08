@@ -11,7 +11,10 @@
   const defaultState = () => ({
     character: {
       name: "", concept: "", brawn: 0, brains: 0, charm: 0, weird: 0,
-      hp: 8, hpMax: 8, wp: 2, luck: 3, powers: "", gear: "", notes: ""
+      hp: 8, hpMax: 8, wp: 2, luck: 3, glow: 0,
+      powersKnown: [],  // {id, sublime}
+      items: [],        // {id, qty}
+      gear: "", notes: ""
     },
     token: { x: 95, y: 178 },
     suspicion: 2,
@@ -31,19 +34,45 @@
       if (raw) {
         const saved = JSON.parse(raw);
         const base = defaultState();
-        return {
+        const merged = {
           ...base, ...saved,
           character: { ...base.character, ...(saved.character || {}) },
           token: { ...base.token, ...(saved.token || {}) }
         };
+        migrateCharacter(merged.character);
+        return merged;
       }
     } catch (e) { /* corrupted save — start fresh */ }
     return defaultState();
   }
 
+  /* Upgrade saves from before the power-card / gear-card system: the old
+     free-text `powers` string becomes known-power entries where names match,
+     and any leftover text lands in notes. */
+  function migrateCharacter(c) {
+    if (!Array.isArray(c.powersKnown)) c.powersKnown = [];
+    if (!Array.isArray(c.items)) c.items = [];
+    if (typeof c.powers === "string" && c.powers.trim() && !c.powersKnown.length) {
+      const leftovers = [];
+      for (const line of c.powers.split("\n")) {
+        const match = DATA.powers.find((p) =>
+          line.toLowerCase().includes(p.name.toLowerCase()));
+        if (match && !c.powersKnown.some((k) => k.id === match.id)) {
+          c.powersKnown.push({ id: match.id, sublime: false });
+        } else if (line.trim()) {
+          leftovers.push(line.trim());
+        }
+      }
+      if (leftovers.length) {
+        c.notes = (c.notes ? c.notes + "\n" : "") + leftovers.join("\n");
+      }
+    }
+    delete c.powers;
+  }
+
   let state = load();
   let selectedLoc = null;
-  let lastGenPower = null;
+  let lastGen = null; // {type: "power"|"item", ref}
 
   const save = () => localStorage.setItem(SAVE_KEY, JSON.stringify(state));
 
@@ -482,7 +511,7 @@
   /* ---------------- character sheet ---------------- */
 
   const sheetFields = {
-    chName: "name", chConcept: "concept", chPowers: "powers",
+    chName: "name", chConcept: "concept",
     chGear: "gear", chNotes: "notes",
     stBrawn: "brawn", stBrains: "brains", stCharm: "charm", stWeird: "weird"
   };
@@ -492,11 +521,200 @@
     for (const [id, key] of Object.entries(sheetFields)) $("#" + id).value = c[key];
     $("#hpCur").textContent = c.hp;
     $("#hpMax").value = c.hpMax;
+    $("#glowVal").textContent = c.glow;
     renderDerived();
     renderPips("#wpPips", c.wp, "wp");
     renderPips("#luckPips", c.luck, "luck");
+    renderPowerCards();
+    renderItemCards();
     positionToken();
   }
+
+  /* ---- power & item cards ---- */
+
+  function renderPowerCards() {
+    const box = $("#powerCards");
+    box.innerHTML = "";
+    const known = state.character.powersKnown;
+    if (!known.length) {
+      box.innerHTML = `<p class="empty-note">No powers yet. Roll one on the Dice tab, or hit + add.</p>`;
+      return;
+    }
+    for (const k of known) {
+      const p = DATA.powers.find((x) => x.id === k.id);
+      if (!p) continue;
+      const div = document.createElement("div");
+      div.className = "power-card";
+      div.innerHTML = `
+        <div class="pc-head">
+          <span class="pc-name">${p.name}</span>
+          <span class="tier-badges">
+            <span class="tier on" title="Spark — free flavor use">✨</span>
+            <span class="tier on" title="Surge — 1 WP, the scene-changer">⚡</span>
+            <span class="tier ${k.sublime ? "on" : "locked"}" title="SUBLIME — 2 WP, once/session">🌟</span>
+          </span>
+          <button class="btn tiny pc-remove" title="Forget power">✕</button>
+        </div>
+        <p class="pc-desc">⚡ ${p.desc}</p>
+        ${k.sublime
+          ? `<p class="pc-sublime">🌟 ${p.sublime}</p>`
+          : `<p class="pc-sublime dim">🌟 ${p.sublime}</p>
+             <button class="btn tiny pc-unlock">Unlock SUBLIME (1 Glow)</button>`}
+      `;
+      div.querySelector(".pc-remove").addEventListener("click", () => {
+        state.character.powersKnown = known.filter((x) => x.id !== k.id);
+        save(); renderPowerCards();
+      });
+      const unlock = div.querySelector(".pc-unlock");
+      if (unlock) unlock.addEventListener("click", () => {
+        if (state.character.glow < 1) {
+          unlock.textContent = "Needs 1 Glow — earned at act ends";
+          setTimeout(() => { unlock.textContent = "Unlock SUBLIME (1 Glow)"; }, 1600);
+          return;
+        }
+        state.character.glow--;
+        k.sublime = true;
+        save(); renderSheet();
+      });
+      box.appendChild(div);
+    }
+  }
+
+  const RARITY_LABEL = { mundane: "⚪ mundane", modified: "🔧 modified", glorptech: "🟢 glorptech", oddity: "✦ oddity" };
+
+  function renderItemCards() {
+    const box = $("#itemCards");
+    box.innerHTML = "";
+    const items = state.character.items;
+    if (!items.length) {
+      box.innerHTML = `<p class="empty-note">Pockets empty. Hit + add, or roll 🎁 Loot on the Dice tab.</p>`;
+      return;
+    }
+    for (const entry of items) {
+      const it = DATA.items.find((x) => x.id === entry.id);
+      if (!it) continue;
+      const div = document.createElement("div");
+      div.className = `item-card rarity-${it.rarity}`;
+      div.innerHTML = `
+        <div class="ic-head">
+          <span class="ic-name">${it.name}</span>
+          <span class="rarity-pill ${it.rarity}">${RARITY_LABEL[it.rarity]}</span>
+          ${it.cat === "consumable" ? `
+            <span class="ic-qty">
+              <button class="btn tiny" data-d="-1">−</button><b>${entry.qty}</b><button class="btn tiny" data-d="1">+</button>
+            </span>` : ""}
+          <button class="btn tiny ic-remove" title="Drop">✕</button>
+        </div>
+        <p class="ic-effect">${it.effect}</p>
+        ${it.quirk ? `<p class="ic-quirk">Quirk: ${it.quirk}</p>` : ""}
+      `;
+      div.querySelectorAll("[data-d]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          entry.qty = Math.max(0, entry.qty + Number(btn.dataset.d));
+          if (entry.qty === 0) state.character.items = items.filter((x) => x !== entry);
+          save(); renderItemCards();
+        });
+      });
+      div.querySelector(".ic-remove").addEventListener("click", () => {
+        state.character.items = items.filter((x) => x !== entry);
+        save(); renderItemCards();
+      });
+      box.appendChild(div);
+    }
+  }
+
+  function learnPower(id) {
+    if (!state.character.powersKnown.some((k) => k.id === id)) {
+      state.character.powersKnown.push({ id, sublime: false });
+      save(); renderPowerCards();
+    }
+  }
+
+  function gainItem(id) {
+    const existing = state.character.items.find((x) => x.id === id);
+    if (existing) existing.qty++;
+    else state.character.items.push({ id, qty: 1 });
+    save(); renderItemCards();
+  }
+
+  /* ---- compendium picker ---- */
+
+  const pickerOverlay = $("#pickerOverlay");
+  let pickerKind = "item";
+  let pickerCat = "all";
+
+  function openPicker(kind) {
+    pickerKind = kind;
+    pickerCat = "all";
+    $("#pickerTitle").textContent = kind === "power" ? "LEARN A WACKY POWER" : "ADD GEAR FROM THE COMPENDIUM";
+    $("#pickerSearch").value = "";
+    renderPickerChips();
+    renderPickerList();
+    pickerOverlay.hidden = false;
+    $("#pickerSearch").focus();
+  }
+
+  function closePicker() { pickerOverlay.hidden = true; }
+  $("#pickerClose").addEventListener("click", closePicker);
+  pickerOverlay.addEventListener("click", (e) => { if (e.target === pickerOverlay) closePicker(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !pickerOverlay.hidden) closePicker();
+  });
+
+  function renderPickerChips() {
+    const chips = $("#pickerChips");
+    chips.innerHTML = "";
+    if (pickerKind === "power") return;
+    for (const cat of ["all", "weapon", "gadget", "consumable", "glorptech", "oddity"]) {
+      const chip = document.createElement("button");
+      chip.className = "chip" + (cat === pickerCat ? " on" : "");
+      chip.textContent = cat;
+      chip.addEventListener("click", () => { pickerCat = cat; renderPickerChips(); renderPickerList(); });
+      chips.appendChild(chip);
+    }
+  }
+
+  function renderPickerList() {
+    const list = $("#pickerList");
+    const q = $("#pickerSearch").value.trim().toLowerCase();
+    list.innerHTML = "";
+    if (pickerKind === "power") {
+      for (const p of DATA.powers) {
+        if (q && !(p.name + p.desc).toLowerCase().includes(q)) continue;
+        const known = state.character.powersKnown.some((k) => k.id === p.id);
+        const row = document.createElement("button");
+        row.className = "picker-row" + (known ? " known" : "");
+        row.innerHTML = `<b>${p.name}</b><span>${p.desc}</span>${known ? "<i>known</i>" : ""}`;
+        if (!known) row.addEventListener("click", () => { learnPower(p.id); closePicker(); });
+        list.appendChild(row);
+      }
+    } else {
+      for (const it of DATA.items) {
+        if (pickerCat !== "all" && it.cat !== pickerCat) continue;
+        if (q && !(it.name + it.effect).toLowerCase().includes(q)) continue;
+        const row = document.createElement("button");
+        row.className = "picker-row";
+        row.innerHTML = `<b>${it.name} <em class="rarity-pill ${it.rarity}">${RARITY_LABEL[it.rarity]}</em></b>
+          <span>${it.effect}</span>`;
+        row.addEventListener("click", () => { gainItem(it.id); closePicker(); });
+        list.appendChild(row);
+      }
+    }
+    if (!list.children.length) list.innerHTML = `<p class="empty-note">Nothing matches. Suspicious.</p>`;
+  }
+
+  $("#pickerSearch").addEventListener("input", renderPickerList);
+  $("#addPowerBtn").addEventListener("click", () => openPicker("power"));
+  $("#addItemBtn").addEventListener("click", () => openPicker("item"));
+
+  $("#glowMinus").addEventListener("click", () => {
+    state.character.glow = Math.max(0, state.character.glow - 1);
+    save(); $("#glowVal").textContent = state.character.glow;
+  });
+  $("#glowPlus").addEventListener("click", () => {
+    state.character.glow = Math.min(9, state.character.glow + 1);
+    save(); $("#glowVal").textContent = state.character.glow;
+  });
 
   function renderDerived() {
     const brawn = Number(state.character.brawn) || 0;
@@ -559,13 +777,13 @@
     const i = pregenSelect.value;
     if (i === "") return;
     const p = DATA.pregens[i];
-    const power = DATA.powers.find((pw) => pw.name === p.power);
     state.character = {
       ...state.character,
       name: p.name, concept: p.concept,
       brawn: p.brawn, brains: p.brains, charm: p.charm, weird: p.weird,
-      hp: 8 + p.brawn, hpMax: 8 + p.brawn, wp: 2, luck: 3,
-      powers: power ? `${power.name} — ${power.desc}` : p.power,
+      hp: 8 + p.brawn, hpMax: 8 + p.brawn, wp: 2, luck: 3, glow: 0,
+      powersKnown: [{ id: p.powerId, sublime: false }],
+      items: p.itemIds.map((id) => ({ id, qty: 1 })),
       gear: p.gear
     };
     save();
@@ -602,28 +820,45 @@
 
   /* ---- generators ---- */
 
-  function showGen(text, isPower) {
+  function showGen(text, addable) {
     $("#genResult").hidden = false;
     $("#genText").textContent = text;
-    $("#genAdd").hidden = !isPower;
+    const addBtn = $("#genAdd");
+    addBtn.hidden = !addable;
+    if (addable) addBtn.textContent = lastGen.type === "power" ? "+ Learn this power" : "+ Add to gear";
   }
 
   $("#genPower").addEventListener("click", () => {
-    lastGenPower = Dice.pick(DATA.powers);
-    showGen(`🛸 ${lastGenPower.name} — ${lastGenPower.desc}`, true);
+    const p = Dice.pick(DATA.powers);
+    lastGen = { type: "power", ref: p };
+    showGen(`🛸 ${p.name} — ${p.desc}`, true);
   });
-  $("#genTell").addEventListener("click", () =>
-    showGen(`👁 Clone tell: ${Dice.pick(DATA.cloneTells)}`, false));
-  $("#genComp").addEventListener("click", () =>
-    showGen(`🌀 Complication: ${Dice.pick(DATA.complications)}`, false));
+  $("#genLoot").addEventListener("click", () => {
+    const lootable = DATA.items.filter((it) =>
+      !["glove", "form77b", "sentimental", "gnorman"].includes(it.id));
+    const it = Dice.pick(lootable);
+    lastGen = { type: "item", ref: it };
+    showGen(`🎁 ${it.name} — ${it.effect}${it.quirk ? ` (Quirk: ${it.quirk})` : ""}`, true);
+  });
+  $("#genTell").addEventListener("click", () => {
+    lastGen = null;
+    showGen(`👁 Clone tell: ${Dice.pick(DATA.cloneTells)}`, false);
+  });
+  $("#genComp").addEventListener("click", () => {
+    lastGen = null;
+    showGen(`🌀 Complication: ${Dice.pick(DATA.complications)}`, false);
+  });
+  $("#genMark").addEventListener("click", () => {
+    lastGen = null;
+    showGen(`🩹 Mark: ${Dice.pick(DATA.marks)}`, false);
+  });
 
   $("#genAdd").addEventListener("click", () => {
-    if (!lastGenPower) return;
-    const line = `${lastGenPower.name} — ${lastGenPower.desc}`;
-    state.character.powers = state.character.powers
-      ? state.character.powers + "\n" + line : line;
-    save();
-    $("#chPowers").value = state.character.powers;
+    if (!lastGen) return;
+    if (lastGen.type === "power") learnPower(lastGen.ref.id);
+    else gainItem(lastGen.ref.id);
+    $("#genAdd").textContent = "✓ added";
+    setTimeout(() => { $("#genAdd").hidden = true; }, 900);
   });
 
   /* ---------------- quests ---------------- */
@@ -785,6 +1020,7 @@
           character: { ...base.character, ...(data.character || {}) },
           token: { ...base.token, ...(data.token || {}) }
         };
+        migrateCharacter(state.character);
         save();
         renderAll();
       } catch (err) {

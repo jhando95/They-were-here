@@ -211,6 +211,85 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .pip.on { background: var(--alien); border-color: var(--alien); box-shadow: 0 0 8px rgba(157, 255, 112, 0.5); }
 #luckPips .pip.on { background: var(--amber); border-color: var(--amber); box-shadow: 0 0 8px rgba(255, 207, 107, 0.5); }
 
+/* ---------- glow tracker ---------- */
+.glow-val { font-family: var(--mono); font-size: 20px; color: var(--alien); min-width: 22px; text-align: center; }
+.glow-hint { font-size: 10px; color: var(--muted); font-family: var(--mono); letter-spacing: 0.5px; }
+
+.section-head { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; }
+.section-head .section-title { margin: 0; }
+
+/* ---------- power cards ---------- */
+.power-card {
+  border: 1px solid var(--border); border-left: 3px solid var(--alien);
+  border-radius: 6px; background: var(--card-2); padding: 9px 11px; margin: 8px 0;
+}
+.pc-head { display: flex; align-items: center; gap: 8px; }
+.pc-name { font-family: var(--mono); font-size: 13px; letter-spacing: 1px; color: var(--alien); flex: 1; }
+.tier-badges { display: flex; gap: 3px; font-size: 12px; }
+.tier.locked { filter: grayscale(1); opacity: 0.35; }
+.pc-desc { margin: 6px 0 0; font-size: 13px; }
+.pc-sublime { margin: 6px 0 0; font-size: 13px; color: var(--amber); }
+.pc-sublime.dim { opacity: 0.45; font-style: italic; }
+.pc-unlock { margin-top: 6px; }
+.pc-remove, .ic-remove { opacity: 0.5; }
+.pc-remove:hover, .ic-remove:hover { opacity: 1; }
+
+/* ---------- item cards ---------- */
+.item-card {
+  border: 1px solid var(--border); border-left: 3px solid #5c6f7d;
+  border-radius: 6px; background: var(--card-2); padding: 9px 11px; margin: 8px 0;
+}
+.item-card.rarity-modified { border-left-color: var(--accent); }
+.item-card.rarity-glorptech { border-left-color: var(--alien); }
+.item-card.rarity-oddity { border-left-color: var(--amber); }
+.ic-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ic-name { font-family: var(--mono); font-size: 13px; letter-spacing: 0.5px; flex: 1; min-width: 120px; }
+.rarity-pill {
+  font-family: var(--mono); font-style: normal; font-size: 9.5px; letter-spacing: 1px;
+  padding: 2px 7px; border-radius: 9px; border: 1px solid var(--border); color: var(--muted);
+  white-space: nowrap;
+}
+.rarity-pill.modified { color: var(--accent); border-color: var(--accent); }
+.rarity-pill.glorptech { color: var(--alien); border-color: var(--alien); }
+.rarity-pill.oddity { color: var(--amber); border-color: var(--amber); }
+.ic-qty { display: flex; align-items: center; gap: 5px; }
+.ic-qty b { font-family: var(--mono); color: var(--accent); min-width: 14px; text-align: center; }
+.ic-effect { margin: 6px 0 0; font-size: 13px; }
+.ic-quirk { margin: 5px 0 0; font-size: 12.5px; color: var(--alien); font-style: italic; }
+
+/* ---------- compendium picker ---------- */
+.picker-overlay {
+  position: fixed; inset: 0; z-index: 90; background: rgba(4, 8, 12, 0.75);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+  backdrop-filter: blur(3px);
+}
+.picker-overlay[hidden] { display: none; }
+.picker-modal {
+  width: min(560px, 94vw); max-height: 82vh; display: flex; flex-direction: column;
+  margin: 0; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+.picker-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.picker-head .section-title { margin: 0; color: var(--accent); }
+.picker-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0 4px; }
+.chip {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase;
+  background: var(--card-2); color: var(--muted); border: 1px solid var(--border);
+  border-radius: 12px; padding: 4px 11px; cursor: pointer;
+}
+.chip.on { color: var(--accent); border-color: var(--accent); }
+.picker-list { overflow-y: auto; margin-top: 8px; flex: 1; }
+.picker-row {
+  display: block; width: 100%; text-align: left; background: var(--card-2);
+  border: 1px solid var(--border); border-radius: 6px; padding: 9px 11px;
+  margin-bottom: 6px; cursor: pointer; color: var(--text); font: inherit;
+  transition: border-color 0.12s;
+}
+.picker-row:hover { border-color: var(--accent); }
+.picker-row b { font-family: var(--mono); font-size: 13px; letter-spacing: 0.5px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.picker-row span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.picker-row i { font-size: 11px; color: var(--alien); }
+.picker-row.known { opacity: 0.45; cursor: default; }
+
 /* ---------- dice ---------- */
 .dice-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
 .die {
@@ -234,8 +313,8 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .dice-total.fumble { color: var(--danger); }
 .dice-detail { display: block; font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-.generators { display: flex; gap: 6px; margin-bottom: 8px; }
-.gen { flex: 1; font-size: 12px; padding: 8px 4px; }
+.generators { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+.gen { font-size: 12px; padding: 8px 4px; }
 .gen-result { border: 1px dashed var(--alien); border-radius: 8px; padding: 10px; margin-bottom: 12px; background: rgba(157, 255, 112, 0.05); }
 .gen-result p { margin: 0 0 6px; font-size: 13.5px; }
 
